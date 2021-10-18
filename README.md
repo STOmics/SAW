@@ -63,7 +63,7 @@ singularity build SAW_v1.0.0.sif docker://kikiii/saw:01.0.0
 ## Run
 ### Preparation
 ```
-Before running the Stereo-seq Analysis Workflow, you should prepare the indexed reference as follows:
+Before running the Stereo-seq Analysis Workflow, you should prepare the indexed reference as follow:
 singularity exec SAW_v1.0.0.sif mapping --runMode genomeGenerate \
     --genomeDir reference/STAR_SJ100 \
     --genomeFastaFiles reference/genome.fa \
@@ -103,7 +103,8 @@ usage: sh stereoRun_multiLane.sh -m maskFile -1 read1 -2 read2 -g indexedGenome 
 ### Running example
 #### stereoRun.sh
 ```
-If only one lane sequencing data was given, run the stereoRun.sh script:
+If only one lane sequencing data was given, run the stereoRun.sh script as follows:
+when tissue image was not given:
 sh stereoRun.sh \
     -m SN.h5 \
     -1 lane_read_1.fq.gz \
@@ -112,10 +113,21 @@ sh stereoRun.sh \
     -a reference/genes.gtf \
     -s SAW_v1.0.0.sif \
     -o outDir
+when tissue image was given
+sh stereoRun.sh \
+    -m SN.h5 \
+    -1 lane_read_1.fq.gz \
+    -2 lane_read_2.fq.gz \
+    -g reference/STAR_SJ100 \
+    -a reference/genes.gtf \
+    -s SAW_v1.0.0.sif \
+    -o outDir \
+    -i image_dir_path
 ```
 #### stereoRun_multiLane.sh
 ```
-If more than one lane sequencing data was given, run the stereoRun_multiLane.sh script:
+If more than one lane sequencing data was given, run the stereoRun_multiLane.sh script as follows:
+when tissue image was not given:
 sh stereoRun_multiLane.sh \
     -m SN.h5 \
     -1 lane1_read_1.fq.gz,lane2_read_1.fq.gz \
@@ -124,5 +136,14 @@ sh stereoRun_multiLane.sh \
     -a reference/genes.gtf \
     -s SAW_v1.0.0.sif \
     -o outDir
-
+when tissue image was given
+sh stereoRun_multiLane.sh \
+    -m SN.h5 \
+    -1 lane1_read_1.fq.gz,lane2_read_1.fq.gz \
+    -2 lane1_read_2.fq.gz,lane2_read_2.fq.gz \
+    -g reference/STAR_SJ100 \
+    -a reference/genes.gtf \
+    -s SAW_v1.0.0.sif \
+    -o outDir \
+    -i image_dir_path
 ```

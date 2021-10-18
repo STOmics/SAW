@@ -49,17 +49,17 @@ done
 if [ `command -v singularity` ]
 then
     singularityPath=`command -v singularity`
-    echo "singularity check: pass and path is ${singularityPath}"
+    echo `date` " singularity check: pass and path is ${singularityPath}"
 else
-    echo "singularity check: singularity does not exits, please verify that you have installed singularity and exported it to system PATH variable"
+    echo `date` " singularity check: singularity does not exits, please verify that you have installed singularity and exported it to system PATH variable"
     exit
 fi
 
 if [[ -n $visualSif ]]
 then
-    echo "visualSif check: file exists and path is ${visualSif}"
+    echo `date` " visualSif check: file exists and path is ${visualSif}"
 else
-    echo "visualSif check: file does not exists, please verify that your visualSif file in the current directory or the path given by the option -s is correct."
+    echo `date` " visualSif check: file does not exists, please verify that your visualSif file in the current directory or the path given by the option -s is correct."
 fi
 
 if [[ ! -d $outDir ]];then
@@ -73,6 +73,7 @@ maskname=$(basename $maskFile)
 SNid=${maskname%%.*}
 
 #barcode mapping and star alignment.
+echo `date` " barcode mapping, adapter filter and RNA alignment start......"
 fqname=$(basename $read1)
 fqbase=${fqname%%.*}
 bcPara=${result}/${fqbase}.bcPara
@@ -107,6 +108,7 @@ singularity exec ${visualSif} mapping \
     > ${result}/${fqbase}_barcodeMap.stat &&\
 
 #annotation and deduplication
+echo `date` " annotation and deduplication start......"
 mkdir -p ${result}/GetExp
 starBam=${result}/${fqbase}.Aligned.sortedByCoord.out.bam
 geneExp=${result}/GetExp/barcode_gene_exp.txt
@@ -125,9 +127,11 @@ singularity exec ${visualSif} count \
 
 tissueCutResult=${result}/GetExp/tissueCut
 
+
 if [[ -n $image ]]
 then
     #firstly do registration, then cut the gene expression matrix based on the repistration result
+    echo `date` " registration and tissueCut start......."
     regResult=${result}/GetExp/registration
     imageQC=$(find ${image} -maxdepth 1 -name ${SNid}*.json | head -1)
     singularity exec ${visualSif} register \
@@ -141,26 +145,29 @@ then
         -o ${tissueCutResult} \
         -s ${regResult}/7_result \
         -t tissue \
-        --snId ${SNid}
+        --snId ${SNid} &&\
 else
     #cut the gene expression matrix directly
+    echo `date` " there is no image, tissueCut start......."
     singularity exec ${visualSif} tissuecut \
         --dnbfile ${barcodeReadsCount} \
         -i ${geneExp} \
         -o ${tissueCutResult} \
         -t tissue \
-        --snId ${SNid}
+        --snId ${SNid} &&\
 fi
 
 visualGem=${tissueCutResult}/segmentation/${SNid}.gem.gz
 #generate gef format file that can be loaded by the stereomap system
+echo `date` " transfer gem format matrix to gef start......"
 singularity exec ${visualSif} gem2gef \
     -i $visualGem \
     -o $outDir \
     -t $threads \
     -m $threads \
-    -b '1,5,10,15,20,50,80,100,150,200' 
+    -b '1,5,10,15,20,50,80,100,150,200' &&\
 
+echo `date` " report generation start......"
 mv $visualGem $outDir/
 #generate report file in json format
 singularity exec ${visualSif} report \
