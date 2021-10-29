@@ -133,7 +133,7 @@ barcodeReadsCounts=${result}/${SNid}.barcodeReadsCount.txt
 singularity exec ${visualSif} merge \
     -i $bcReadsCountsStr \
     --out $barcodeReadsCounts \
-    --action 5
+    --action 2 &&\
 
 #annotation and deduplication
 echo `date` " annotation and deduplication start......"
