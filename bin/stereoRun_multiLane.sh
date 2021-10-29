@@ -129,6 +129,7 @@ starBamsStr=$( IFS=','; echo "${starBams[*]}" )
 
 #merge barcode reads count file
 echo `date` " merge barcode reads count tables start......"
+export SINGULARITY_BIND=$outDir
 barcodeReadsCounts=${result}/${SNid}.barcodeReadsCount.txt
 singularity exec ${visualSif} merge \
     -i $bcReadsCountsStr \
