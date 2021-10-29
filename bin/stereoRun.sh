@@ -71,7 +71,15 @@ result=${outDir}/result
 mkdir -p $result
 maskname=$(basename $maskFile)
 SNid=${maskname%%.*}
-
+fqdir=$(dirname $read1)
+maskdir=$(dirname $maskFile)
+annodir=$(dirname $annotation)
+if [[ -n $image ]]
+then
+        export SINGULARITY_BIND=$outDir,$result,$fqdir,$genome,$annodir,$image
+else
+        export SINGULARITY_BIND=$outDir,$result,$fqdir,$genome,$annodir
+fi
 #barcode mapping and star alignment.
 echo `date` " barcode mapping, adapter filter and RNA alignment start......"
 fqname=$(basename $read1)
@@ -145,7 +153,7 @@ then
         -o ${tissueCutResult} \
         -s ${regResult}/7_result \
         -t tissue \
-        --snId ${SNid} &&\
+        --snId ${SNid}
 else
     #cut the gene expression matrix directly
     echo `date` " there is no image, tissueCut start......."
@@ -154,7 +162,7 @@ else
         -i ${geneExp} \
         -o ${tissueCutResult} \
         -t tissue \
-        --snId ${SNid} &&\
+        --snId ${SNid}
 fi
 
 visualGem=${tissueCutResult}/segmentation/${SNid}.gem.gz

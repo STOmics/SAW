@@ -71,6 +71,8 @@ result=${outDir}/result
 mkdir -p $result
 maskname=$(basename $maskFile)
 SNid=${maskname%%.*}
+maskdir=$(dirname $maskFile)
+annodir=$(dirname $annotation)
 
 #barcode mapping and star alignment.
 echo `date` " barcode mapping, adapter filter and RNA alignment start......"
@@ -83,6 +85,8 @@ fqNumber=`echo ${#read1Lines[@]}`
 for i in $(seq 0 `expr $fqNumber - 1`)
 do
 fqname=$(basename ${read1Lines[i]})
+fqdir=$(dirname ${read1Lines[i]})
+export SINGULARITY_BIND=$outDir,$genome,$fqdir
 fqbase=${fqname%%.*}
 fqbases[i]=$fqbase
 bcPara=${result}/${fqbase}.bcPara
@@ -129,10 +133,11 @@ barcodeReadsCounts=${result}/${SNid}.barcodeReadsCount.txt
 singularity exec ${visualSif} merge \
     -i $bcReadsCountsStr \
     --out $barcodeReadsCounts \
-    --action 2
+    --action 5
 
 #annotation and deduplication
 echo `date` " annotation and deduplication start......"
+export SINGULARITY_BIND=$outDir,$annodir
 mkdir -p ${result}/GetExp
 geneExp=${result}/GetExp/barcode_gene_exp.txt
 seturationFile=${result}/GetExp/sequence_saturation.txt
@@ -154,6 +159,7 @@ if [[ -n $image ]]
 then
     #firstly do registration, then cut the gene expression matrix based on the repistration result
     echo `date` " registration and tissueCut start......."
+    export SINGULARITY_BIND=$outDir,$annodir,$image
     regResult=${result}/GetExp/registration
     imageQC=$(find ${image} -maxdepth 1 -name ${SNid}*.json | head -1)
     singularity exec ${visualSif} register \
@@ -167,7 +173,7 @@ then
         -o ${tissueCutResult} \
         -s ${regResult}/7_result \
         -t tissue \
-        --snId ${SNid} &&\
+        --snId ${SNid}
 else
     #cut the gene expression matrix directly
     echo `date` " there is no image, tissueCut start......."
@@ -176,7 +182,7 @@ else
         -i ${geneExp} \
         -o ${tissueCutResult} \
         -t tissue \
-        --snId ${SNid} &&\
+        --snId ${SNid}
 fi
 
 visualGem=${tissueCutResult}/segmentation/${SNid}.gem.gz
