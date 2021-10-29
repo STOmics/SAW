@@ -57,7 +57,7 @@ $ yum install -y singularity
 ```
 #### Get SAW image from dockerHub
 ```
-singularity build SAW_v1.0.0.sif docker://kikiii/saw:01.0.0 
+singularity build SAW_v1.0.0.sif docker://stomics/saw:01.0.0 
 ```
 
 ## Run
