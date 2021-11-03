@@ -1,5 +1,5 @@
 # SAW(Stereo-seq Analysis Workflow)
-workflow to analysis stereo-seq transcriptome data
+Workflow of analyzing Stereo-Seq transcriptome data
 
 ## System Requirements
 ### Hardware
