@@ -100,7 +100,7 @@ then
     barcodeReadsCounts=${result}/${SNid}.barcodeReadsCount.txt
     singularity exec ${visualSif} semiautoregister \
         -i ${result}/GetExp/registration \
-        $patameters &&
+        $patameters &&\
     echo ~ici~
 else
     ulimit -c 100000000000
