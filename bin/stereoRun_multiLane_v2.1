@@ -165,14 +165,14 @@ else
     export SINGULARITY_BIND=$outDir,$annodir
     mkdir -p ${result}/GetExp
     geneExp=${result}/GetExp/barcode_gene_exp.txt
-    seturationFile=${result}/GetExp/sequence_saturation.txt
+    saturationFile=${result}/GetExp/sequence_saturation.txt
     singularity exec ${visualSif} count \
         -i ${starBamsStr} \
         -o ${result}/${SNid}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam \
         -a ${annotation} \
         -s ${result}/${SNid}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam.summary.stat \
         -e ${geneExp} \
-        --sat_file ${seturationFile} \
+        --sat_file ${saturationFile} \
         --umi_on \
         --save_lq \
         --save_dup \
@@ -215,7 +215,7 @@ fi
 #saturationi
 echo `date` " saturation start ......"
 singularity exec ${visualSif} saturation \
-    -i ${seturationFile} \
+    -i ${saturationFile} \
 	--tissue ${tissueCutResult}/segmentation/${SNid}.tissue.gem.gz \
 	-o ${result}/GetExp &&\
 mv ${result}/GetExp/*saturation.png ${outDir}
