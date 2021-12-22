@@ -144,6 +144,7 @@ else
     mkdir -p ${result}/GetExp
     starBam=${result}/${fqbase}.Aligned.sortedByCoord.out.bam
     geneExp=${result}/GetExp/barcode_gene_exp.txt
+    saturationFile=${result}/GetExp/raw_barcode_gene_exp.txt
     export SINGULARITY_BIND=$outDir,$annodir    
 
     singularity exec ${visualSif} count \
