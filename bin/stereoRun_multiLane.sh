@@ -236,10 +236,10 @@ singularity exec ${visualSif} gem2gef \
 
 mv $visualGem $outDir/
 #generate report file in json format
+echo `date` " report generation start......"
 singularity exec ${visualSif} jsonreport \
     -p $outdir \
     -o $outdir
-echo `date` " report generation start......"
 singularity exec ${visualSif} report \
     -r $outDir \
     -s $SNid
