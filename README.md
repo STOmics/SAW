@@ -64,7 +64,7 @@ singularity build SAW_v2.1.0.sif docker://stomics/saw:02.1.0
 ### Preparation
 ```
 Before running the Stereo-seq Analysis Workflow, you should prepare the indexed reference as follow:
-singularity exec SAW_v1.0.0.sif mapping --runMode genomeGenerate \
+singularity exec SAW_v2.1.0.sif mapping --runMode genomeGenerate \
     --genomeDir reference/STAR_SJ100 \
     --genomeFastaFiles reference/genome.fa \
     --sjdbGTFfile reference/genes.gtf \
@@ -74,9 +74,9 @@ Then you should get the mask file from our website through the slide number(SN)
 ```
 
 ### Usage
-#### stereoRun.sh
+#### stereoRun_singleLane.sh
 ```
-usage: sh stereoRun.sh -m maskFile -1 read1 -2 read2 -g indexedGenome -a annotationFile -o outDir -i image -t threads -s visualSif
+usage: sh stereoRun_singleLane.sh -m maskFile -1 read1 -2 read2 -g indexedGenome -a annotationFile -o outDir -i image -t threads -s visualSif
     -m stereochip mask file
     -1 fastq file path of read1
     -2 fastq file path of read2
