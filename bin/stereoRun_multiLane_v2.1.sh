@@ -162,7 +162,7 @@ else
     export SINGULARITY_BIND=$outDir,$annodir
     mkdir -p ${result}/GetExp
     geneExp=${result}/GetExp/barcode_gene_exp.txt
-    saturationFile=${result}/GetExp/sequence_saturation.txt
+    saturationFile=${result}/GetExp/raw_barcode_gene_exp.txt
     singularity exec ${visualSif} count \
         -i ${starBamsStr} \
         -o ${result}/${SNid}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam \
