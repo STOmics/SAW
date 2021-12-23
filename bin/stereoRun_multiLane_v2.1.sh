@@ -67,12 +67,20 @@ else
 fi
 
 if [[ ! -d $outDir ]];then
-    mkdir $outDir
+    mkdir -p $outDir
 fi
 
 #basic information get
-result=${outDir}/result
-mkdir -p $result
+result_02alignment=${outDir}/02.alignment
+result_00fq=${outDir}/00.fq
+if [[ ! -d $result_02alignment ]];then
+    mkdir -p $result_02alignment
+fi
+if [[ ! -d $result_00fq ]];then
+    mkdir -p $result_00fq
+fi
+
+
 maskname=$(basename $maskFile)
 SNid=${maskname%%.*}
 maskdir=$(dirname $maskFile)
@@ -95,13 +103,12 @@ then
     #merge barcode reads count file
     echo `date` " merge barcode reads count tables start......"
     export SINGULARITY_BIND=$outDir
-    barcodeReadsCounts=${result}/${SNid}.barcodeReadsCount.txt
+    barcodeReadsCounts=${result_00fq}/${SNid}.barcodeReadsCount.txt
     singularity exec ${visualSif} semiautoregister \
-        -i ${result}/GetExp/registration \
+        -i ${result_02alignment}/GetExp/registration \
         $patameters &&
 else
     ulimit -c 100000000000
-    echo  " ~~~ mapping - $fqname ~~~"
     for i in $(seq 0 `expr $fqNumber - 1`)
     do
         fqname=$(basename ${read1Lines[i]})
@@ -109,8 +116,8 @@ else
         export SINGULARITY_BIND=$outDir,$genome,$fqdir
         fqbase=${fqname%%.*}
         fqbases[i]=$fqbase
-        bcPara=${result}/${fqbase}.bcPara
-        barcodeReadsCount=${result}/${fqbase}.barcodeReadsCount.txt
+        bcPara=${result_02alignment}/${fqbase}.bcPara
+        barcodeReadsCount=${result_00fq}/${fqbase}.barcodeReadsCount.txt
         echo "in=${maskFile}" > $bcPara
         echo "in1=${read1Lines[i]}" >> $bcPara
         echo "in2=${read2Lines[i]}" >> $bcPara
@@ -126,32 +133,33 @@ else
         echo "umiRead=1" >> $bcPara
         echo "mismatch=1" >> $bcPara
 
-	echo  "~~~ mapping - $fqname ~~~"
+	echo  " ~~~ mapping - $fqname ~~~"
         singularity exec ${visualSif} mapping \
             --outSAMattributes spatial \
             --outSAMtype BAM SortedByCoordinate \
             --genomeDir ${genome} \
             --runThreadN ${threads} \
-            --outFileNamePrefix ${result}/${fqbase}. \
+            --outFileNamePrefix ${result_02alignment}/${fqbase}. \
             --sysShell /bin/bash \
             --stParaFile ${bcPara} \
             --readNameSeparator \" \" \
             --limitBAMsortRAM 38582880124 \
             --limitOutSJcollapsed 10000000 \
             --limitIObufferSize=280000000 \
-            > ${result}/${fqbase}_barcodeMap.stat &&\
+            > ${result_00fq}/${fqbase}_barcodeMap.stat &&\
             
-        starBam=${result}/${fqbase}.Aligned.sortedByCoord.out.bam
+        starBam=${result_00fq}/${fqbase}.Aligned.sortedByCoord.out.bam
         starBams[i]=$starBam
         bcReadsCounts[i]=$barcodeReadsCount
     done
+
     bcReadsCountsStr=$( IFS=','; echo "${bcReadsCounts[*]}" )
     starBamsStr=$( IFS=','; echo "${starBams[*]}" )
 
     #merge barcode reads count file
     echo `date` " merge barcode reads count tables start......"
     export SINGULARITY_BIND=$outDir
-    barcodeReadsCounts=${result}/${SNid}.barcodeReadsCount.txt
+    barcodeReadsCounts=${result_00fq}/${SNid}.barcodeReadsCount.txt
     singularity exec ${visualSif} merge \
         -i $bcReadsCountsStr \
         --out $barcodeReadsCounts \
@@ -160,14 +168,14 @@ else
     #annotation and deduplication
     echo `date` " annotation and deduplication start......"
     export SINGULARITY_BIND=$outDir,$annodir
-    mkdir -p ${result}/GetExp
-    geneExp=${result}/GetExp/barcode_gene_exp.txt
-    saturationFile=${result}/GetExp/raw_barcode_gene_exp.txt
+    mkdir -p ${result_02alignment}/GetExp
+    geneExp=${result_02alignment}/GetExp/barcode_gene_exp.txt
+    saturationFile=${result_02alignment}/GetExp/raw_barcode_gene_exp.txt
     singularity exec ${visualSif} count \
         -i ${starBamsStr} \
-        -o ${result}/${SNid}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam \
+        -o ${result_02alignment}/${SNid}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam \
         -a ${annotation} \
-        -s ${result}/${SNid}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam.summary.stat \
+        -s ${result_02alignment}/${SNid}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam.summary.stat \
         -e ${geneExp} \
         --sat_file ${saturationFile} \
         --umi_on \
@@ -175,14 +183,14 @@ else
         --save_dup \
         -c ${threads} &&\
 
-    tissueCutResult=${result}/GetExp/tissueCut
+    tissueCutResult=${result_02alignment}/GetExp/tissueCut
 
     if [[ -n $image ]]
     then
         #firstly do registration, then cut the gene expression matrix based on the repistration result
         echo `date` " registration and tissueCut start......."
         export SINGULARITY_BIND=$outDir,$annodir,$image
-        regResult=${result}/GetExp/registration
+        regResult=${result_02alignment}/GetExp/registration
         imageQC=$(find ${image} -maxdepth 1 -name ${SNid}*.json | head -1)
         image4register=$(find ${image} -maxdepth 1 -name *.tar.gz | head -1)
         echo "register parameter $imageQC ; $image4register ; $geneExp"
@@ -214,8 +222,8 @@ echo `date` " saturation start ......"
 singularity exec ${visualSif} saturation \
     -i ${saturationFile} \
 	--tissue ${tissueCutResult}/segmentation/${SNid}.tissue.gem.gz \
-	-o ${result}/GetExp &&\
-mv ${result}/GetExp/*saturation.png ${outDir}
+	-o ${result_02alignment} &&\
+mv ${result_02alignment}/*saturation.png ${outDir}
 
 #cellcluster
 echo `date` " cellcluster start ......"
@@ -239,7 +247,7 @@ mv $visualGem $outDir/
 echo `date` " report generation start......"
 singularity exec ${visualSif} jsonreport \
     -p $outdir \
-    -o $outdir
+    -o $outdir &&\
 singularity exec ${visualSif} report \
     -r $outDir \
     -s $SNid
