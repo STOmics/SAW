@@ -217,6 +217,9 @@ else
             --snId ${SNid}
     fi
 fi
+
+mv ${tissueCutResult}/segmentation/TissueFig/SS200000003BR_B3.ssDNA.rpi $outDir/
+
 #saturationi
 echo `date` " saturation start ......"
 singularity exec ${visualSif} saturation \
