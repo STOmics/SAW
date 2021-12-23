@@ -148,7 +148,7 @@ else
             --limitIObufferSize=280000000 \
             > ${result_00fq}/${fqbase}_barcodeMap.stat &&\
             
-        starBam=${result_00fq}/${fqbase}.Aligned.sortedByCoord.out.bam
+        starBam=${result_02alignment}/${fqbase}.Aligned.sortedByCoord.out.bam
         starBams[i]=$starBam
         bcReadsCounts[i]=$barcodeReadsCount
     done
