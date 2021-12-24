@@ -67,49 +67,77 @@ else
 fi
 
 if [[ ! -d $outDir ]];then
-    mkdir $outDir
+    mkdir -p $outDir
 fi
 
 #basic information get
-result=${outDir}/result
-mkdir -p $result
+result_02alignment=${outDir}/02.alignment
+result_00fq=${outDir}/00.fq
+if [[ ! -d $result_02alignment ]];then
+    mkdir -p $result_02alignment
+fi
+if [[ ! -d $result_00fq ]];then
+    mkdir -p $result_00fq
+fi
+
+
 maskname=$(basename $maskFile)
 SNid=${maskname%%.*}
 maskdir=$(dirname $maskFile)
 annodir=$(dirname $annotation)
 
 #barcode mapping and star alignment.
+echo `date` " barcode mapping, adapter filter and RNA alignment start......"
 read1Lines=(`echo $read1 | tr ',' ' '`)
 read2Lines=(`echo $read2 | tr ',' ' '`)
 fqbases=()
 starBams=()
 bcReadsCounts=()
 fqNumber=`echo ${#read1Lines[@]}`
-
 echo "$read1Lines $fqNumber $result"
-
 
 
 if [[ $parameters ]]
 then
-    echo ~~~ici~~~
     echo `date` " manualParameterForRegistration check: parameter exists and parameter is ${parameters}"
-    #merge barcode reads count file
-    echo `date` " merge barcode reads count tables start......"
+    barcodeReadsCounts=${result_00fq}/${SNid}.barcodeReadsCount.txt
+    regResult=${result_02alignment}/GetExp/registration
+    geneExp=${result_02alignment}/GetExp/barcode_gene_exp.txt
+    tissueCutResult=${result_02alignment}/GetExp/tissueCut
+    imageQC=$(find ${image} -maxdepth 1 -name ${SNid}*.json | head -1)
+    image4register=$(find ${image} -maxdepth 1 -name *.tar.gz | head -1)
+
+    echo `date` " semi-auto registration start......"
     export SINGULARITY_BIND=$outDir
-    barcodeReadsCounts=${result}/${SNid}.barcodeReadsCount.txt
-    singularity exec ${visualSif} semiautoregister \
-        -i ${result}/GetExp/registration \
+    singularity exec ${visualSif} manualregister \
+        -i ${result_02alignment}/GetExp/registration \
         $patameters &&
-    echo ~ici~
+    echo "
+        singularity exec ${visualSif} tissuecut \
+            --dnbfile ${barcodeReadsCount} \
+            -i ${geneExp} \
+            -o ${tissueCutResult} \
+            -s ${regResult}/7_result \
+            -t tissue \
+            --snId ${SNid}
+        "
+    echo `date` " tissueCut start......."
+    export SINGULARITY_BIND=$outDir,$annodir,$image
+    singularity exec ${visualSif} tissuecut \
+            --dnbfile ${barcodeReadsCount} \
+            -i ${geneExp} \
+            -o ${tissueCutResult} \
+            -s ${regResult}/7_result \
+            -t tissue \
+            --snId ${SNid}
+    
 else
     ulimit -c 100000000000
-    
     echo `date` " barcode mapping, adapter filter and RNA alignment start......"
     fqname=$(basename $read1)
     fqbase=${fqname%%.*}
-    bcPara=${result}/${fqbase}.bcPara
-    barcodeReadsCount=${result}/${fqbase}.barcodeReadsCount.txt
+    bcPara=${result_02alignment}/${fqbase}.bcPara
+    barcodeReadsCount=${result_00fq}/${fqbase}.barcodeReadsCount.txt
     echo "in=${maskFile}" > $bcPara
     echo "in1=${read1}" >> $bcPara
     echo "in2=${read2}" >> $bcPara
@@ -125,50 +153,52 @@ else
     echo "umiRead=1" >> $bcPara
     echo "mismatch=1" >> $bcPara
 
+    echo  " ~~~ mapping - $fqname ~~~"
     singularity exec ${visualSif} mapping \
         --outSAMattributes spatial \
         --outSAMtype BAM SortedByCoordinate \
         --genomeDir ${genome} \
         --runThreadN ${threads} \
-        --outFileNamePrefix ${result}/${fqbase}. \
+        --outFileNamePrefix ${result_02alignment}/${fqbase}. \
         --sysShell /bin/bash \
         --stParaFile ${bcPara} \
         --readNameSeparator \" \" \
         --limitBAMsortRAM 38582880124 \
         --limitOutSJcollapsed 10000000 \
         --limitIObufferSize=280000000 \
-        > ${result}/${fqbase}_barcodeMap.stat &&\
+        > ${result_00fq}/${fqbase}_barcodeMap.stat &&\
     
     #annotation and deduplication
     echo `date` " annotation and deduplication start......"
-    mkdir -p ${result}/GetExp
-    starBam=${result}/${fqbase}.Aligned.sortedByCoord.out.bam
-    geneExp=${result}/GetExp/barcode_gene_exp.txt
-    saturationFile=${result}/GetExp/raw_barcode_gene_exp.txt
+    mkdir -p ${result_02alignment}/GetExp
+    geneExp=${result_02alignment}/GetExp/barcode_gene_exp.txt
+    saturationFile=${result_02alignment}/GetExp/raw_barcode_gene_exp.txt
+    starBam=${result_02alignment}/${fqbase}.Aligned.sortedByCoord.out.bam
     export SINGULARITY_BIND=$outDir,$annodir    
 
     singularity exec ${visualSif} count \
-        -i ${starBams} \
-        -o ${result}/${SNid}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam \
+        -i ${starBam} \
+        -o ${result_02alignment}/${SNid}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam \
         -a ${annotation} \
-        -s ${result}/${SNid}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam.summary.stat \
+        -s ${result_02alignment}/${SNid}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam.summary.stat \
         -e ${geneExp} \
         --sat_file ${saturationFile} \
         --umi_on \
         --save_lq \
         --save_dup \
         -c ${threads} &&\
-    echo "icicici"
-    
-    tissueCutResult=${result}/GetExp/tissueCut
+
+    tissueCutResult=${result_02alignment}/GetExp/tissueCut
+
     if [[ -n $image ]]
     then
         #firstly do registration, then cut the gene expression matrix based on the repistration result
         echo `date` " registration and tissueCut start......."
         export SINGULARITY_BIND=$outDir,$annodir,$image
-        regResult=${result}/GetExp/registration
+        regResult=${result_02alignment}/GetExp/registration
         imageQC=$(find ${image} -maxdepth 1 -name ${SNid}*.json | head -1)
         image4register=$(find ${image} -maxdepth 1 -name *.tar.gz | head -1)
+        echo "register parameter $imageQC ; $image4register ; $geneExp"
         singularity exec ${visualSif} register \
             -i ${image4register} \
             -c ${imageQC} \
@@ -192,13 +222,17 @@ else
             --snId ${SNid}
     fi
 fi
+
+mv ${tissueCutResult}/segmentation/TissueFig/${SNid}.ssDNA.rpi $outDir/
+mv ${tissueCutResult}/segmentation/TissueFig/*.png $outDir/
+
 #saturationi
 echo `date` " saturation start ......"
 singularity exec ${visualSif} saturation \
-    -i ${saturationFile} \
-    --tissue ${tissueCutResult}/segmentation/${SNid}.tissue.gem.gz \
-    -o ${result}/GetExp &&\
-mv ${result}/GetExp/*saturation.png ${outDir}
+    -i ${samplingFile} \
+	--tissue ${tissueCutResult}/segmentation/${SNid}.tissue.gem.gz \
+	-o ${result_02alignment} &&\
+mv ${result_02alignment}/*saturation.png ${outDir}
 
 #cellcluster
 echo `date` " cellcluster start ......"
@@ -222,7 +256,7 @@ mv $visualGem $outDir/
 echo `date` " report generation start......"
 singularity exec ${visualSif} jsonreport \
     -p $outdir \
-    -o $outdir
+    -o $outdir &&\
 singularity exec ${visualSif} report \
     -r $outDir \
-    -s $SNid
+    -s $SNid &&\
