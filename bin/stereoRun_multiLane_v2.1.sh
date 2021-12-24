@@ -109,7 +109,7 @@ then
 
     echo `date` " semi-auto registration start......"
     export SINGULARITY_BIND=$outDir
-    singularity exec ${visualSif} semiautoregister \
+    singularity exec ${visualSif} manualregister \
         -i ${result_02alignment}/GetExp/registration \
         $patameters &&
     echo "
