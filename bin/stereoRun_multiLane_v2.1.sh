@@ -100,13 +100,37 @@ fqNumber=`echo ${#read1Lines[@]}`
 if [[ $parameters ]]
 then
     echo `date` " manualParameterForRegistration check: parameter exists and parameter is ${parameters}"
-    #merge barcode reads count file
-    echo `date` " merge barcode reads count tables start......"
-    export SINGULARITY_BIND=$outDir
     barcodeReadsCounts=${result_00fq}/${SNid}.barcodeReadsCount.txt
+    regResult=${result_02alignment}/GetExp/registration
+    geneExp=${result_02alignment}/GetExp/barcode_gene_exp.txt
+    tissueCutResult=${result_02alignment}/GetExp/tissueCut
+    imageQC=$(find ${image} -maxdepth 1 -name ${SNid}*.json | head -1)
+    image4register=$(find ${image} -maxdepth 1 -name *.tar.gz | head -1)
+
+    echo `date` " semi-auto registration start......"
+    export SINGULARITY_BIND=$outDir
     singularity exec ${visualSif} semiautoregister \
         -i ${result_02alignment}/GetExp/registration \
         $patameters &&
+    echo "
+        singularity exec ${visualSif} tissuecut \
+            --dnbfile ${barcodeReadsCount} \
+            -i ${geneExp} \
+            -o ${tissueCutResult} \
+            -s ${regResult}/7_result \
+            -t tissue \
+            --snId ${SNid}
+        "
+    echo `date` " tissueCut start......."
+    export SINGULARITY_BIND=$outDir,$annodir,$image
+    singularity exec ${visualSif} tissuecut \
+            --dnbfile ${barcodeReadsCount} \
+            -i ${geneExp} \
+            -o ${tissueCutResult} \
+            -s ${regResult}/7_result \
+            -t tissue \
+            --snId ${SNid}
+    
 else
     ulimit -c 100000000000
     for i in $(seq 0 `expr $fqNumber - 1`)
@@ -218,7 +242,8 @@ else
     fi
 fi
 
-mv ${tissueCutResult}/segmentation/TissueFig/SS200000003BR_B3.ssDNA.rpi $outDir/
+mv ${tissueCutResult}/segmentation/TissueFig/${SNid}.ssDNA.rpi $outDir/
+mv ${tissueCutResult}/segmentation/TissueFig/*.png $outDir/
 
 #saturationi
 echo `date` " saturation start ......"
@@ -253,4 +278,4 @@ singularity exec ${visualSif} jsonreport \
     -o $outdir &&\
 singularity exec ${visualSif} report \
     -r $outDir \
-    -s $SNid
+    -s $SNid &&\
