@@ -137,7 +137,7 @@ else
     fqname=$(basename $read1)
     fqbase=${fqname%%.*}
     bcPara=${result_02alignment}/${fqbase}.bcPara
-    barcodeReadsCount=${result_00fq}/${fqbase}.barcodeReadsCount.txt
+    barcodeReadsCount=${result_02alignment}/${fqbase}.barcodeReadsCount.txt
     echo "in=${maskFile}" > $bcPara
     echo "in1=${read1}" >> $bcPara
     echo "in2=${read2}" >> $bcPara
@@ -152,7 +152,7 @@ else
     echo "umiLen=10" >> $bcPara
     echo "umiRead=1" >> $bcPara
     echo "mismatch=1" >> $bcPara
-
+    export SINGULARITY_BIND=$outDir,$annodir,$maskdir
     echo  " ~~~ mapping - $fqname ~~~"
     singularity exec ${visualSif} mapping \
         --outSAMattributes spatial \
@@ -167,7 +167,16 @@ else
         --limitOutSJcollapsed 10000000 \
         --limitIObufferSize=280000000 \
         > ${result_00fq}/${fqbase}_barcodeMap.stat &&\
-    
+   
+    #merge barcode reads count file
+    echo `date` " merge barcode reads count tables start......"
+    export SINGULARITY_BIND=$outDir
+    barcodeReadsCounts=${result_00fq}/${SNid}.barcodeReadsCount.txt
+    singularity exec ${visualSif} merge \
+        -i $barcodeReadsCount \
+        --out $barcodeReadsCounts \
+        --action 2 &&\
+
     #annotation and deduplication
     echo `date` " annotation and deduplication start......"
     mkdir -p ${result_02alignment}/GetExp
@@ -204,7 +213,8 @@ else
             -c ${imageQC} \
             -v ${geneExp} \
             -o ${regResult} &&\
-        singularity exec ${visualSif} tissuecut \
+        export SINGULARITY_BIND=$outDir,$annodir,$image
+	singularity exec ${visualSif} tissuecut \
             --dnbfile ${barcodeReadsCount} \
             -i ${geneExp} \
             -o ${tissueCutResult} \
@@ -214,6 +224,7 @@ else
     else
         #cut the gene expression matrix directly
         echo `date` " there is no image, tissueCut start......."
+        export SINGULARITY_BIND=$outDir
         singularity exec ${visualSif} tissuecut \
             --dnbfile ${barcodeReadsCounts} \
             -i ${geneExp} \
@@ -223,8 +234,7 @@ else
     fi
 fi
 
-mv ${tissueCutResult}/segmentation/TissueFig/${SNid}.ssDNA.rpi $outDir/
-mv ${tissueCutResult}/segmentation/TissueFig/*.png $outDir/
+
 
 #saturationi
 echo `date` " saturation start ......"
@@ -251,12 +261,23 @@ singularity exec ${visualSif} gem2gef \
     -m $threads \
     -b '1,5,10,15,20,50,80,100,150,200'  &&\
 
-mv $visualGem $outDir/
+
+cp ${result_02alignment}/sequence_saturation.txt  ${result_02alignment}/GetExp/sequence_saturation.txt
+cp $visualGem $outDir/
+cp ${tissueCutResult}/segmentation/TissueFig/${SNid}.ssDNA.rpi $outDir/
+cp ${tissueCutResult}/segmentation/TissueFig/*.png $outDir/
+
+
 #generate report file in json format
 echo `date` " report generation start......"
+
+export SINGULARITY_BIND=$outDir
 singularity exec ${visualSif} jsonreport \
-    -p $outdir \
-    -o $outdir &&\
+    -p $outDir \
+    -o $outDir &&\
+export SINGULARITY_BIND=$outDir
 singularity exec ${visualSif} report \
     -r $outDir \
-    -s $SNid &&\
+    -s $SNid \
+
+echo `data` " all done "
