@@ -181,7 +181,7 @@ else
     echo `date` " annotation and deduplication start......"
     mkdir -p ${result_02alignment}/GetExp
     geneExp=${result_02alignment}/GetExp/barcode_gene_exp.txt
-    saturationFile=${result_02alignment}/GetExp/raw_barcode_gene_exp.txt
+    samplingFile=${result_02alignment}/GetExp/raw_barcode_gene_exp.txt
     starBam=${result_02alignment}/${fqbase}.Aligned.sortedByCoord.out.bam
     export SINGULARITY_BIND=$outDir,$annodir    
 
@@ -191,7 +191,7 @@ else
         -a ${annotation} \
         -s ${result_02alignment}/${SNid}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam.summary.stat \
         -e ${geneExp} \
-        --sat_file ${saturationFile} \
+        --sat_file ${samplingFile} \
         --umi_on \
         --save_lq \
         --save_dup \
