@@ -1,7 +1,6 @@
 # Demo Data For SAW (Stereo-seq Analysis Workflow) Test
 
-#### download from intra-path
-path: /jdfssz1/ST_BIGDATA/USER/heqiqi/Task/SAW-workflow/test_data/demo_perfect/SS200000003BR_B3
+
 
 #### download from web
 SS200000135TL_D1: 
