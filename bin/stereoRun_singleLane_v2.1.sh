@@ -132,7 +132,6 @@ then
             --snId ${SNid}
     
 else
-    ulimit -c 100000000000
     echo `date` " barcode mapping, adapter filter and RNA alignment start......"
     fqname=$(basename $read1)
     fqbase=${fqname%%.*}
