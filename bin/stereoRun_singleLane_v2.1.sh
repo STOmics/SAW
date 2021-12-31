@@ -111,7 +111,7 @@ then
     export SINGULARITY_BIND=$outDir
     singularity exec ${visualSif} manualregister \
         -i ${result_02alignment}/GetExp/registration \
-        $patameters &&
+        $parameters &&
     echo "
         singularity exec ${visualSif} tissuecut \
             --dnbfile ${barcodeReadsCount} \
