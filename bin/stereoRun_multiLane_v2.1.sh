@@ -113,8 +113,7 @@ then
     export SINGULARITY_BIND=$outDir
     singularity exec ${visualSif} manualregister \
         -i ${result_02alignment}/GetExp/registration \
-	-p /home/ubuntu/TEST/SAW_v2_211202/test_saw_toB/test_multi/demo_0_v3/test_only_semiauto \ 
-        $parameters &&
+        $patameters && \
     
     echo `date` " tissueCut start......."
     export SINGULARITY_BIND=$outDir,$annodir,$image
