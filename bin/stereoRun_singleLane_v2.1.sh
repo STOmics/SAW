@@ -114,7 +114,7 @@ then
         $parameters &&
     echo "
         singularity exec ${visualSif} tissuecut \
-            --dnbfile ${barcodeReadsCount} \
+            --dnbfile ${barcodeReadsCounts} \
             -i ${geneExp} \
             -o ${tissueCutResult} \
             -s ${regResult}/7_result \
@@ -124,7 +124,7 @@ then
     echo `date` " tissueCut start......."
     export SINGULARITY_BIND=$outDir,$annodir,$image
     singularity exec ${visualSif} tissuecut \
-            --dnbfile ${barcodeReadsCount} \
+            --dnbfile ${barcodeReadsCounts} \
             -i ${geneExp} \
             -o ${tissueCutResult} \
             -s ${regResult}/7_result \
