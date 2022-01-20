@@ -63,7 +63,7 @@ singularity build SAW_v2.1.0.sif docker://stomics/saw:02.1.0
 ## Run
 ### Preparation
 ```
-Before running the Stereo-seq Analysis Workflow, you should prepare the indexed reference as follow:
+Before running the STOmics Analysis Workflow, you should prepare the indexed reference as follow:
 singularity exec SAW_v2.1.0.sif mapping --runMode genomeGenerate \
     --genomeDir reference/STAR_SJ100 \
     --genomeFastaFiles reference/genome.fa \
