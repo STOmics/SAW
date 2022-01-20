@@ -1,10 +1,10 @@
-# SAW(Stereo-seq Analysis Workflow)
-Workflow of analyzing Stereo-Seq transcriptome data
+# SAW(STOmics Analysis Workflow)
+Workflow for analyzing Stereo-Seq transcriptome data
 
 ## System Requirements
 ### Hardware
 
-Stereo-seq Analysis Workflow (SAW) run on Linux systems that meet these minimum requirements:
+STOmics Analysis Workflow (SAW) run on Linux systems that meet these minimum requirements:
 * 8-core Intel or AMD processor (24 cores recommended)
 * 128GB RAM (256GB recommended)
 * 1TB free disk space
