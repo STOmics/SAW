@@ -80,8 +80,6 @@ annodir=$(dirname $annotation)
 imagdir=$(dirname $image)
 
 
-
-
 #create result path
 ##result path
 result_00mapping=${outDir}/00.mapping
@@ -93,23 +91,12 @@ result_05spatialcluster=${outDir}/05.spatialcluster
 result_06saturation=${outDir}/06.saturation
 result_07report=${outDir}/07.report
 arr_result=( $result_00mapping $result_01merge $result_02count $result_03register $result_04tissuecut $result_05spatialcluster $result_06saturation $result_07report )
-result_finalResult=${outDir}/${SNid}_result
-result_finalResult_BAM=${outDir}/${SNid}_result/BAM
-result_finalResult_FASTQ=${outDir}/${SNid}_result/FASTQ
-##create result directory
-if [[ ! -d $result_finalResult ]];then
-    mkdir -p $result_finalResult
-    mkdir -p $result_finalResult_BAM
-    mkdir -p $result_finalResult_FASTQ
-fi
 for each in "${arr_result[@]}";
 do
     if [[ ! -d $each ]];then
         mkdir -p $each
     fi
 done
-
-
 
 
 #barcode mapping and star alignment.
@@ -140,7 +127,6 @@ then
         -t tissue \
         --platform T10 \
         --snId ${SNid}
-
 else
     ulimit -c 100000000000
 
@@ -283,7 +269,7 @@ then
         -o ${result_07report} \
         -r standard_version \
         --pipelineVersion SAW_v4.0.0 \
-        -s $SNid &&\
+        -s ${SNid} &&\
     echo `date` " report finish "
 else
     singularity exec ${visualSif} report \
@@ -299,7 +285,7 @@ else
         -o ${result_07report} \
         -r standard_version \
         --pipelineVersion SAW_v4.0.0 \
-        -s $SNid &&\
+        -s ${SNid} &&\
     echo `date` " report finish "
 fi
 echo `date` " all done "
