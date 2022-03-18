@@ -150,7 +150,8 @@ then
         -s ${result_03register}/7_result \
         -t tissue \
         --platform T10 \
-        --snId ${SNid} &&\
+        --snId ${SNid} 
+
 else
     ulimit -c 100000000000
     for i in $(seq 0 `expr $fqNumber - 1`)
@@ -208,7 +209,7 @@ else
     bcReadsCountsStr=$( IFS=','; echo "${bcReadsCounts[*]}" )
     starBamsStr=$( IFS=','; echo "${starBams[*]}" )
     bcFinalOutStr=$( IFS=','; echo "${bcFinalOut[*]}" )
-
+    bcStatStr=$( IFS=','; echo "${bcStat[*]}" )
     #merge barcode reads count file
     echo `date` " merge barcode reads count tables start......"
     export SINGULARITY_BIND=$outDir
@@ -238,7 +239,7 @@ else
 
     if [[ -n $image ]]
     then
-        #firstly do registration, then cut the gene expression matrix based on the registration result
+        #firstly do registration, then cut the gene expression matrix based on the repistration result
         echo `date` " registration and tissueCut start......."
         export SINGULARITY_BIND=$outDir,$annodir,$image
         imageQC=$(find ${image} -maxdepth 1 -name ${SNid}*.json | head -1)
@@ -258,11 +259,11 @@ else
             -t tissue \
             --platform T10 \
             --snId ${SNid} &&\
-    echo `date` " tissuecut finish"
+    echo `date` " tissueCut finish"
     else
         #cut the gene expression matrix directly
         echo `date` " there is no image, tissueCut start......."
-        singularity exec ${visualSif} tissueCut \
+        singularity exec ${visualSif} tissuecut \
             --dnbfile ${barcodeReadsCounts} \
             -i ${geneExp} \
             -o ${result_04tissuecut} \
@@ -288,16 +289,15 @@ singularity exec ${visualSif} saturation \
     -o ${result_06saturation} \
     --bcstat ${bcStat} \
     --summary ${result_02count}/${SNid}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam.summary.stat &&\
-
-
 #generate report file in json format
 echo `date` " report generation start......"
+
 export SINGULARITY_BIND=$outDir
-if [[ -n ${result_03register}/${SNid}.ssDNA.rpi ]] && [[ -e ${result_03register}/${SNid}.ssDNA.rpi ]];
+if [[ -n ${result_04tissuecut}/tissue_fig/${SNid}.ssDNA.rpi ]] && [[ -e ${result_04tissuecut}/tissue_fig/${SNid}.ssDNA.rpi ]];
 then
     singularity exec ${visualSif} report \
-        -m ${bcStat} \
-        -a $bcLogFinalOutStr \
+        -m $bcStatStr \
+        -a $bcFinalOutStr \
         -g ${result_02count}/${SNid}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam.summary.stat \
         -l ${result_04tissuecut}/tissuecut.stat \
         -n ${result_04tissuecut}/${SNid}.gef \
@@ -314,8 +314,8 @@ then
     echo `date` " report finish "
 else
     singularity exec ${visualSif} report \
-        -m ${bcStat} \
-        -a $bcLogFinalOutStr \
+        -m $bcStatStr \
+        -a $bcFinalOutStr\
         -g ${result_02count}/${SNid}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam.summary.stat \
         -l ${result_04tissuecut}/tissuecut.stat \
         -n ${result_04tissuecut}/${SNid}.gef \
@@ -329,5 +329,5 @@ else
         --pipelineVersion SAW_v4.0.0 \
         -s $SNid &&\
     echo `date` " report finish "
-
+fi
 echo `date` " all done "
