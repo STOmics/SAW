@@ -279,7 +279,6 @@ then
         -t ${result_06saturation}/plot_200x200_saturation.png \
         -b ${result_04tissuecut}/tissue_fig/scatter_200x200_MID_gene_counts.png \
         -v ${result_04tissuecut}/tissue_fig/violin_200x200_MID_gene.png \
-        -c ${result_04tissuecut}/tissue_fig/statistic_200x200_MID_gene_DNB.png \
         -i ${result_04tissuecut}/tissue_fig/${SNid}.ssDNA.rpi \
         -o ${result_07report} \
         -r standard_version \
@@ -297,7 +296,6 @@ else
         -t ${result_06saturation}/plot_200x200_saturation.png \
         -b ${result_04tissuecut}/tissue_fig/scatter_200x200_MID_gene_counts.png \
         -v ${result_04tissuecut}/tissue_fig/violin_200x200_MID_gene.png \
-        -c ${result_04tissuecut}/tissue_fig/statistic_200x200_MID_gene_DNB.png \
         -o ${result_07report} \
         -r standard_version \
         --pipelineVersion SAW_v4.0.0 \
