@@ -1,7 +1,6 @@
 #!/bin/bash
 
 if [[ $# -lt 12 ]];then
-#if [[ $# -lt 12 ]];then
     echo
     echo "usage: sh $0 -m maskFile -1 read1 -2 read2 -g indexedGenome -a annotationFile -o outDir -i image -t threads -s visualSif
     -m stereochip mask file
@@ -18,9 +17,7 @@ if [[ $# -lt 12 ]];then
     exit
 fi
 
-
 threads=8
-
 
 while [[ -n "$1" ]]
 do
