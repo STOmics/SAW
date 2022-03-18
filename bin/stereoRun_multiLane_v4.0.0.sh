@@ -70,7 +70,6 @@ if [[ ! -d $outDir ]];then
     mkdir -p $outDir
 fi
 
-
 #basic information get
 maskname=$(basename $maskFile)
 SNid=${maskname%%.*}
@@ -78,9 +77,6 @@ SNid=${maskname%%.*}
 maskdir=$(dirname $maskFile)
 annodir=$(dirname $annotation)
 imagdir=$(dirname $image)
-
-
-
 
 #create result path
 ##result path
@@ -93,23 +89,12 @@ result_05spatialcluster=${outDir}/05.spatialcluster
 result_06saturation=${outDir}/06.saturation
 result_07report=${outDir}/07.report
 arr_result=( $result_00mapping $result_01merge $result_02count $result_03register $result_04tissuecut $result_05spatialcluster $result_06saturation $result_07report )
-result_finalResult=${outDir}/${SNid}_result
-result_finalResult_BAM=${outDir}/${SNid}_result/BAM
-result_finalResult_FASTQ=${outDir}/${SNid}_result/FASTQ
-##create result directory
-if [[ ! -d $result_finalResult ]];then
-    mkdir -p $result_finalResult
-    mkdir -p $result_finalResult_BAM
-    mkdir -p $result_finalResult_FASTQ
-fi
 for each in "${arr_result[@]}";
 do
     if [[ ! -d $each ]];then
         mkdir -p $each
     fi
 done
-
-
 
 
 #barcode mapping and star alignment.
@@ -122,8 +107,6 @@ bcStat=()
 bcLogFinalOut=()
 bcReadsCounts=()
 fqNumber=`echo ${#read1Lines[@]}`
-
-
 
 if [[ $parameters ]]
 then
@@ -167,12 +150,9 @@ else
         echo "in2=${read2Lines[i]}" >> $bcPara
         echo "encodeRule=ACTG" >> $bcPara
         echo "action=4" >> $bcPara
-
         echo "barcodeReadsCount=${barcodeReadsCount}" >> $bcPara
         echo "platform=T10" >> $bcPara
-
         echo "out=${fqbase}" >> $bcPara
-        
         echo "barcodeStart=0" >> $bcPara
         echo "barcodeLen=25" >> $bcPara
         echo "umiStart=25" >> $bcPara
@@ -297,8 +277,8 @@ export SINGULARITY_BIND=$outDir
 if [[ -n ${result_04tissuecut}/tissue_fig/${SNid}.ssDNA.rpi ]] && [[ -e ${result_04tissuecut}/tissue_fig/${SNid}.ssDNA.rpi ]];
 then
     singularity exec ${visualSif} report \
-        -m $bcStatStr \
-        -a $bcFinalOutStr \
+        -m ${bcStatStr} \
+        -a ${bcFinalOutStr} \
         -g ${result_02count}/${SNid}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam.summary.stat \
         -l ${result_04tissuecut}/tissuecut.stat \
         -n ${result_04tissuecut}/${SNid}.gef \
@@ -306,17 +286,16 @@ then
         -t ${result_06saturation}/plot_200x200_saturation.png \
         -b ${result_04tissuecut}/tissue_fig/scatter_200x200_MID_gene_counts.png \
         -v ${result_04tissuecut}/tissue_fig/violin_200x200_MID_gene.png \
-        -c ${result_04tissuecut}/tissue_fig/statistic_200x200_MID_gene_DNB.png \
         -i ${result_04tissuecut}/tissue_fig/${SNid}.ssDNA.rpi \
         -o ${result_07report} \
         -r standard_version \
         --pipelineVersion SAW_v4.0.0 \
-        -s $SNid &&\
+        -s ${SNid} &&\
     echo `date` " report finish "
 else
     singularity exec ${visualSif} report \
-        -m $bcStatStr \
-        -a $bcFinalOutStr\
+        -m ${bcStatStr} \
+        -a ${bcFinalOutStr} \
         -g ${result_02count}/${SNid}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam.summary.stat \
         -l ${result_04tissuecut}/tissuecut.stat \
         -n ${result_04tissuecut}/${SNid}.gef \
@@ -324,11 +303,10 @@ else
         -t ${result_06saturation}/plot_200x200_saturation.png \
         -b ${result_04tissuecut}/tissue_fig/scatter_200x200_MID_gene_counts.png \
         -v ${result_04tissuecut}/tissue_fig/violin_200x200_MID_gene.png \
-        -c ${result_04tissuecut}/tissue_fig/statistic_200x200_MID_gene_DNB.png \
         -o ${result_07report} \
         -r standard_version \
         --pipelineVersion SAW_v4.0.0 \
-        -s $SNid &&\
+        -s ${SNid} &&\
     echo `date` " report finish "
 fi
 
