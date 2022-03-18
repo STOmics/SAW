@@ -289,9 +289,10 @@ singularity exec ${visualSif} saturation \
     -o ${result_06saturation} \
     --bcstat ${bcStat} \
     --summary ${result_02count}/${SNid}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam.summary.stat &&\
+
+
 #generate report file in json format
 echo `date` " report generation start......"
-
 export SINGULARITY_BIND=$outDir
 if [[ -n ${result_04tissuecut}/tissue_fig/${SNid}.ssDNA.rpi ]] && [[ -e ${result_04tissuecut}/tissue_fig/${SNid}.ssDNA.rpi ]];
 then
@@ -330,4 +331,5 @@ else
         -s $SNid &&\
     echo `date` " report finish "
 fi
+
 echo `date` " all done "
