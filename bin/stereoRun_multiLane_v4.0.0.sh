@@ -227,16 +227,16 @@ else
             -c ${imageQC} \
             -v ${geneExp} \
             -o ${result_03register} &&\
-    echo `date` "   tissuecut start......."
-        singularity exec ${visualSif} tissueCut \
-            --dnbfile ${barcodeReadsCount} \
-            -i ${geneExp} \
-            -o ${result_04tissuecut} \
-            -s ${result_03register}/7_result \
-            -t tissue \
-            --platform T10 \
-            --snId ${SNid} &&\
-    echo `date` " tissueCut finish"
+        echo `date` "   tissuecut start......."
+            singularity exec ${visualSif} tissueCut \
+                --dnbfile ${barcodeReadsCount} \
+                -i ${geneExp} \
+                -o ${result_04tissuecut} \
+                -s ${result_03register}/7_result \
+                -t tissue \
+                --platform T10 \
+                --snId ${SNid} &&\
+        echo `date` " tissueCut finish"
     else
         #cut the gene expression matrix directly
         echo `date` " there is no image, tissueCut start......."
