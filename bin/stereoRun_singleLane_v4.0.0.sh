@@ -226,7 +226,7 @@ else
             -t tissue \
             --platform T10 \
             --snId ${SNid} &&\
-    echo `date` " tissueCut finish"
+        echo `date` " tissueCut finish"
     fi
 fi
 
