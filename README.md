@@ -56,6 +56,7 @@ Install singularity on CentOS without compile
 $ yum install -y singularity
 ```
 #### Get SAW image from dockerHub
+SAW has 2 versions now : v2.1.0 & v4.0.0
 ```
 singularity build SAW_v2.1.0.sif docker://stomics/saw:02.1.0 
 singularity build SAW_v4.0.0.sif docker://stomics/saw:04.0.0 
@@ -65,7 +66,7 @@ singularity build SAW_v4.0.0.sif docker://stomics/saw:04.0.0
 ### Preparation
 ```
 Before running the STOmics Analysis Workflow, you should prepare the indexed reference as follow:
-singularity exec SAW_v2.1.0.sif mapping --runMode genomeGenerate \
+singularity exec SAW_version.sif mapping --runMode genomeGenerate \
     --genomeDir reference/STAR_SJ100 \
     --genomeFastaFiles reference/genome.fa \
     --sjdbGTFfile reference/genes.gtf \
@@ -114,7 +115,7 @@ sh stereoRun_singleLane.sh \
     -2 lane_read_2.fq.gz \
     -g reference/STAR_SJ100 \
     -a reference/genes.gtf \
-    -s SAW_v2.1.0.sif \
+    -s SAW_version.sif \
     -o outDir
 when tissue image was given
 sh stereoRun_singleLane.sh \
@@ -123,7 +124,7 @@ sh stereoRun_singleLane.sh \
     -2 lane_read_2.fq.gz \
     -g reference/STAR_SJ100 \
     -a reference/genes.gtf \
-    -s SAW_v2.1.0.sif \
+    -s SAW_version.sif \
     -o outDir \
     -i image_dir_path
 when tissue image was given and auto-semi-register parameters was given
@@ -133,7 +134,7 @@ sh stereoRun_singleLane.sh \
     -2 lane_read_2.fq.gz \
     -g reference/STAR_SJ100 \
     -a reference/genes.gtf \
-    -s SAW_v2.1.0.sif \
+    -s SAW_version.sif \
     -o outDir \
     -i image_dir_path \
     -p parameters_for_re-registrater
@@ -148,7 +149,7 @@ sh stereoRun_multiLane.sh \
     -2 lane1_read_2.fq.gz,lane2_read_2.fq.gz \
     -g reference/STAR_SJ100 \
     -a reference/genes.gtf \
-    -s SAW_v2.1.0.sif \
+    -s SAW_version.sif \
     -o outDir
 when tissue image was given
 sh stereoRun_multiLane.sh \
@@ -157,7 +158,7 @@ sh stereoRun_multiLane.sh \
     -2 lane1_read_2.fq.gz,lane2_read_2.fq.gz \
     -g reference/STAR_SJ100 \
     -a reference/genes.gtf \
-    -s SAW_v2.1.0.sif \
+    -s SAW_version.sif \
     -o outDir \
     -i image_dir_path
 when tissue image was given and auto-semi-register parameters was given
@@ -167,7 +168,7 @@ sh stereoRun_multiLane.sh \
     -2 lane1_read_2.fq.gz,lane2_read_2.fq.gz \
     -g reference/STAR_SJ100 \
     -a reference/genes.gtf \
-    -s SAW_v2.1.0.sif \
+    -s SAW_version.sif \
     -o outDir \
     -i image_dir_path \
     -p parameters_for_re-registrater
