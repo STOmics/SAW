@@ -239,8 +239,9 @@ else
         echo `date` " tissueCut finish"
     else
         #cut the gene expression matrix directly
+        export SINGULARITY_BIND=$outDir,$annodir
         echo `date` " there is no image, tissueCut start......."
-        singularity exec ${visualSif} tissuecut \
+        singularity exec ${visualSif} tissueCut \
             --dnbfile ${barcodeReadsCounts} \
             -i ${geneExp} \
             -o ${result_04tissuecut} \
