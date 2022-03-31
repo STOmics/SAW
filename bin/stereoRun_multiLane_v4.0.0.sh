@@ -123,7 +123,7 @@ then
     echo `date` " tissueCut start......."
     export SINGULARITY_BIND=$outDir,$annodir,$image
 
-    singularity exec ${visualSif} tissuecut \
+    singularity exec ${visualSif} tissueCut \
         --dnbfile ${barcodeReadsCount} \
         -i ${geneExp} \
         -o ${result_04tissuecut} \
@@ -269,7 +269,7 @@ singularity exec ${visualSif} saturation \
     --summary ${result_02count}/${SNid}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam.summary.stat &&\
 
 
-#generate report file in json format
+#generate json and html report files
 echo `date` " report generation start......"
 export SINGULARITY_BIND=$outDir
 if [[ -n ${result_04tissuecut}/tissue_fig/${SNid}.ssDNA.rpi ]] && [[ -e ${result_04tissuecut}/tissue_fig/${SNid}.ssDNA.rpi ]];
