@@ -128,6 +128,7 @@ else
     ulimit -c 100000000000
 
     fqname=$(basename $read1})
+    fqdir=$(dirname $read1)
     fqbase=${fqname%%.*}
     bcPara=${result_00mapping}/${fqbase}.bcPara
     barcodeReadsCount=${result_00mapping}/${fqbase}.barcodeReadsCount.txt #"0.barcodeReadsCount.txt" in wdl
