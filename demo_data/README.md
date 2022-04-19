@@ -6,7 +6,7 @@
 http://116.6.21.110:8090/share/T8PrIbHgCR9ViuEmc0yj
 
 
-old share data(SS200000135TL_D1) link : 
+note => old share data(SS200000135TL_D1) link : 
 http://116.6.21.110:8090/share/rln3Hvxdi6fsBXj0tmG9
 
 #### directory structure
