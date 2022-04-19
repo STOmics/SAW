@@ -7,7 +7,7 @@ SS200000135TL_D1: 
 http://116.6.21.110:8090/share/rln3Hvxdi6fsBXj0tmG9
 
 
-#### tree
+#### directory structure
 ```
 $ tree
 .
