@@ -149,7 +149,7 @@ else
     echo "useF14" >> $bcPara
     echo "bcNum=638759403" >> $bcPara
     export SINGULARITY_BIND=$outDir,$fqdir,$maskdir
-    echo " export SINGULARITY_BIND=$outDir,$fqdir,$maskdir "
+    echo "  *** CHECK_INFO *** outDir=$outDir, fqdir=$fqdir, maskdir=$maskdir"
     echo  " ~~~ mapping - $fqname ~~~"
     singularity exec ${visualSif} mapping \
         --outSAMattributes spatial \
