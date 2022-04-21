@@ -71,10 +71,15 @@ fi
 #basic information get
 maskname=$(basename $maskFile)
 SNid=${maskname%%.*}
-
 maskdir=$(dirname $maskFile)
 annodir=$(dirname $annotation)
 imagdir=$(dirname $image)
+read1DIR=$(dirname $read1)
+read2DIR=$(dirname $read2)
+refDIR=$(dirname $genome)
+
+export SINGULARITY_BIND=$outDir,$read1DIR,$read2DIR,$refDIR,$maskdir,$annodir,$imagdir
+echo "  *** CHECK_INFO *** outDir=$outDir, read1DIR=$read1DIR,read2DIR=$read2DIR,refDIR=$refDIR,maskdir=$maskdir,annodir=$annodir,imagdir=$imagdir"
 
 
 #create result path
@@ -150,6 +155,8 @@ else
     echo "bcNum=638759403" >> $bcPara
     export SINGULARITY_BIND=$outDir,$fqdir,$maskdir
     echo "  *** CHECK_INFO *** outDir=$outDir, fqdir=$fqdir, maskdir=$maskdir"
+    
+    export SINGULARITY_BIND=$outDir,$read1DIR,$read2DIR,$refDIR,$maskdir,$annodir,$imagdir
     echo  " ~~~ mapping - $fqname ~~~"
     singularity exec ${visualSif} mapping \
         --outSAMattributes spatial \
