@@ -65,6 +65,7 @@ singularity build SAW_v4.1.0.sif docker://stomics/saw:04.1.0
 
 ## Run
 ### Preparation
+#### indexBuild.sh
 ```
 Before running the STOmics Analysis Workflow, you should prepare the indexed reference as follow:
 singularity exec <SAW_v4.1.0.sif> mapping --runMode genomeGenerate \
