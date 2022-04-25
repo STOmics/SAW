@@ -3,7 +3,8 @@
 
 
 #### download from web
-http://116.6.21.110:8090/share/T8PrIbHgCR9ViuEmc0yj
+http://stomicsupload.cngb.org:8090/share/XScFj8Oa2LqR9HyDo6K3
+
 
 
 note => old share data(SS200000135TL_D1) link : 
