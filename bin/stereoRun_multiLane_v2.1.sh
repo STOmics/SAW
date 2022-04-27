@@ -113,7 +113,7 @@ then
     export SINGULARITY_BIND=$outDir
     singularity exec ${visualSif} manualregister \
         -i ${result_02alignment}/GetExp/registration \
-        $patameters && \
+        $parameters && \
     
     echo `date` " tissueCut start......."
     export SINGULARITY_BIND=$outDir,$annodir,$image
