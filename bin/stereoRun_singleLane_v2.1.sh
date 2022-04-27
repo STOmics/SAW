@@ -112,15 +112,7 @@ then
     singularity exec ${visualSif} manualregister \
         -i ${result_02alignment}/GetExp/registration \
         $parameters &&
-    echo "
-        singularity exec ${visualSif} tissuecut \
-            --dnbfile ${barcodeReadsCounts} \
-            -i ${geneExp} \
-            -o ${tissueCutResult} \
-            -s ${regResult}/7_result \
-            -t tissue \
-            --snId ${SNid}
-        "
+    
     echo `date` " tissueCut start......."
     export SINGULARITY_BIND=$outDir,$annodir,$image
     singularity exec ${visualSif} tissuecut \
