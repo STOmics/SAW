@@ -224,7 +224,7 @@ then
 
     echo `date` "   tissuecut start......."
     singularity exec ${visualSif} tissueCut \
-        --dnbfile ${barcodeReadsCount} \
+        --dnbfile ${barcodeReadsCounts} \
         -i ${geneExp} \
         -o ${result_04tissuecut} \
         -s ${result_03register}/7_result \
