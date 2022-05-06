@@ -35,7 +35,6 @@ $ tree
         ├── exonInfo.tab
         ├── geneInfo.tab
         ├── Genome
-        ├── genomeParameters_bkp.txt
         ├── genomeParameters.txt
         ├── SA
         ├── SAindex
