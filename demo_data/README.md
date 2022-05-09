@@ -3,12 +3,13 @@
 
 
 #### download from web
-http://stomicsupload.cngb.org:8090/share/XScFj8Oa2LqR9HyDo6K3
-
+http://stomicsupload.cngb.org:8090/share/dPR5Xs9h4aTrungcOMx1
 
 
 note => old share data(SS200000135TL_D1) link : 
+http://stomicsupload.cngb.org:8090/share/XScFj8Oa2LqR9HyDo6K3
 http://116.6.21.110:8090/share/rln3Hvxdi6fsBXj0tmG9
+
 
 #### directory structure
 ```
