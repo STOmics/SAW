@@ -117,10 +117,10 @@ sh stereoRun_singleLane.sh \
     -2 lane_read_2.fq.gz \
     -g reference/STAR_SJ100 \
     -a reference/genes.gtf \
-    -c threads_num \
     -s SAW_version.sif \
-    -o outDir \
-    -i image_dir_path  # [option] when tissue image was given
+    -c genome size \
+    -i image_dir_path \ # [option] when tissue image was given
+    -o outDir
 ```
 #### stereoRun_multiLane.sh
 ```
