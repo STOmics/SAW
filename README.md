@@ -96,9 +96,9 @@ usage: sh <stereoRun.sh> -m maskFile -1 read1 -2 read2 -g indexedGenome -a annot
 ```
 
 ### Running example
-#### stereoRun_singleLane.sh
+#### how to run stereoRun_singleLane.sh script
 ```
-If only one lane sequencing data was given, run the stereoRun.sh script as follows:
+If only one lane sequencing data was given, run the stereoRun_singleLane.sh script as follows:
 
 sh stereoRun_singleLane.sh \
     -m SN.h5 \
@@ -111,7 +111,7 @@ sh stereoRun_singleLane.sh \
     -i image_dir_path \ # [option] when tissue image was given
     -o outDir
 ```
-#### stereoRun_multiLane.sh
+#### how to run stereoRun_multiLane.sh script
 ```
 If more than one lane sequencing data was given, run the stereoRun_multiLane.sh script as follows:
 sh stereoRun_multiLane.sh \
