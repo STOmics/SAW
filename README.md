@@ -100,7 +100,9 @@ usage: sh <stereoRun.sh> -m maskFile -1 read1 -2 read2 -g indexedGenome -a annot
 ```
 If only one lane sequencing data was given, run the stereoRun_singleLane.sh script as follows:
 
-sh stereoRun_singleLane.sh \
+dataDir=/Full/Path/Of/Input/File 
+export SINGULARITY_BIND=$dataDir
+bash stereoRun_singleLane.sh \
     -m SN.h5 \
     -1 lane_read_1.fq.gz \
     -2 lane_read_2.fq.gz \
@@ -114,7 +116,7 @@ sh stereoRun_singleLane.sh \
 #### how to run stereoRun_multiLane.sh script
 ```
 If more than one lane sequencing data was given, run the stereoRun_multiLane.sh script as follows:
-sh stereoRun_multiLane.sh \
+bash stereoRun_multiLane.sh \
     -m SN.h5 \
     -1 lane1_read_1.fq.gz,lane2_read_1.fq.gz \
     -2 lane1_read_2.fq.gz,lane2_read_2.fq.gz \
