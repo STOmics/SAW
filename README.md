@@ -8,6 +8,7 @@ expression distribution. SAW processes the sequencing data of Stereo-Seq to gene
 matrices, and then users could take these files as the starting point to perform downstream analysis. SAW
 includes eight essential pipelines:
 ADD A IMAGE HERE 
+![wrokflow.png](saw_4.1.0_workflow.png)
 
 ##  System Requirements
 ###   Hardware
