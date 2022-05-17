@@ -1,8 +1,10 @@
-# Demo Data For SAW (Stereo-seq Analysis Workflow) Test
+# TEST DATA
+##  demo data base information
+SN: SS200000135TL_D1
+Reference: mouse
+Tissue: brain
 
-
-
-#### download from web
+###   download data from web
 http://stomicsupload.cngb.org:8090/share/dPR5Xs9h4aTrungcOMx1
 
 

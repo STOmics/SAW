@@ -1,10 +1,16 @@
 
 
-# SAW(STOmics Analysis Workflow)
+# SAW : STOmics Analysis Workflow
 Workflow for analyzing Stereo-Seq transcriptome data
+STOmics Analysis Workflow1 (SAW) software suite is a set of pipelines bundled to position sequenced reads
+to their spatial location on the tissue section, quantify spatial gene expression and visually present spatial
+expression distribution. SAW processes the sequencing data of Stereo-Seq to generate spatial gene expression
+matrices, and then users could take these files as the starting point to perform downstream analysis. SAW
+includes eight essential pipelines:
+ADD A IMAGE HERE 
 
-## System Requirements
-### Hardware
+##  System Requirements
+###   Hardware
 
 STOmics Analysis Workflow (SAW) run on Linux systems that meet these minimum requirements:
 * 8-core Intel or AMD processor (24 cores recommended)
@@ -12,12 +18,13 @@ STOmics Analysis Workflow (SAW) run on Linux systems that meet these minimum req
 * 1TB free disk space
 * 64-bit CentOS/RedHat 7.8 or Ubuntu 20.04
 
-### Software
+###   Software
 
 * singularity
 * SAW
 
-#### Install singularity
+##  Installation
+###   Install singularity
 ```
 https://sylabs.io/guides/3.8/admin-guide/installation.html
 
@@ -57,28 +64,13 @@ $ echo 'export GOPATH=${HOME}/go' >> ~/.bashrc && \
 Install singularity on CentOS without compile
 $ yum install -y singularity
 ```
-#### Get SAW image from dockerHub
+###   Get SAW image from dockerHub
 SAW has 3 versions now : v2.1.0 & v4.0.0 & v4.1.0
 ```
 singularity build SAW_v4.1.0.sif docker://stomics/saw:04.1.0 
 ```
 
-## Run
-### Preparation
-#### indexBuild.sh
-```
-Before running the STOmics Analysis Workflow, you should prepare the indexed reference as follow:
-singularity exec <SAW_v4.1.0.sif> mapping --runMode genomeGenerate \
-    --genomeDir reference/STAR_SJ100 \
-    --genomeFastaFiles reference/genome.fa \
-    --sjdbGTFfile reference/genes.gtf \
-    --sjdbOverhang 99 \
-    --runThreadN 12
-Then you should get the mask file from our website through the slide number(SN)
-```
-
-### Usage
-#### stereoRun_singleLane_SAWversion.sh & stereoRun_multiLane_SAWversion.sh 
+##  Usage
 ```
 usage: sh <stereoRun.sh> -m maskFile -1 read1 -2 read2 -g indexedGenome -a annotationFile -o outDir -i image -t threads -s visualSif -c genomeSize
     -m stereochip mask file
@@ -95,8 +87,21 @@ usage: sh <stereoRun.sh> -m maskFile -1 read1 -2 read2 -g indexedGenome -a annot
 # 1GiB=1024M=10241024KB=10241024*1024B
 ```
 
+###   indexedReference
+####    indexBuild.sh
+```
+Before running the STOmics Analysis Workflow, you should prepare the indexed reference as follow:
+singularity exec <SAW_v4.1.0.sif> mapping --runMode genomeGenerate \
+    --genomeDir reference/STAR_SJ100 \
+    --genomeFastaFiles reference/genome.fa \
+    --sjdbGTFfile reference/genes.gtf \
+    --sjdbOverhang 99 \
+    --runThreadN 12
+Then you should get the mask file from our website through the slide number(SN)
+```
+
 ### Running example
-#### how to run stereoRun_singleLane.sh script
+#### how to run stereoRun_singleLane.sh bash script
 ```
 If only one lane sequencing data was given, run the stereoRun_singleLane.sh script as follows:
 
@@ -113,7 +118,7 @@ bash stereoRun_singleLane.sh \
     -i image_dir_path \ # [option] when tissue image was given
     -o outDir
 ```
-#### how to run stereoRun_multiLane.sh script
+#### how to run stereoRun_multiLane.sh bash script
 ```
 If more than one lane sequencing data was given, run the stereoRun_multiLane.sh script as follows:
 bash stereoRun_multiLane.sh \
