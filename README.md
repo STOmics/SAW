@@ -11,7 +11,7 @@ SAW processes the sequencing data of Stereo-Seq to generate spatial gene express
 matrices, and then users could take these files as the starting point to perform downstream analysis. SAW
 includes eight essential pipelines:
 ADD A IMAGE HERE 
-![wrokflow.png](saw_4.1.0_workflow.png)
+![wrokflow.png](SAW_v4.1.0_workflow.jpg)
 
 ##  System Requirements
 ###   Hardware
