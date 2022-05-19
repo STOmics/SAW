@@ -9,13 +9,11 @@ expression distribution.
 ##  Workflow of SAW
 SAW processes the sequencing data of Stereo-Seq to generate spatial gene expression
 matrices, and then users could take these files as the starting point to perform downstream analysis. SAW
-includes eight essential pipelines:
-ADD A IMAGE HERE 
+includes eight essential pipelines: 
 ![wrokflow.png](SAW_v4.1.0_workflow.jpg)
 
 ##  System Requirements
 ###   Hardware
-
 STOmics Analysis Workflow (SAW) run on Linux systems that meet these minimum requirements:
 * 8-core Intel or AMD processor (24 cores recommended)
 * 128GB RAM (256GB recommended)
@@ -23,7 +21,6 @@ STOmics Analysis Workflow (SAW) run on Linux systems that meet these minimum req
 * 64-bit CentOS/RedHat 7.8 or Ubuntu 20.04
 
 ###   Software
-
 * singularity
 * SAW
 
@@ -125,6 +122,8 @@ bash stereoRun_singleLane.sh \
 #### how to run stereoRun_multiLane.sh bash script
 ```
 If more than one lane sequencing data was given, run the stereoRun_multiLane.sh script as follows:
+
+ulimit -n 10240 
 bash stereoRun_multiLane.sh \
     -m SN.h5 \
     -1 lane1_read_1.fq.gz,lane2_read_1.fq.gz \
