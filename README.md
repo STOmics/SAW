@@ -6,7 +6,7 @@ STOmics Analysis Workflow1 (SAW) software suite is a set of pipelines bundled to
 to their spatial location on the tissue section, quantify spatial gene expression and visually present spatial
 expression distribution. 
 
-##  Workflow of SAW
+##  Introduction
 SAW processes the sequencing data of Stereo-Seq to generate spatial gene expression
 matrices, and then users could take these files as the starting point to perform downstream analysis. SAW
 includes eight essential pipelines: 
@@ -21,14 +21,11 @@ STOmics Analysis Workflow (SAW) run on Linux systems that meet these minimum req
 * 64-bit CentOS/RedHat 7.8 or Ubuntu 20.04
 
 ###   Software
-* singularity
-* SAW
+* Singularity : a container platform
+* SAW in the Singularity Image File (SIF) format
 
-##  Installation
-###   Install singularity
+####   Quick installation of Singularity
 ```
-https://sylabs.io/guides/3.8/admin-guide/installation.html
-
 On Red Hat Enterprise Linux or CentOS install the following dependencies:
 $ sudo yum update -y && \
      sudo yum groupinstall -y 'Development Tools' && \
@@ -65,13 +62,16 @@ $ echo 'export GOPATH=${HOME}/go' >> ~/.bashrc && \
 Install singularity on CentOS without compile
 $ yum install -y singularity
 ```
-###   Get SAW image from dockerHub
-SAW has 3 versions now : v2.1.0 & v4.0.0 & v4.1.0
+For additional help or support, please visit https://sylabs.io/guides/3.8/admin-guide/installation.html
+
+####   Quick download SAW from dockerHub
+Currently the latest version of SAW is v4.1.0
 ```
 singularity build SAW_v4.1.0.sif docker://stomics/saw:04.1.0 
 ```
 
-##  Usage
+##  RUN
+### Usage
 ```
 usage: sh <stereoRun.sh> -m maskFile -1 read1 -2 read2 -g indexedGenome -a annotationFile -o outDir -i image -t threads -s visualSif -c genomeSize
     -m stereochip mask file
@@ -86,10 +86,12 @@ usage: sh <stereoRun.sh> -m maskFile -1 read1 -2 read2 -g indexedGenome -a annot
     -c genome fasta file size (GiB, Gibibyte)
 
 # 1GiB=1024M=10241024KB=10241024*1024B
+# SAW version : v4.1.0
 ```
 
-###   indexedReference
-####    indexBuild.sh
+###   Preparation : Indexing a reference genome
+Prior to mapping, our mapping step requires you to construct and index the genome, so that the aligner can quickly and efficiently retrieve reference sequence information.
+####    Build indexed reference 
 ```
 Before running the STOmics Analysis Workflow, you should prepare the indexed reference as follow:
 singularity exec <SAW_v4.1.0.sif> mapping --runMode genomeGenerate \
@@ -100,38 +102,43 @@ singularity exec <SAW_v4.1.0.sif> mapping --runMode genomeGenerate \
     --runThreadN 12
 Then you should get the mask file from our website through the slide number(SN)
 ```
+For more information in /doc
 
-### Running example
-#### how to run stereoRun_singleLane.sh bash script
-```
-If only one lane sequencing data was given, run the stereoRun_singleLane.sh script as follows:
+###   Main : Running the entire workflow
+Using the stereoRun_singleLane_v4.1.0.sh or stereoRun_multiLane_v4.1.0.sh to run whole workflow.
 
-dataDir=/Full/Path/Of/Input/File 
-export SINGULARITY_BIND=$dataDir
-bash stereoRun_singleLane.sh \
-    -m SN.h5 \
-    -1 lane_read_1.fq.gz \
-    -2 lane_read_2.fq.gz \
-    -g reference/STAR_SJ100 \
-    -a reference/genes.gtf \
-    -s SAW_version.sif \
-    -c genome_size \
-    -i image_dir_path \ # [option] when tissue image was given
-    -o outDir
+####    Run stereoRun_singleLane_v4.1.0.sh bash script
+If only one lane sequencing data was given, run the stereoRun_singleLane_v4.1.0.sh bash script as follows:
 ```
-#### how to run stereoRun_multiLane.sh bash script
-```
-If more than one lane sequencing data was given, run the stereoRun_multiLane.sh script as follows:
-
 ulimit -n 10240 
-bash stereoRun_multiLane.sh \
-    -m SN.h5 \
-    -1 lane1_read_1.fq.gz,lane2_read_1.fq.gz \
-    -2 lane1_read_2.fq.gz,lane2_read_2.fq.gz \
-    -g reference/STAR_SJ100 \
-    -a reference/genes.gtf \
-    -s SAW_version.sif \
+dataDir=/Full/Path/Of/Input/File 
+export SINGULARITY_BIND=$dataDir,$outDir
+bash stereoRun_singleLane.sh \
+    -m $dataDir/mask/SN.h5 \
+    -1 $dataDir/reads/lane1_read_1.fq.gz \
+    -2 $dataDir/reads/lane1_read_2.fq.gz \
+    -g $dataDir/reference/STAR_SJ100 \
+    -a $dataDir/reference/genes.gtf \
+    -s $dataDir/SAW/SAW_version.sif \
     -c genome_size \
-    -i image_dir_path \ # [option] when tissue image was given
-    -o outDir
+    -i $dataDir/SN/image_dir_path \ # [option] when tissue image was given
+    -o $outDir
+```
+####    Run stereoRun_multiLane_v4.1.0.sh bash script
+If more than one lane sequencing data was given, run the stereoRun_multiLane_v4.1.0.sh script as follows:
+```
+ulimit -n 10240 
+dataDir=/Full/Path/Of/Input/File 
+outDir=/Full/Path/Of/Output/File 
+export SINGULARITY_BIND=$dataDir,$outDir
+bash stereoRun_multiLane.sh \
+    -m $dataDir/mask/SN.h5 \
+    -1 $dataDir/reads/lane1_read_1.fq.gz,$dataDir/reads/lane2_read_1.fq.gz \
+    -2 $dataDir/reads/lane1_read_2.fq.gz,$dataDir/reads/lane2_read_2.fq.gz \
+    -g $dataDir/reference/STAR_SJ100 \
+    -a $dataDir/reference/genes.gtf \
+    -s $dataDir/SAW/SAW_version.sif \
+    -c genome_size \
+    -i $dataDir/SN/image_dir_path \ # [option] when tissue image was given
+    -o $outDir
 ```
