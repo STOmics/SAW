@@ -1,11 +1,8 @@
 # SAW : STOmics Analysis Workflow
 Building your reference before running SAW analysis.
 ##  Preparation : Indexing a reference genome
+For more information visit https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf
 
-## Usage
---sjdbOverhang parameter, which “specifies the length of the genomic sequence around the annotated junction to be used in constructing the splice junctions database. Ideally, this length should be equal to the ReadLength-1, where ReadLength is the length of the reads. For instance, for Illumina 2x100b paired-end reads, the ideal value is 100-1=99. In case of reads of varying length, the ideal value is max(ReadLength)-1” (quoted from the STAR manual).
-/--sjdbOverhang
-specifies the length of the genomic sequence around the annotated junction to be used in constructing the splice junctions database. Ideally, this length should be equal to the ReadLength-1, where ReadLength is the length of the reads. For instance, for Illumina 2x100b paired-end reads, the ideal value is 100-1=99. In case of reads of varying length, the ideal value is max(ReadLength)-1
 ##  Run
 ###   Prepare input files
 ```
@@ -26,8 +23,7 @@ cd ../genes
 wget <ftp link for annotation file in gtf/gff format> #wget https://ftp.ensembl.org/pub/release-93/gtf/homo_sapiens/Homo_sapiens.GRCh38.93.gtf.gz 
 gunzip Homo_sapiens.GRCh38.93.gtf.gz
 ```
-
-###   Main : build the genome index file
+###   Run : build the genome index file
 ```
 referenceDir=/Full/Path/Of/Reference/Folder/Path
 
