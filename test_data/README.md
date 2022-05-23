@@ -1,24 +1,19 @@
 # TEST DATA
-##  Test data base information
+##  demo data base information
 SN: SS200000135TL_D1
-
 Reference: mouse
-
 Tissue: brain
 
-
-
-###   Download data from web
+###   download data from web
 http://stomicsupload.cngb.org:8090/share/dPR5Xs9h4aTrungcOMx1
 
 
-    note => old share data(SS200000135TL_D1) link : 
+note => old share data(SS200000135TL_D1) link : 
+http://stomicsupload.cngb.org:8090/share/XScFj8Oa2LqR9HyDo6K3
+http://116.6.21.110:8090/share/rln3Hvxdi6fsBXj0tmG9
 
-    http://stomicsupload.cngb.org:8090/share/XScFj8Oa2LqR9HyDo6K3
-    http://116.6.21.110:8090/share/rln3Hvxdi6fsBXj0tmG9
 
-
-###   Description of each folder
+#### directory structure
 ```
 $ tree
 .
@@ -53,4 +48,3 @@ $ tree
 
 5 directories, 24 files
 ```
-###   Test data demonstration
