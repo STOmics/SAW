@@ -112,6 +112,7 @@ If only one lane sequencing data was given, run the stereoRun_singleLane_v4.1.0.
 ```
 ulimit -n 10240 
 dataDir=/Full/Path/Of/Input/File 
+outDir=/Full/Path/Of/Output/File 
 export SINGULARITY_BIND=$dataDir,$outDir
 bash stereoRun_singleLane.sh \
     -m $dataDir/mask/SN.h5 \
@@ -122,7 +123,7 @@ bash stereoRun_singleLane.sh \
     -s $dataDir/SAW/SAW_version.sif \
     -c genome_size \
     -i $dataDir/SN/image_dir_path \ # [option] when tissue image was given
-    -o $outDir
+    -o $outDir/result
 ```
 ####    Run stereoRun_multiLane_v4.1.0.sh bash script
 If more than one lane sequencing data was given, run the stereoRun_multiLane_v4.1.0.sh script as follows:
@@ -140,5 +141,5 @@ bash stereoRun_multiLane.sh \
     -s $dataDir/SAW/SAW_version.sif \
     -c genome_size \
     -i $dataDir/SN/image_dir_path \ # [option] when tissue image was given
-    -o $outDir
+    -o $outDir/result
 ```
