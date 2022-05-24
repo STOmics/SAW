@@ -121,9 +121,12 @@ bash stereoRun_singleLane.sh \
     -g $dataDir/reference/STAR_SJ100 \
     -a $dataDir/reference/genes.gtf \
     -s $dataDir/SAW/SAW_version.sif \
-    -c genome_size \
+    -c genome_size \ # (GiB, Gibibyte)
     -i $dataDir/SN/image_dir_path \ # [option] when tissue image was given
     -o $outDir/result
+    
+# 1GiB=1024M=10241024KB=10241024*1024B
+# SAW version : v4.1.0
 ```
 ####    Run stereoRun_multiLane_v4.1.0.sh bash script
 If more than one lane sequencing data was given, run the stereoRun_multiLane_v4.1.0.sh script as follows:
@@ -139,7 +142,11 @@ bash stereoRun_multiLane.sh \
     -g $dataDir/reference/STAR_SJ100 \
     -a $dataDir/reference/genes.gtf \
     -s $dataDir/SAW/SAW_version.sif \
-    -c genome_size \
+    -c genome_size \ # (GiB, Gibibyte)
     -i $dataDir/SN/image_dir_path \ # [option] when tissue image was given
     -o $outDir/result
+    
+
+# 1GiB=1024M=10241024KB=10241024*1024B
+# SAW version : v4.1.0
 ```
