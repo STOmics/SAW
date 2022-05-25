@@ -38,7 +38,8 @@ Then you should get the mask file from our website through the slide number(SN)
 ```
 
 ###   Output files
-Once this run has successfully finished, you will have a STAR_SJ100 folder in the reference directory.
+Once the run is completed , you will have a STAR_SJ100 folder in the reference directory.
+
 ####    Description of each folder    
 ```
 cd /data/dataManagement/reference
