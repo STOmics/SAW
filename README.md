@@ -1,20 +1,15 @@
 
 
 # SAW : STOmics Analysis Workflow
-Workflow for analyzing Stereo-Seq transcriptome data
-STOmics Analysis Workflow1 (SAW) software suite is a set of pipelines bundled to position sequenced reads
-to their spatial location on the tissue section, quantify spatial gene expression and visually present spatial
-expression distribution. 
+Workflow for analyzing Stereo-seq transcriptomic data. STOmics Analysis Workflow (SAW) software suite is a set of pipelines bundled to map sequenced reads to their spatial location on the tissue section and quantify the corresponding gene expression levels, to enablevisualization of spatial gene expression pattern.
 
 ##  Introduction
-SAW processes the sequencing data of Stereo-Seq to generate spatial gene expression
-matrices, and then users could take these files as the starting point to perform downstream analysis. SAW
-includes eight essential pipelines: 
+SAW processes the sequencing data of Stereo-seq to generate spatial gene expression matrices, so that the users could take these files as the starting point to perform downstream analysis. SAW includes eight essential pipelines:
 ![wrokflow.png](SAW_v4.1.0_workflow.jpg)
 
 ##  System Requirements
 ###   Hardware
-STOmics Analysis Workflow (SAW) run on Linux systems that meet these minimum requirements:
+STOmics Analysis Workflow (SAW) should be run on a Linux system that meets the following  requirements:
 * 8-core Intel or AMD processor (24 cores recommended)
 * 128GB RAM (256GB recommended)
 * 1TB free disk space
@@ -65,7 +60,7 @@ $ yum install -y singularity
 For additional help or support, please visit https://sylabs.io/guides/3.8/admin-guide/installation.html
 
 ####   Quick download SAW from dockerHub
-Currently the latest version of SAW is v4.1.0
+Currently, the latest version of SAW is v4.1.0
 ```
 singularity build SAW_v4.1.0.sif docker://stomics/saw:04.1.0 
 ```
@@ -90,7 +85,7 @@ usage: sh <stereoRun.sh> -m maskFile -1 read1 -2 read2 -g indexedGenome -a annot
 ```
 
 ###   Preparation : Indexing a reference genome
-Prior to mapping, our mapping step requires you to construct and index the genome, so that the aligner can quickly and efficiently retrieve reference sequence information.
+A genome index has to be constructed before performing data mapping, to allow a smooth information retrieval of reference sequences by the aligner.
 ####    Build indexed reference 
 ```
 Before running the STOmics Analysis Workflow, you should prepare the indexed reference as follow:
@@ -102,13 +97,13 @@ singularity exec <SAW_v4.1.0.sif> mapping --runMode genomeGenerate \
     --runThreadN 12
 Then you should get the mask file from our website through the slide number(SN)
 ```
-For more information in /doc
+For more information, refer to "script/pre_buildIndexedRef"
 
 ###   Main : Running the entire workflow
 Using the stereoRun_singleLane_v4.1.0.sh or stereoRun_multiLane_v4.1.0.sh to run whole workflow.
 
 ####    Run stereoRun_singleLane_v4.1.0.sh bash script
-If only one lane sequencing data was given, run the stereoRun_singleLane_v4.1.0.sh bash script as follows:
+If only one lane sequencing data was given, run the stereoRun_singleLane_v4.1.0.sh bash script as the following:
 ```
 ulimit -n 10240 
 dataDir=/Full/Path/Of/Input/File 
@@ -129,7 +124,7 @@ bash stereoRun_singleLane.sh \
 # SAW version : v4.1.0
 ```
 ####    Run stereoRun_multiLane_v4.1.0.sh bash script
-If more than one lane sequencing data was given, run the stereoRun_multiLane_v4.1.0.sh script as follows:
+If more than one lane sequencing data was given, run the stereoRun_multiLane_v4.1.0.sh script as the following:
 ```
 ulimit -n 10240 
 dataDir=/Full/Path/Of/Input/File 
