@@ -131,8 +131,7 @@ echo "umiRead=1" >> $bcPara
 echo "mismatch=1" >> $bcPara
 echo "bcNum=`cat ${result_00mapping}/refMemory.txt`" >> $bcPara
 
-export SINGULARITY_BIND=$outDir,$fqdir,$maskDIR, $read1DIR, $read2DIR
-echo "[2check] export SINGULARITY_BIND=$outDir,$fqdir,$maskDIR, $read1DIR, $read2DIR"
+export SINGULARITY_BIND=$outDir,$fqdir,$maskDIR,$read1DIR,$read2DIR,$annoDIR,$refDIR
 echo " ~~~ mapping - $fqname ~~~"
 echo "--runThreadN ${threads} "
 
