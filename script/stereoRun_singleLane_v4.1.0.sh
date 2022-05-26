@@ -199,8 +199,14 @@ then
         -o ${result_03register} && \
     ## organize your outputs (optional)
     mkdir -p $result_sn/IMAGE
-    ln ${result_03register}/4_register/attrs.json $result_sn/IMAGE/${SNid}.transform.attrs.json
-    ln ${result_03register}/4_register/transform_thumb.png $result_sn/IMAGE/${SNid}.transform.thumbnail.png
+    if [[ ! -n $result_sn/IMAGE/${SNid}.transform.attrs.json ]]
+    then
+            ln ${result_03register}/4_register/attrs.json $result_sn/IMAGE/${SNid}.transform.attrs.json
+    fi
+    if [[ ! -n $result_sn/IMAGE/${SNid}.transform.thumbnail.png ]]
+    then
+            ln ${result_03register}/4_register/transform_thumb.png $result_sn/IMAGE/${SNid}.transform.thumbnail.png
+    fi
 
     echo `date` "   tissuecut start......."
     /usr/bin/time -f "parse:[MEM]max:%M, avg:%t; [CPU]real:%e, user:%U.sys:%S, cpu:%P; [IO]i%I, o:%O" \
@@ -214,10 +220,14 @@ then
         --snId ${SNid} &&\
     echo `date` " tissuecut finish"
     ## organize your outputs (optional)
-    ln ${result_04tissuecut}/${SNid}.gef $result_sn/${SNid}.gef
-    ln ${result_04tissuecut}/tissue_fig/${SNid}.ssDNA.rpi $result_sn/${SNid}.ssDNA.rpi
-    ln ${result_04tissuecut}/dnb_merge/bin200.png $result_sn/${SNid}.thumbnail.png
-    ln ${result_04tissuecut}/${SNid}.tissue.gef $result_sn/${SNid}.tissue.gef
+    if [[ ! -n $result_sn/${SNid}.ssDNA.rpi ]] || [[ ! -n $result_sn/${SNid}.gef ]] || [[ ! -n $result_sn/${SNid}.thumbnail.png ]] || [[ ! -n $result_sn/${SNid}.tissue.gef ]]
+    then
+         ln ${result_04tissuecut}/${SNid}.gef $result_sn/${SNid}.gef
+         ln ${result_04tissuecut}/tissue_fig/${SNid}.ssDNA.rpi $result_sn/${SNid}.ssDNA.rpi
+         ln ${result_04tissuecut}/dnb_merge/bin200.png $result_sn/${SNid}.thumbnail.png
+         ln ${result_04tissuecut}/${SNid}.tissue.gef $result_sn/${SNid}.tissue.gef
+    fi
+
 else
     #cut the gene expression matrix directly
     echo `date` " there is no image, tissueCut start......."
@@ -231,9 +241,12 @@ else
         --snId ${SNid} &&\
     echo `date` " tissueCut finish"
     ## organize your outputs (optional)
-    ln ${result_04tissuecut}/${SNid}.gef $result_sn/${SNid}.gef
-    ln ${result_04tissuecut}/dnb_merge/bin200.png $result_sn/${SNid}.thumbnail.png
-    ln ${result_04tissuecut}/${SNid}.tissue.gef $result_sn/${SNid}.tissue.gef
+    if [[ ! -n $result_sn/${SNid}.gef ]] || [[ ! -n $result_sn/${SNid}.thumbnail.png ]] || [[ ! -n $result_sn/${SNid}.tissue.gef ]]
+    then
+         ln ${result_04tissuecut}/${SNid}.gef $result_sn/${SNid}.gef
+         ln ${result_04tissuecut}/dnb_merge/bin200.png $result_sn/${SNid}.thumbnail.png
+         ln ${result_04tissuecut}/${SNid}.tissue.gef $result_sn/${SNid}.tissue.gef
+    fi
 fi
 
 
@@ -245,7 +258,10 @@ singularity exec ${visualSif} spatialCluster \
     -o ${result_05spatialcluster}/${SNid}.spatial.cluster.h5ad \
     -s 200 &&\
 ## organize your outputs (optional)
-ln ${result_05spatialcluster}/${SNid}.spatial.cluster.h5ad $result_sn/${SNid}.spatial.cluster.h5ad
+if [[ ! -n $result_sn/${SNid}.spatial.cluster.h5ad]]
+then
+    ln ${result_05spatialcluster}/${SNid}.spatial.cluster.h5ad $result_sn/${SNid}.spatial.cluster.h5ad
+fi
 
 #saturation
 echo `date` " saturation start ......"
@@ -257,7 +273,10 @@ singularity exec ${visualSif} saturation \
     --bcstat ${result_00mapping}/${fqbase}_barcodeMap.stat \
     --summary ${result_02count}/${SNid}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam.summary.stat &&\
 ## organize your outputs (optional)
-ln ${result_06saturation}/plot_200x200_saturation.png $result_sn/${SNid}.saturation.bin200.png
+if [[ ! -n $result_sn/${SNid}.saturation.bin200.png ]]
+then
+    ln ${result_06saturation}/plot_200x200_saturation.png $result_sn/${SNid}.saturation.bin200.png
+fi
 
 #generate json and html report files
 echo `date` " report generation start......"
@@ -301,8 +320,11 @@ else
 fi
 echo `date` " analyses all done "
 ## organize your outputs (optional)
-ln ${result_07report}/new_final_result.json $result_sn/${SNid}.statistics.json
-ln ${result_07report}/${SNid}.report.html $result_sn/${SNid}.report.html
+if [[ ! -n $result_sn/${SNid}.statistics.json ]] || [[ ! -n $result_sn/${SNid}.report.html ]]
+then
+    ln ${result_07report}/new_final_result.json $result_sn/${SNid}.statistics.json
+    ln ${result_07report}/${SNid}.report.html $result_sn/${SNid}.report.html
+fi
 
 echo `date` " gef2gem start "
 /usr/bin/time -f "parse:[MEM]max:%M, avg:%t; [CPU]real:%e, user:%U.sys:%S, cpu:%P; [IO]i%I, o:%O" \
