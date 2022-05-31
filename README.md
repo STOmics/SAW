@@ -102,8 +102,8 @@ usage: sh <stereoRun.sh> -m maskFile -1 read1 -2 read2 -g indexedGenome -a annot
 # SAW version : v4.1.0
 ```
 
-###   Main : Running the entire workflow
-Using the stereoRun_singleLane_v4.1.0.sh or stereoRun_multiLane_v4.1.0.sh to run whole workflow.
+###   Example : Running the entire workflow
+Using the [stereoRun_singleLane_v4.1.0.sh](https://github.com/BGIResearch/SAW/blob/main/script/stereoRun_singleLane_v4.1.0.sh) or [stereoRun_multiLane_v4.1.0.sh](https://github.com/BGIResearch/SAW/blob/main/script/stereoRun_multiLane_v4.0.0.sh) to run whole workflow.
 
 ####    Run stereoRun_singleLane_v4.1.0.sh bash script
 If only one lane sequencing data was given, run the stereoRun_singleLane_v4.1.0.sh bash script as the following:
