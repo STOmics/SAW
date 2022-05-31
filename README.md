@@ -65,6 +65,24 @@ Currently, the latest version of SAW is v4.1.0
 singularity build SAW_v4.1.0.sif docker://stomics/saw:04.1.0 
 ```
 
+
+##   [Preparation : Indexing a reference genome](https://github.com/BGIResearch/SAW/tree/main/script/pre_buildIndexedRef)
+A genome index has to be constructed before performing data mapping, to allow a smooth information retrieval of reference sequences by the aligner.
+###    Build indexed reference 
+```
+Before running the STOmics Analysis Workflow, you should prepare the indexed reference as follow:
+singularity exec <SAW_v4.1.0.sif> mapping --runMode genomeGenerate \
+    --genomeDir reference/STAR_SJ100 \
+    --genomeFastaFiles reference/genome.fa \
+    --sjdbGTFfile reference/genes.gtf \
+    --sjdbOverhang 99 \
+    --runThreadN 12
+Then you should get the mask file from our website through the slide number(SN)
+```
+**For more information, refer to "script/pre_buildIndexedRef"**
+
+
+
 ##  RUN
 ### Usage
 ```
@@ -83,21 +101,6 @@ usage: sh <stereoRun.sh> -m maskFile -1 read1 -2 read2 -g indexedGenome -a annot
 # 1GiB=1024M=10241024KB=10241024*1024B
 # SAW version : v4.1.0
 ```
-
-###   [Preparation : Indexing a reference genome](https://github.com/BGIResearch/SAW/tree/main/script/pre_buildIndexedRef)
-A genome index has to be constructed before performing data mapping, to allow a smooth information retrieval of reference sequences by the aligner.
-####    Build indexed reference 
-```
-Before running the STOmics Analysis Workflow, you should prepare the indexed reference as follow:
-singularity exec <SAW_v4.1.0.sif> mapping --runMode genomeGenerate \
-    --genomeDir reference/STAR_SJ100 \
-    --genomeFastaFiles reference/genome.fa \
-    --sjdbGTFfile reference/genes.gtf \
-    --sjdbOverhang 99 \
-    --runThreadN 12
-Then you should get the mask file from our website through the slide number(SN)
-```
-For more information, refer to "script/pre_buildIndexedRef"
 
 ###   Main : Running the entire workflow
 Using the stereoRun_singleLane_v4.1.0.sh or stereoRun_multiLane_v4.1.0.sh to run whole workflow.
