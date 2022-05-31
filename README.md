@@ -84,7 +84,7 @@ usage: sh <stereoRun.sh> -m maskFile -1 read1 -2 read2 -g indexedGenome -a annot
 # SAW version : v4.1.0
 ```
 
-###   Preparation : Indexing a reference genome
+###   [Preparation : Indexing a reference genome](https://github.com/BGIResearch/SAW/tree/main/script/pre_buildIndexedRef)
 A genome index has to be constructed before performing data mapping, to allow a smooth information retrieval of reference sequences by the aligner.
 ####    Build indexed reference 
 ```
