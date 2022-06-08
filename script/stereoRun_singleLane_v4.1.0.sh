@@ -258,7 +258,7 @@ singularity exec ${visualSif} spatialCluster \
     -o ${result_05spatialcluster}/${SNid}.spatial.cluster.h5ad \
     -s 200 &&\
 ## organize your outputs (optional)
-if [[ ! -n $result_sn/${SNid}.spatial.cluster.h5ad]]
+if [[ ! -n $result_sn/${SNid}.spatial.cluster.h5ad ]]
 then
     ln ${result_05spatialcluster}/${SNid}.spatial.cluster.h5ad $result_sn/${SNid}.spatial.cluster.h5ad
 fi
