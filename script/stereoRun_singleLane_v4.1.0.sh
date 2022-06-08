@@ -332,7 +332,7 @@ singularity exec ${visualSif} gefTools view \
     -i $result_sn/${SNid}.gef \
     -o $result_sn/${SNid}.gem \
     -b 1 && \
-gzip $result_sn/${SNid}.gem
+gzip -f $result_sn/${SNid}.gem
 echo `date` " gef2gem finish "
 
 echo `date` " gef2gem start "
@@ -341,7 +341,7 @@ singularity exec ${visualSif} gefTools view \
     -i ${result_04tissuecut}/${SNid}.tissue.gef \
     -o $result_sn/${SNid}.tissue.gem \
     -b 1 && \
-gzip $result_sn/${SNid}.tissue.gem
+gzip -f $result_sn/${SNid}.tissue.gem
 echo `date` " gef2gem finish "
 
 
