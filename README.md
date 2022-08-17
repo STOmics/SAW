@@ -1,7 +1,7 @@
 
 
 # SAW : STOmics Analysis Workflow
-Workflow for analyzing Stereo-seq transcriptomic data. STOmics Analysis Workflow (SAW) software suite is a set of pipelines bundled to map sequenced reads to their spatial location on the tissue section and quantify the corresponding gene expression levels, to enablevisualization of spatial gene expression pattern.
+Workflow for analyzing Stereo-seq transcriptomic data. STOmics Analysis Workflow (SAW) software suite is a set of pipelines bundled to map sequenced reads to their spatial location on the tissue section and quantify the corresponding gene expression levels, to enable visualization of spatial gene expression pattern.
 
 ##  Introduction
 SAW processes the sequencing data of Stereo-seq to generate spatial gene expression matrices, so that the users could take these files as the starting point to perform downstream analysis. SAW includes eight essential pipelines:
