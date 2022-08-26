@@ -290,7 +290,7 @@ singularity exec ${visualSif} saturation \
     -i ${saturationFile} \
     --tissue ${result_04tissuecut}/${SNid}.tissue.gef \
     -o ${result_06saturation} \
-    --bcstat ${bcStat} \
+    --bcstat ${bcStatStr} \
     --summary ${result_02count}/${SNid}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam.summary.stat &&\
 ## organize your outputs (optional)
 if [[ ! -f $result_sn/${SNid}.saturation.bin200.png ]]
