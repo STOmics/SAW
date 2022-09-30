@@ -7,7 +7,7 @@ Reference: mouse
 Tissue: brain
 
 ###   Download data from web
-http://stomicsupload.cngb.org:8090/share/dPR5Xs9h4aTrungcOMx1
+http://116.6.21.110:8090/share/vQEWMHSlnqutfLNg9h35
 
 
 note => The previous shared data(SS200000135TL_D1) link : 
