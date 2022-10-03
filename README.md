@@ -1,27 +1,27 @@
 
-
-# SAW : STOmics Analysis Workflow
-Workflow for analyzing Stereo-seq transcriptomic data. STOmics Analysis Workflow (SAW) software suite is a set of pipelines bundled to map sequenced reads to their spatial location on the tissue section and quantify the corresponding gene expression levels, to enable visualization of spatial gene expression pattern.
+# SAW: Stereo-seq Analysis Workflow
+Workflow for analyzing Stereo-seq transcriptomic data. Stereo-seq Analysis Workflow (SAW) software suite is a set of pipelines bundled to map sequenced reads to their spatial location on the tissue section, quantify the corresponding gene expression levels and visually present spatial gene expression distribution.
 
 ##  Introduction
-SAW processes the sequencing data of Stereo-seq to generate spatial gene expression matrices, so that the users could take these files as the starting point to perform downstream analysis. SAW includes eight essential pipelines:
-![wrokflow.png](SAW_v4.1.0_workflow.jpg)
+SAW processes the sequencing data of Stereo-seq to generate spatial gene expression matrices, and the users could take these files as the starting point to perform downstream analysis. SAW includes thirteen essential and suggest pipelines and auxiliary tools for supporting other handy functions.
+![workflow.png](SAW_v5.1.3_workflow.jpg)
 
 ##  System Requirements
 ###   Hardware
-STOmics Analysis Workflow (SAW) should be run on a Linux system that meets the following  requirements:
+Stereo-seq Analysis Workflow (SAW) should be run on a Linux system that meets the following requirements:
 * 8-core Intel or AMD processor (24 cores recommended)
 * 128GB RAM (256GB recommended)
 * 1TB free disk space
 * 64-bit CentOS/RedHat 7.8 or Ubuntu 20.04
 
 ###   Software
-* Singularity : a container platform
+* Singularity: a container platform
 * SAW in the Singularity Image File (SIF) format
+* ImageQC version greater than v1.1.0
 
 ####   Quick installation of Singularity
 ```
-On Red Hat Enterprise Linux or CentOS install the following dependencies:
+## On Red Hat Enterprise Linux or CentOS install the following dependencies:
 $ sudo yum update -y && \
      sudo yum groupinstall -y 'Development Tools' && \
      sudo yum install -y \
@@ -32,7 +32,7 @@ $ sudo yum update -y && \
      squashfs-tools \
      cryptsetup
 
-On Ubuntu or Debian install the following dependencies:
+## On Ubuntu or Debian install the following dependencies:
 $ sudo apt-get update && sudo apt-get install -y \
     build-essential \
     uuid-dev \
@@ -44,7 +44,7 @@ $ sudo apt-get update && sudo apt-get install -y \
     git \
     cryptsetup-bin
 
-Install Go
+## Install Go
 $ export VERSION=1.14.12 OS=linux ARCH=amd64 && \
     wget https://dl.google.com/go/go$VERSION.$OS-$ARCH.tar.gz && \
     sudo tar -C /usr/local -xzvf go$VERSION.$OS-$ARCH.tar.gz && \
@@ -54,36 +54,41 @@ $ echo 'export GOPATH=${HOME}/go' >> ~/.bashrc && \
     echo 'export PATH=/usr/local/go/bin:${PATH}:${GOPATH}/bin' >> ~/.bashrc && \
     source ~/.bashrc
 
-Install singularity on CentOS without compile
+## Install singularity on CentOS without compile
 $ yum install -y singularity
 ```
-For additional help or support, please visit https://sylabs.io/guides/3.8/admin-guide/installation.html
+**For additional help or support, please visit https://sylabs.io/guides/3.8/admin-guide/installation.html**
 
-####   Quick download SAW from dockerHub
-Currently, the latest version of SAW is v4.1.0
+####   Quick download SAW from DockerHub
+Currently, the latest version of SAW is v5.1.3. You can download SAW by running the following command:
 ```
-singularity build SAW_v4.1.0.sif docker://stomics/saw:04.1.0 
+singularity build SAW_v5.1.3.sif docker://stomics/saw:05.1.3
 ```
+_The bash script for v5.1.3 is coming very soon._
 
 
-##   [Preparation : Indexing a reference genome](https://github.com/BGIResearch/SAW/tree/main/script/pre_buildIndexedRef)
-A genome index has to be constructed before performing data mapping, to allow a smooth information retrieval of reference sequences by the aligner.
-###    Build indexed reference 
+
+##   [Preparation](https://github.com/BGIResearch/SAW/tree/main/script/pre_buildIndexedRef)
+###    Build index for reference genome
+A genome index has to be constructed before performing data mapping. The index files are used as reference when aligning reads. You can prepare the indexed reference before run SAW as follow:
 ```
-Before running the STOmics Analysis Workflow, you should prepare the indexed reference as follow:
-singularity exec <SAW_v4.1.0.sif> mapping --runMode genomeGenerate \
+singularity exec <SAW_v5.1.3.sif> mapping --runMode genomeGenerate \
     --genomeDir reference/STAR_SJ100 \
     --genomeFastaFiles reference/genome.fa \
     --sjdbGTFfile reference/genes.gtf \
     --sjdbOverhang 99 \
     --runThreadN 12
-Then you should get the mask file from our website through the slide number(SN)
 ```
 **For more information, refer to "script/pre_buildIndexedRef"**
+
+###    Get Stereo-seq Chip T mask file
+You should get the mask file (.h5/.bin) from BGI-FAS team or from [SAP website](https://www.stomics.tech/sap) using the Stereo-seq Chip T serial number (SN).
 
 
 
 ##  RUN
+_The RUN examples and bash script for v5.1.3 is coming very soon._
+
 ### Usage
 ```
 usage: sh <stereoRun.sh> -m maskFile -1 read1 -2 read2 -g indexedGenome -a annotationFile -o outDir -i image -t threads -s visualSif -c genomeSize
@@ -102,7 +107,7 @@ usage: sh <stereoRun.sh> -m maskFile -1 read1 -2 read2 -g indexedGenome -a annot
 # SAW version : v4.1.0
 ```
 
-###   Example : Running the entire workflow
+###   Example: Running the entire workflow
 Using the [stereoRun_singleLane_v4.1.0.sh](https://github.com/BGIResearch/SAW/blob/main/script/stereoRun_singleLane_v4.1.0.sh) or [stereoRun_multiLane_v4.1.0.sh](https://github.com/BGIResearch/SAW/blob/main/script/stereoRun_multiLane_v4.0.0.sh) to run whole workflow.
 
 ####    Run stereoRun_singleLane_v4.1.0.sh bash script
@@ -148,3 +153,4 @@ bash stereoRun_multiLane.sh \
 # 1GiB=1024M=10241024KB=10241024*1024B
 # SAW version : v4.1.0
 ```
+_The bash script for v5.1.3 is coming very soon._
