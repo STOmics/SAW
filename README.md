@@ -82,12 +82,13 @@ singularity exec <SAW_v5.1.3.sif> mapping --runMode genomeGenerate \
 **For more information, refer to "script/pre_buildIndexedRef"**
 
 ###    Get Stereo-seq Chip T mask file
-You should get the mask file (.h5/.bin) from BGI-FAS team or from [SAP website](https://www.stomics.tech/sap) using the Stereo-seq Chip T serial number (SN).
+- If you want to access mask file (.h5/.bin) for your own data, please contact BGI-FAS team.
+- To access mask file for published paper, please go to [CNGBdb](https://db.cngb.org/) > [STOmicsDB](https://db.cngb.org/stomics) > [Collections](https://db.cngb.org/stomics/collections).
 
 
 
 ##  RUN
-_The RUN examples and bash script for v5.1.3 is coming very soon._
+_The RUN examples and bash script for v5.1.3 are coming very soon._
 
 ### Usage
 ```
