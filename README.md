@@ -114,7 +114,7 @@ usage: sh <stereoRun.sh> -m maskFile -1 read1 -2 read2 -g indexedGenome -a annot
     -sif : the file format of the visual software
 
 # 1GiB=1024M=10241024KB=10241024*1024B
-# SAW version : v5.1.0
+# SAW version : v5.1.3
 ```
 ```
 # for saw_beta_v4.1.0 & saw_v4.1.0
