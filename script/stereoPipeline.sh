@@ -452,13 +452,12 @@ echo "${result_04tissuecut}/tissue_fig/${SNid}.ssDNA.rpi    ${result_04tissuecut
 export SINGULARITY_BIND=$outDir
 
 
-packageFile=/opt/saw_v5.1.3_software/pipeline/report_v2.0.2/plotly_package.txt
+packageFile=/opt/saw_v5.1.3_software/pipeline/report/plotly_package.txt
 iprFile=`ls ${result_03register}/${SNid}*.ipr`
 export SINGULARITY_BIND=$outDir
 
 if [[ -n ${iprFile} ]] && [[ -e ${iprFile} ]] && [[ $doCell == 'Y' ]]
 then
-  echo 333
     singularity exec ${sif} report \
         -m ${bcStatStr} \
         -a ${bcFinalOutStr} \
