@@ -140,7 +140,7 @@ For SAW_v5, please use the [stereoPipeline.sh](https://github.com/BGIResearch/SA
 
 ####    Run stereoPipeline.sh bash script
 ```
-cd <个人工作目录>
+cd <Your Working Directory>
 
 ulimit -n 10240
 ulimit -v 33170449147
