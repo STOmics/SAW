@@ -281,6 +281,7 @@ elif [[ $fqType == 'PE' ]]; then
         cp $bcReadsCountsStr $barcodeReadsCounts
     else
         singularity exec ${sif} merge \
+            ${maskFile} \
             $bcReadsCountsStr \
             $barcodeReadsCounts
     fi
