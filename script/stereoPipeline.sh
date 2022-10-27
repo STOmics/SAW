@@ -281,6 +281,7 @@ elif [[ $fqType == 'PE' ]]; then
         cp $bcReadsCountsStr $barcodeReadsCounts
     else
         singularity exec ${sif} merge \
+            ${maskFile} \
             $bcReadsCountsStr \
             $barcodeReadsCounts
     fi
@@ -453,7 +454,9 @@ export SINGULARITY_BIND=$outDir
 
 
 packageFile=/opt/saw_v5.1.3_software/pipeline/report/plotly_package.txt
-iprFile=`ls ${result_03register}/${SNid}*.ipr`
+if [[ -f $imageCF ]] && [[ -f $imageRF ]];then
+    iprFile=`ls ${result_03register}/${SNid}*.ipr`
+fi
 export SINGULARITY_BIND=$outDir
 
 if [[ -n ${iprFile} ]] && [[ -e ${iprFile} ]] && [[ $doCell == 'Y' ]]
