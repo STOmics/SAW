@@ -97,7 +97,7 @@ _The RUN examples and bash script for v5.1.3 are coming very soon._
 ```
 # for saw_v5.1.3
 usage: sh <stereoPipeline.sh> -genomeSize -splitCount -maskFile -fq1 -fq2 -refIndex -genomeFile -speciesName -tissueType -annotationFile -outDir -imageRecordFile -imageCompressedFile -doCellBin -threads -sif
-    -genomeSize : genome size
+    -genomeSize : file size of the genome.fa (GiB) 
     -splitCount : count of splited stereochip mask file, usually 16 for SE+Q4 fq data and 1 for PE+Q40 fq data
     -maskFile : stereochip mask file
     -fq1 : fastq file path of read1, if there are more than one fastq file, please separate them with comma, e.g:lane1_read_1.fq.gz,lane2_read_1.fq.gz
