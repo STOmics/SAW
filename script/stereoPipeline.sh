@@ -270,20 +270,13 @@ fi
 echo `date` "=> merge barcode reads count tables start......"
 barcodeReadsCounts=${result_01merge}/${SNid}.merge.barcodeReadsCount.txt
 export SINGULARITY_BIND=$outDir,$maskDIR
-if [[ $fqType == 'SE' ]] && [[ $(echo ${#bcReadsCounts[*]}) > '1' ]]; then
+if [[ $fqType == 'PE' ]] && [[ $(echo ${#bcReadsCounts[*]}) == '1' ]]; then
+    cp $bcReadsCountsStr $barcodeReadsCounts
+else
     singularity exec ${sif} merge \
         ${maskFile} \
         $bcReadsCountsStr \
         $barcodeReadsCounts
-elif [[ $fqType == 'PE' ]]; then
-    if [[ $(echo ${#bcReadsCounts[*]}) == '1' ]]
-    then
-        cp $bcReadsCountsStr $barcodeReadsCounts
-    else
-        singularity exec ${sif} merge \
-            $bcReadsCountsStr \
-            $barcodeReadsCounts
-    fi
 fi
 
 #annotation and deduplication
