@@ -28,9 +28,9 @@ gunzip Homo_sapiens.GRCh38.93.gtf.gz
 referenceDir=/Full/Path/Of/Reference/Folder/Path
 export SINGULARITY_BIND=$referenceDir
 
-singularity exec <SAW_v4.1.0.sif> mapping \
+singularity exec <SAW_version.sif> mapping \
     --runMode genomeGenerate \
-    --genomeDir reference/STAR_SJ100 \
+    --genomeDir $reference/STAR_SJ100 \
     --genomeFastaFiles $referenceDir/genome/genome.fa \
     --sjdbGTFfile $referenceDir/genes/genes.gtf \
     --sjdbOverhang 99 \
