@@ -1,23 +1,28 @@
 # TEST DATA
-##  Demo data base information
-SN: SS200000135TL_D1
+##  Demo data basic information
 
-Reference: mouse
-
-Tissue: brain
-
-###   Download data from Raysync
-Link: http://116.6.21.110:8090/share/oQxmk2NcFIu4sYi8yG67
-
-Access password: aDzJ
+|  | SN | Reference | Tissue Type |
+| ----------- | ----------- | ----------- | ----------- |
+| Demo 1 | SS200000135TL_D1 | mouse | brain |
+| Demo 2 | SS200000154TR_F5 | mouse | tongue |
 
 
-Note => The previous shared data (SS200000135TL_D1) link: 
-http://116.6.21.110:8090/share/vQEWMHSlnqutfLNg9h35 (for SAW v4.1.0)
+##  Download data from Raysync
+**Link: http://116.6.21.110:8090/share/QJKAO6hGUpTPbuYH7Dvi**
+
+**Access password: ltVO**
+
+![demo_data.png](demo_data.png)
+
+| Demo Data Directory | SAW Version |
+| ----------- | ----------- |
+| SS200000135TL_D1 | <= V4.1.0  |
+| SS200000135TL_D1_v5 | >= V5.1.3 |
+| SS200000154TR_F5_tongue | >= V5.1.3 |
 
 
-
-#### Raw Data Directory Structure
+## Raw Data Directory Structure
+Here we take `SS200000135TL_D1_v5` as an example. 
 ```
 $ tree
 .
