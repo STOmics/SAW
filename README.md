@@ -6,7 +6,7 @@ Workflow for analyzing Stereo-seq transcriptomic data. Stereo-seq Analysis Workf
 
 ##  Introduction
 SAW processes the sequencing data of Stereo-seq to generate spatial gene expression matrices, and the users could take these files as the starting point to perform downstream analysis. SAW includes thirteen essential and suggest pipelines and auxiliary tools for supporting other handy functions.
-![workflow.png](SAW_v5.1.3_workflow.jpg)
+![workflow.png](SAW_v5.4.0_workflow.jpg)
 
 ##  System Requirements
 ###   Hardware
@@ -62,19 +62,17 @@ $ yum install -y singularity
 **For additional help or support, please visit https://sylabs.io/guides/3.8/admin-guide/installation.html**
 
 ####   Quick download SAW from DockerHub
-Currently, the latest version of SAW is v5.1.3. You can download SAW by running the following command:
+Currently, the latest version of SAW is v5.4.0. You can download SAW by running the following command:
 ```
-singularity build SAW_v5.1.3.sif docker://stomics/saw:05.1.3
+singularity build SAW_v5.4.0.sif docker://stomics/saw:05.4.0
 ```
-_The bash script for v5.1.3 is coming very soon._
-
 
 
 ##   [Preparation](https://github.com/BGIResearch/SAW/tree/main/script/pre_buildIndexedRef)
 ###    Build index for reference genome
 A genome index has to be constructed before performing data mapping. The index files are used as reference when aligning reads. You can prepare the indexed reference before run SAW as follow:
 ```
-singularity exec <SAW_v5.1.3.sif> mapping --runMode genomeGenerate \
+singularity exec <SAW_version.sif> mapping --runMode genomeGenerate \
     --genomeDir reference/STAR_SJ100 \
     --genomeFastaFiles reference/genome.fa \
     --sjdbGTFfile reference/genes.gtf \
@@ -84,7 +82,7 @@ singularity exec <SAW_v5.1.3.sif> mapping --runMode genomeGenerate \
 **For more information, refer to "script/pre_buildIndexedRef"**
 
 ###    Get Stereo-seq Chip T mask file
-- If you want to access mask file (.h5/.bin) for your own data, please contact BGI-FAS team.
+- If you want to access mask file (.h5/.bin) for your own data, please contact your salesmen or your team project administrator.
 - To access mask file for published paper, please go to [CNGBdb](https://db.cngb.org/) > [STOmicsDB](https://db.cngb.org/stomics) > [Collections](https://db.cngb.org/stomics/collections).
 
 
@@ -95,7 +93,7 @@ _The RUN examples and bash script for v5.1.3 are coming very soon._
 
 ### Usage
 ```
-# for saw_v5.1.3
+# for saw_v5.4.0 & saw_v5.1.3
 usage: sh <stereoPipeline.sh> -genomeSize -splitCount -maskFile -fq1 -fq2 -refIndex -genomeFile -speciesName -tissueType -annotationFile -outDir -imageRecordFile -imageCompressedFile -doCellBin -threads -sif
     -genomeSize : file size of the genome.fa (GiB) 
     -splitCount : count of splited stereochip mask file, usually 16 for SE+Q4 fq data and 1 for PE+Q40 fq data
@@ -114,7 +112,7 @@ usage: sh <stereoPipeline.sh> -genomeSize -splitCount -maskFile -fq1 -fq2 -refIn
     -sif : the file format of the visual software
 
 # 1GiB=1024M=10241024KB=10241024*1024B
-# SAW version : v5.1.3
+# SAW version : saw_v5.4.0 & saw_v5.1.3
 ```
 ```
 # for saw_beta_v4.1.0 & saw_v4.1.0
@@ -131,20 +129,22 @@ usage: sh <stereoRun.sh> -m maskFile -1 read1 -2 read2 -g indexedGenome -a annot
     -c genome fasta file size (GiB, Gibibyte)
 
 # 1GiB=1024M=10241024KB=10241024*1024B
-# SAW version : v4.1.0
+# SAW version : saw_beta_v4.1.0 & saw_v4.1.0
 ```
 
 ###   Example: Running the entire workflow
 For SAW_v4, please use the [stereoRun_singleLane_v4.1.0.sh](https://github.com/BGIResearch/SAW/blob/main/script/stereoRun_singleLane_v4.1.0.sh) or [stereoRun_multiLane_v4.1.0.sh](https://github.com/BGIResearch/SAW/blob/main/script/stereoRun_multiLane_v4.0.0.sh) to run whole workflow.
+
 For SAW_v5, please use the [stereoPipeline.sh](https://github.com/BGIResearch/SAW/blob/main/script/stereoPipeline.sh) to run whole workflow.
 
 ####    Run stereoPipeline.sh bash script
 ```
+# for saw_v5.4.0 & saw_v5.1.3
 cd <Your Working Directory>
 
 ulimit -n 10240
 ulimit -v 33170449147
-NUMBA_CACHE_DIR=<Your Working Directory>
+export NUMBA_CACHE_DIR=<Your Working Directory>
 
 dataDir=<Your Working Directory>/rawData
 outDir=<Your Working Directory>/resultresult
@@ -155,16 +155,16 @@ bash stereoPipeline.sh \
     -splitCount 1 \
     -maskFile $dataDir/mask/SN.h5 \
     -fq1 $dataDir/reads/lane1_read_1.fq.gz,...,$dataDir/reads/laneN_read_1.fq.gz  \
-    -fq2 $dataDir/reads/lane1_read_2.fq.gz,...,$dataDir/reads/laneN_read_2.fq.gz \ # [option] when the sequenced data is in PE format
+    -fq2 $dataDir/reads/lane1_read_2.fq.gz,...,$dataDir/reads/laneN_read_2.fq.gz \ # [optional] when the sequenced data is in PE format
     -speciesName <speciesName> \
     -tissueType <tissueName> \
     -refIndex $dataDir/reference/STAR_SJ100 \
     -annotationFile $dataDir/reference/genes.gtf \
-    -imageRecordFile $dataDir/SN/image_dir_path/<imageQC result>.ipr \ # [option] when tissue image was given
-    -imageCompressedFile $dataDir/SN/image_dir_path/<imageQC result>.tar.gz \ # [option] when tissue image was given
+    -imageRecordFile $dataDir/SN/image_dir_path/<imageQC result>.ipr \ # [optional] when image is given and has passed QC
+    -imageCompressedFile $dataDir/SN/image_dir_path/<imageQC result>.tar.gz \ # [optional] when image is given and has passed QC
     -sif $dataDir/SAW/SAW_version.sif \
     -threads 16 \
-    -doCellBin Y \ # [option] when you want to do the cellBin part
+    -doCellBin Y \ # [optional] when you want to do the cell segmentation and get cell gene expression data
     -outDir $outDir/result
 ```
 
@@ -172,6 +172,7 @@ bash stereoPipeline.sh \
 ####    Run stereoRun_singleLane_v4.1.0.sh bash script
 If only one lane sequencing data was given, run the stereoRun_singleLane_v4.1.0.sh bash script as the following:
 ```
+# for saw_beta_v4.1.0 & saw_v4.1.0
 ulimit -n 10240 
 dataDir=/Full/Path/Of/Input/File 
 outDir=/Full/Path/Of/Output/File 
@@ -184,7 +185,7 @@ bash stereoRun_singleLane.sh \
     -a $dataDir/reference/genes.gtf \
     -s $dataDir/SAW/SAW_version.sif \
     -c genome_size \ # (GiB, Gibibyte)
-    -i $dataDir/SN/image_dir_path \ # [option] when tissue image was given
+    -i $dataDir/SN/image_dir_path \ # [optional] when image is given and has passed QC
     -o $outDir/result
     
 # 1GiB=1024M=10241024KB=10241024*1024B
@@ -193,6 +194,7 @@ bash stereoRun_singleLane.sh \
 ####    Run stereoRun_multiLane_v4.1.0.sh bash script
 If more than one lane sequencing data was given, run the stereoRun_multiLane_v4.1.0.sh script as the following:
 ```
+# for saw_beta_v4.1.0 & saw_v4.1.0
 ulimit -n 10240 
 dataDir=/Full/Path/Of/Input/File 
 outDir=/Full/Path/Of/Output/File 
@@ -212,4 +214,3 @@ bash stereoRun_multiLane.sh \
 # 1GiB=1024M=10241024KB=10241024*1024B
 # SAW version : v4.1.0
 ```
-_The bash script for v5.1.3 is coming very soon._
