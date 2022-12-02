@@ -2,7 +2,7 @@
 This notification page is a place to record and respond the user-reported issues/bugs and inform other users who may be affected by the same bug. We apologize for any inconvenience caused you.
 
 
-## SAW ST v5.1.3 (Modified Oct. 25, 2022)
+## SAW ST v5.1.3 (Modified Dec. 2, 2022)
 1. Issue description: SAW tissueCut pipeline failed and the error message shows `xxx line 1: 324233 Segmentation fault (core dumped). xxx`. (reported on: Oct. 24, 2022)
   - R: In SAW ST v5.1.3, the data type used for recording gene numbers is uint16 which can store a maximum of 65535 genes (using the ID index). However, for some exceptions where the gene number can exceed the upper limit, it will cause memory corruption and kill the program. 
   - Fixing this issue will be done in an upcoming release.
