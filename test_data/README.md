@@ -5,6 +5,7 @@
 | ----------- | ----------- | ----------- | ----------- |
 | Demo 1 | SS200000135TL_D1 | mouse | brain |
 | Demo 2 | SS200000154TR_F5 | mouse | tongue |
+| Demo 3 | SS200000464BL_C4 | mouse | heart |
 
 
 ##  Download data from Raysync
@@ -16,9 +17,10 @@
 
 | Demo Data Directory | SAW Version |
 | ----------- | ----------- |
-| SS200000135TL_D1 | <= V4.1.0  |
+| SS200000135TL_D1_v4 | <= V4.1.0  |
 | SS200000135TL_D1_v5 | >= V5.1.3 |
 | SS200000154TR_F5_tongue | >= V5.1.3 |
+| SS200000464BL_C4_heart | >= V5.1.3 |
 
 
 ## Raw Data Directory Structure
