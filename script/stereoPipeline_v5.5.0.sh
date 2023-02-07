@@ -141,7 +141,7 @@ if [[ ! -n "$read2" ]]; then
         if [[ ! -d $each ]];then mkdir -p $each; fi
     done
     export SINGULARITY_BIND=$outDir,$maskDIR,$annoDIR,$refDIR
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/splitMask \
+    /usr/bin/time -v singularity exec ${sif} splitMask \
         ${maskFile} ${result_00mapping}/splitBin $threads $splitCnt 2_25
     for ((i=1;i<=$splitCnt;i++)); do
         if [[ $(echo ${#i}) == '1' ]];then a=0$i; else a=$i;fi
@@ -152,7 +152,7 @@ else
     read2List=(`echo $read2 | tr ',' ' '`)
     fqNumber=`echo ${#read1List[@]}`
     export SINGULARITY_BIND=$outDir,$maskDIR,$annoDIR,$refDIR
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/CIDCount \
+    /usr/bin/time -v singularity exec ${sif} CIDCount \
         -i ${maskFile} \
         -s ${refName} \
         -g ${GSize} > ${result_00mapping}/CIDCount
@@ -191,7 +191,7 @@ if [[ $fqType == 'PE' ]]; then
         read1DIR=$(dirname ${read1List[i]})
         read2DIR=$(dirname ${read2List[i]})
         export SINGULARITY_BIND=$read1DIR,$read2DIR,$outDir,$maskDIR,$annoDIR,$refDIR
-        /usr/bin/time -v singularity exec ${sif} /usr/local/bin/mapping \
+        /usr/bin/time -v singularity exec ${sif} mapping \
             --outSAMattributes spatial \
             --outSAMtype BAM SortedByCoordinate \
             --genomeDir ${GDir} \
@@ -215,7 +215,7 @@ if [[ $fqType == 'PE' ]]; then
 elif [[ $fqType == 'SE' ]]; then
     for ((i=1;i<=$splitCnt;i++)); do
         if [[ $(echo ${#i}) == '1' ]];then a=0$i; else a=$i;fi
-        /usr/bin/time -v singularity exec ${sif} /usr/local/bin/CIDCount \
+        /usr/bin/time -v singularity exec ${sif} CIDCount \
             -i $(ls ${result_00mapping}/splitBin/${a}.${SN}.barcodeToPos.bin) \
             -s ${refName} \
             -g ${GSize} > ${result_00mapping}/CIDCount
@@ -242,7 +242,7 @@ elif [[ $fqType == 'SE' ]]; then
         echo "polyAnum=15" >> $bcPara
         echo "mismatchInPolyA=2" >> $bcPara
         export SINGULARITY_BIND=$read1DIR$outDir,$maskDIR,$annoDIR,$refDIR
-        /usr/bin/time -v singularity exec ${sif} /usr/local/bin/mapping \
+        /usr/bin/time -v singularity exec ${sif} mapping \
             --outSAMattributes spatial \
             --outSAMtype BAM SortedByCoordinate \
             --genomeDir ${GDir} \
@@ -282,7 +282,7 @@ echo `date` "=> merge barcode reads count tables start......"
 barcodeReadsCounts=${result_01merge}/${SN}.merge.barcodeReadsCount.txt
 export SINGULARITY_BIND=$outDir,$maskDIR
 if [[ $fqType == 'SE' ]] && [[ $(echo ${#bcReadsCounts[*]}) > '1' ]]; then
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/merge \
+    /usr/bin/time -v singularity exec ${sif} merge \
         ${maskFile} \
         $bcReadsCountsStr \
         $barcodeReadsCounts
@@ -291,7 +291,7 @@ elif [[ $fqType == 'PE' ]]; then
     then
         cp $bcReadsCountsStr $barcodeReadsCounts
     else
-        /usr/bin/time -v singularity exec ${sif} /usr/local/bin/merge \
+        /usr/bin/time -v singularity exec ${sif} merge \
             ${maskFile} \
             $bcReadsCountsStr \
             $barcodeReadsCounts
@@ -305,7 +305,7 @@ geneExp=${result_02count}/${SN}.raw.gef
 saturationFile=${result_02count}/${SN}_raw_barcode_gene_exp.txt
 export SINGULARITY_BIND=$outDir,$annoDIR,$refDIR
 export HDF5_USE_FILE_LOCKING=FALSE
-/usr/bin/time -v singularity exec ${sif} /usr/local/bin/count \
+/usr/bin/time -v singularity exec ${sif} count \
     -i ${starBamsStr} \
     -o ${result_02count}/${SN}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam \
     -a ${annoFile} \
@@ -330,20 +330,20 @@ if [[ -f $imageTarFile ]] && [[ -f $iprFile ]]  && [[ $doCell == "Y" ]]; then
     iprDIR=$(dirname $iprFile)
 
     export SINGULARITY_BIND=$outDir,$imgTarDIR,$iprDIR
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/register \
+    /usr/bin/time -v singularity exec ${sif} register \
         -i ${imageTarFile} \
         -c ${iprFile} \
         -v ${geneExp} \
         -o ${result_03register}
     out_iprFile=$(find ${result_03register} -maxdepth 1 -name *.ipr | head -1)
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/imageTools ipr2img \
+    /usr/bin/time -v singularity exec ${sif} imageTools ipr2img \
         -i ${imageTarFile} \
         -c ${out_iprFile} \
         -d tissue cell \
         -r True \
         -o ${result_03register}
     registerTif=$(find ${result_03register} -maxdepth 1 -name fov_stitched_transformed.tif | head -1)
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/imageTools img2rpi \
+    /usr/bin/time -v singularity exec ${sif} imageTools img2rpi \
         -i ${registerTif} \
         -g ssDNA \
         -b 1 10 50 100 \
@@ -356,20 +356,20 @@ elif [[ -f $imageTarFile ]] && [[ -f $iprFile ]]  && [[ $doCell == "N" ]]; then
     iprDIR=$(dirname $iprFile)
 
     export SINGULARITY_BIND=$outDir,$imgTarDIR,$iprDIR
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/rapidRegister \
+    /usr/bin/time -v singularity exec ${sif} rapidRegister \
         -i ${imageTarFile} \
         -c ${iprFile} \
         -v ${geneExp} \
         -o ${result_03register}
     out_iprFile=$(find ${result_03register} -maxdepth 1 -name *.ipr | head -1)
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/imageTools ipr2img \
+    /usr/bin/time -v singularity exec ${sif} imageTools ipr2img \
         -i ${imageTarFile} \
         -c ${out_iprFile} \
         -d tissue \
         -r True \
         -o ${result_03register}
     registerTif=$(find ${result_03register} -maxdepth 1 -name fov_stitched_transformed.tif | head -1)
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/imageTools img2rpi \
+    /usr/bin/time -v singularity exec ${sif} imageTools img2rpi \
         -i ${registerTif} \
         -g ssDNA \
         -b 1 10 50 100 \
@@ -384,7 +384,7 @@ if [[ -f $imageTarFile ]] && [[ -f $iprFile ]]; then
     echo `date` "=> tissueCut start......."
     export HDF5_USE_FILE_LOCKING=FALSE
     export SINGULARITY_BIND=$outDir
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/tissueCut \
+    /usr/bin/time -v singularity exec ${sif} tissueCut \
         -i ${geneExp} \
         --dnbfile ${barcodeReadsCounts} \
         -s ${tissueMaskFile} \
@@ -395,7 +395,7 @@ else
     export SINGULARITY_BIND=$outDir,$annoDIR,$refDIR
     echo `date` "=> there is no image, tissueCut based on the gene expression matrix start......."
     export HDF5_USE_FILE_LOCKING=FALSE
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/tissueCut \
+    /usr/bin/time -v singularity exec ${sif} tissueCut \
         -i ${geneExp} \
         --dnbfile ${barcodeReadsCounts} \
         --sn ${SN} -O Transcriptomics -d \
@@ -405,15 +405,15 @@ fi
 
 ## Complete raw GEF to visual GEF
 export HDF5_USE_FILE_LOCKING=FALSE
-/usr/bin/time -v singularity exec ${sif} /usr/local/bin/cellCut bgef \
+/usr/bin/time -v singularity exec ${sif} cellCut bgef \
     -i ${geneExp} \
     -o ${result_04tissuecut}/${SN}.gef \
     -O Transcriptomics
 ## Convert GEF to GEM [optional]
-/usr/bin/time -v singularity exec ${sif} /usr/local/bin/cellCut view \
+/usr/bin/time -v singularity exec ${sif} cellCut view \
     -s ${SN} -i ${result_04tissuecut}/${SN}.gef -o ${result_04tissuecut}/${SN}.gem
 gzip ${result_04tissuecut}/${SN}.gem
-/usr/bin/time -v singularity exec ${sif} /usr/local/bin/cellCut view \
+/usr/bin/time -v singularity exec ${sif} cellCut view \
     -s ${SN} -i ${result_04tissuecut}/${SN}.tissue.gef -o ${result_04tissuecut}/${SN}.tissue.gem
 gzip ${result_04tissuecut}/${SN}.tissue.gem
 
@@ -427,7 +427,7 @@ mkdir -p ${outDir}/tmp
 export NUMBA_CACHE_DIR=${outDir}/tmp
 export MPLCONFIGDIR=${outDir}/tmp
 
-/usr/bin/time -v singularity exec ${sif} /usr/local/bin/spatialCluster \
+/usr/bin/time -v singularity exec ${sif} spatialCluster \
     -i ${result_04tissuecut}/${SN}.tissue.gef \
     -o ${result_05spatialcluster}/${SN}.spatial.cluster.h5ad \
     -s $binSize
@@ -438,12 +438,12 @@ export SINGULARITY_BIND=$outDir
 if [[ $doCell == 'Y' ]]; then
     echo `date` "=> cellCut start......."
     export HDF5_USE_FILE_LOCKING=FALSE
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/cellCut cgef \
+    /usr/bin/time -v singularity exec ${sif} cellCut cgef \
         -i ${geneExp} \
         -m ${result_03register}/${SN}*_mask.tif \
         -o ${result_041cellcut}/${SN}.cellbin.gef
     ## convert cellbin GEF to GEM
-    # /usr/bin/time -v singularity exec ${sif} /usr/local/bin/cellCut view \
+    # /usr/bin/time -v singularity exec ${sif} cellCut view \
     #     -i ${result_041cellcut}/${SN}.cellbin.gef \
     #     -d ${result_04tissuecut}/${SN}.gef \
     #     -o ${result_041cellcut}/${SN}.cellbin.gem \
@@ -452,7 +452,7 @@ if [[ $doCell == 'Y' ]]; then
     mkdir -p ${outDir}/tmp
     export NUMBA_CACHE_DIR=${outDir}/tmp
     export MPLCONFIGDIR=${outDir}/tmp
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/cellCluster \
+    /usr/bin/time -v singularity exec ${sif} cellCluster \
         -i ${result_041cellcut}/${SN}.cellbin.gef \
         -o ${result_051cellcluster}/${SN}.cell.cluster.h5ad
 fi
@@ -462,7 +462,7 @@ fi
 export SINGULARITY_BIND=$outDir
 echo `date` "=> saturation start ......"
 export HDF5_USE_FILE_LOCKING=FALSE
-/usr/bin/time -v singularity exec ${sif} /usr/local/bin/saturation \
+/usr/bin/time -v singularity exec ${sif} saturation \
     -i ${saturationFile} \
     --tissue ${result_04tissuecut}/${SN}.tissue.gef \
     -o ${result_06saturation} \
@@ -478,7 +478,7 @@ export SINGULARITY_BIND=$outDir
 out_iprFile=$(find ${result_03register} -maxdepth 1 -name *.ipr | head -1)
 
 if [[ -n ${out_iprFile} ]] && [[ -e ${out_iprFile} ]] && [[ $doCell == 'Y' ]]; then
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/report \
+    /usr/bin/time -v singularity exec ${sif} report \
         -m ${bcStatStr} \
         -a ${bcFinalOutStr} \
         -g ${result_02count}/${SN}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam.summary.stat \
@@ -510,7 +510,7 @@ if [[ -n ${out_iprFile} ]] && [[ -e ${out_iprFile} ]] && [[ $doCell == 'Y' ]]; t
         --reference ${refName} \
         -o ${result_07report}
 elif [[ -n ${out_iprFile} ]] && [[ -e ${out_iprFile} ]] && [[ $doCell == 'N' ]]; then
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/report \
+    /usr/bin/time -v singularity exec ${sif} report \
         -m ${bcStatStr} \
         -a ${bcFinalOutStr} \
         -g ${result_02count}/${SN}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam.summary.stat \
@@ -540,7 +540,7 @@ elif [[ -n ${out_iprFile} ]] && [[ -e ${out_iprFile} ]] && [[ $doCell == 'N' ]];
         --reference ${refName} \
         -o ${result_07report}
 else
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/report \
+    /usr/bin/time -v singularity exec ${sif} report \
         -m ${bcStatStr} \
         -a ${bcFinalOutStr} \
         -g ${result_02count}/${SN}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam.summary.stat \
