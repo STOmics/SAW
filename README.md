@@ -59,7 +59,7 @@ $ echo 'export GOPATH=${HOME}/go' >> ~/.bashrc && \
 ## Install singularity on CentOS without compile
 $ yum install -y singularity
 ```
-**For additional help or support, please visit https://sylabs.io/guides/3.8/admin-guide/installation.html**
+**For additional help or support, please visit https://docs.sylabs.io/guides/latest/admin-guide/**
 
 ####   Quick download SAW from DockerHub
 Currently, the latest version of SAW is v5.5.0. You can download SAW by running the following command:
