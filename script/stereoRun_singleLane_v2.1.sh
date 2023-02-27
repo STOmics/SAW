@@ -143,7 +143,7 @@ else
     echo "umiLen=10" >> $bcPara
     echo "umiRead=1" >> $bcPara
     echo "mismatch=1" >> $bcPara
-    export SINGULARITY_BIND=$outDir,$annodir,$maskdir
+    export SINGULARITY_BIND=$outDir,$annodir,$maskdir,${genome}
     echo  " ~~~ mapping - $fqname ~~~"
     singularity exec ${visualSif} mapping \
         --outSAMattributes spatial \
