@@ -241,3 +241,25 @@ bash stereoRun_multiLane.sh \
 # 1GiB=1024M=10241024KB=10241024*1024B
 # SAW version : v4.1.0
 ```
+####    Run stereoRun_multiLane_v2.1.0.sh bash script
+If more than one lane sequencing data was given, run the stereoRun_multiLane_v2.1.0.sh script as the following:
+```
+ulimit -n 10240 
+dataDir=/Full/Path/Of/Input/File 
+outDir=/Full/Path/Of/Output/File 
+export SINGULARITY_BIND=$dataDir,$outDir
+bash stereoRun_multiLane.sh \
+    -m $dataDir/mask/SN.h5 \
+    -1 $dataDir/reads/lane1_read_1.fq.gz,$dataDir/reads/lane2_read_1.fq.gz \
+    -2 $dataDir/reads/lane1_read_2.fq.gz,$dataDir/reads/lane2_read_2.fq.gz \
+    -g $dataDir/reference/STAR_SJ100 \
+    -a $dataDir/reference/genes.gtf \
+    -o $outDir/result \
+    -i $dataDir/SN/image_dir_path \ # [option] when tissue image was given
+    -t 24 \
+    -s $dataDir/SAW/SAW_version.sif
+
+
+# 1GiB=1024M=10241024KB=10241024*1024B
+# SAW version : v2.1.0
+```
