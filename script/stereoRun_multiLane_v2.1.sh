@@ -150,8 +150,8 @@ else
         echo "mismatch=1" >> $bcPara
         
 	
-	export SINGULARITY_BIND=$outDir,$fqdir,$maskdir
-	echo " export SINGULARITY_BIND=$outDir,$fqdir,$maskdir "
+	export SINGULARITY_BIND=$outDir,$fqdir,$maskdir,$genome
+	echo " export SINGULARITY_BIND=$outDir,$fqdir,$maskdir,$genome "
 	echo  " ~~~ mapping - $fqname ~~~"
         singularity exec ${visualSif} mapping \
             --outSAMattributes spatial \
