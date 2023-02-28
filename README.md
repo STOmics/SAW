@@ -62,9 +62,9 @@ $ yum install -y singularity
 **For additional help or support, please visit https://sylabs.io/guides/3.8/admin-guide/installation.html**
 
 ####   Quick download SAW from DockerHub
-Currently, the latest version of SAW is v5.5.2. You can download SAW by running the following command:
+Currently, the latest version of SAW in DockerHub is 05.5.2. You can download SAW by running the following command:
 ```
-singularity build SAW_v5.5.2.sif docker://stomics/saw:05.5.2
+singularity build SAW_<version>.sif docker://stomics/saw:<version>
 ```
 
 
@@ -72,7 +72,7 @@ singularity build SAW_v5.5.2.sif docker://stomics/saw:05.5.2
 ###    Build index for reference genome
 A genome index has to be constructed before performing data mapping. The index files are used as reference when aligning reads. You can prepare the indexed reference before run SAW as follow:
 ```
-singularity exec <SAW_v5.5.0.sif> mapping --runMode genomeGenerate \
+singularity exec SAW_version.sif mapping --runMode genomeGenerate \
     --genomeDir reference/STAR_SJ100 \
     --genomeFastaFiles reference/genome.fa \
     --sjdbGTFfile reference/genes.gtf \
@@ -89,7 +89,7 @@ singularity exec <SAW_v5.5.0.sif> mapping --runMode genomeGenerate \
 ##  RUN
 ### Usage
 ```
-# for saw_v5.1.3 and saw_v5.4.0 and saw_v5.5.0
+# for saw_v5.1.3 and saw_v5.4.0 and saw_v5.5.2
 usage: sh <stereoPipeline.sh> -genomeSize -splitCount -maskFile -fq1 -fq2 -refIndex -genomeFile -speciesName -tissueType -annotationFile -outDir -imageRecordFile -imageCompressedFile -doCellBin -threads -sif
     -genomeSize : file size of the genome.fa (GiB) 
     -splitCount : count of split Stereo-seq Chip T Mask file, usually 16 for SE+Q4 FASTQ data and 1 for PE+Q40 FASTQ data
@@ -108,7 +108,7 @@ usage: sh <stereoPipeline.sh> -genomeSize -splitCount -maskFile -fq1 -fq2 -refIn
     -doCellBin : [Y/N], optional
 
 # 1GiB=1024M=10241024KB=10241024*1024B
-# SAW version : v5.1.3, v5.4.0, v5.5.0
+# SAW version : v5.1.3, v5.4.0, v5.5.2
 ```
 ```
 # for saw_beta_v4.1.0 & saw_v4.1.0
@@ -130,7 +130,7 @@ usage: sh <stereoRun.sh> -m maskFile -1 read1 -2 read2 -g indexedGenome -a annot
 
 ###   Example: Running the entire workflow
 For SAW_v4, please use the [stereoRun_singleLane_v4.1.0.sh](https://github.com/BGIResearch/SAW/blob/main/script/stereoRun_singleLane_v4.1.0.sh) or [stereoRun_multiLane_v4.1.0.sh](https://github.com/BGIResearch/SAW/blob/main/script/stereoRun_multiLane_v4.0.0.sh) to run whole workflow.
-For SAW_v5, please use the [stereoPipeline.sh](https://github.com/BGIResearch/SAW/blob/main/script/stereoPipeline.sh) to run whole workflow.
+For SAW_v5, please use the [stereoPipeline_v5.5.0.sh](https://github.com/BGIResearch/SAW/blob/main/script/stereoPipeline_v5.5.0.sh) to run whole workflow.
 
 ####    Run stereoPipeline.sh bash script
 ```
