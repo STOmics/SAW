@@ -67,10 +67,9 @@ Currently, the latest version of SAW is v5.5.2. You can download SAW by running 
 singularity build SAW_<version>.sif docker://stomics/saw:0<version>
 
 ```
-# Example
+####   Example
 ```
 singularity build SAW_5.5.2.sif docker://stomics/saw:05.5.2
-
 ```
 
 
