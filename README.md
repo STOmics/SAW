@@ -62,9 +62,15 @@ $ yum install -y singularity
 **For additional help or support, please visit https://sylabs.io/guides/3.8/admin-guide/installation.html**
 
 ####   Quick download SAW from DockerHub
-Currently, the latest version of SAW is v5.5.0. You can download SAW by running the following command:
+Currently, the latest version of SAW is v5.5.2. You can download SAW by running the following command:
 ```
-singularity build SAW_v5.5.0.sif docker://stomics/saw:05.5.0
+singularity build SAW_<version>.sif docker://stomics/saw:0<version>
+
+```
+# Example
+```
+singularity build SAW_5.5.2.sif docker://stomics/saw:05.5.2
+
 ```
 
 
