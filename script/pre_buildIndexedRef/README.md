@@ -1,4 +1,4 @@
-# SAW : STOmics Analysis Workflow
+# SAW : Stereo-seq Analysis Workflow
 Building your reference before running SAW analysis.
 ##  Preparation : Indexing a reference genome
 For more information visit https://github.com/alexdobin/STAR/blob/master/doc/STARmanual.pdf
