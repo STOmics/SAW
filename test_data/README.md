@@ -14,7 +14,7 @@
 
 **Access password: ltVO**
 
-![demo_data.png](demo_data.png)
+![demo_data.png](https://github.com/BGIResearch/SAW/blob/main/test_data/demo_data.png)
 
 | Demo Data Directory | SAW Version |
 | ----------- | ----------- |
