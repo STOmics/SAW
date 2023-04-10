@@ -1,5 +1,13 @@
 # Important Notifications
-This notification page is a place to record and respond the user-reported issues/bugs and inform other users who may be affected by the same bug. We apologize for any inconvenience caused you.
+This notification page is a place to record and respond the user-reported issues/bugs and inform other users who may be affected by the same bug. Meanwhile, we inform users of important improvement and version changes here. We apologize for any inconvenience caused you.
+
+
+## SAW ST v5.5.3 (Modified Mar. 21, 2023)
+
+1. Improvement description: upgraded `mapping` pipeline module, which performs polyA filtering after CID mapping, for improved statistical output in `report`. SAW V5 has an embedded polyA filtration function during `mapping`. In V5.5.2, polyA reads identification and filtration were done prior to CID mapping (an embedded function within `mapping` module) and these filtrated reads were recorded as 'Invalid CID Reads' which resulted in significantly low 'Valid CID Reads' outputs in certain cases. Hence, we adjusted the sequential order of polyA filtration step to be performed after CID mapping.
+  - Modified the algorithm to optimize ordering capacity without compromising ordering stability.
+  - PolyA filtering includes two main steps: 1) indentify and trim qualified reads according to length limitation, 2) remove trimmed reads of which length is less than 30.
+  - Depending on the polyA ratio of the sequenced data, this adjustment will affect the final output expression matrix when much high polyA ratio were present. Because where to perform polyA filtering would have a slight influence on adapter and DNB filtering of `mapping` pipeline. 
 
 
 ## SAW ST v5.1.3 (Modified Dec. 2, 2022)
