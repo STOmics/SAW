@@ -152,7 +152,9 @@ usage: sh <stereoRun.sh> -m maskFile -1 read1 -2 read2 -g indexedGenome -a annot
 
 ###   Example: Running the entire workflow
 For SAW_v4, please use the [stereoRun_singleLane_v4.1.0.sh](https://github.com/BGIResearch/SAW/blob/main/script/stereoRun_singleLane_v4.1.0.sh) or [stereoRun_multiLane_v4.1.0.sh](https://github.com/BGIResearch/SAW/blob/main/script/stereoRun_multiLane_v4.0.0.sh) to run the whole workflow.
+
 For SAW_v5, please use the [stereoPipeline_v5.5.0.sh](https://github.com/BGIResearch/SAW/blob/main/script/stereoPipeline_v5.5.0.sh) to run the whole workflow.
+
 For SAW_v6, please use the [stereoPipeline_v6.0.0.sh](https://github.com/BGIResearch/SAW/blob/main/script/stereoPipeline_v6.0.0.sh) to run the whole workflow.
 
 ####    Run stereoPipeline.sh bash script
