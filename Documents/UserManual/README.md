@@ -1,6 +1,10 @@
 # Important Notifications
 This notification page is a place to record and respond the user-reported issues/bugs and inform other users who may be affected by the same bug. Meanwhile, we inform users of important improvement and version changes here. We apologize for any inconvenience caused you.
 
+## SAW ST v6.0.1 & v5.5.4 (Modified Apr. 17, 2023)
+
+1. Bug fix: fixed the bug that the execution path of `checkGTF` function was invalid.
+
 
 ## SAW ST v5.5.3 (Modified Mar. 21, 2023)
 
