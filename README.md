@@ -99,7 +99,7 @@ usage: sh <stereoPipeline.sh> -genomeSize -splitCount -maskFile -fq1 -fq2 -refIn
     -refIndex : reference genome indexed folder, please build before running SAW analysis
     -speciesName : species of the sample
     -tissueType : tissue type of the sample
-    -annotationsFile :  annotations file in GFF or GTF format, the file must contain gene and exon annotations
+    -annotationFile :  annotations file in GFF or GTF format, the file must contain gene and exon annotations
     -threads : the number of threads to be used for running this pipeline
     -sif : SAW sif file path
     -outDir : output directory path
@@ -121,7 +121,7 @@ usage: sh <stereoPipeline.sh> -genomeSize -splitCount -maskFile -fq1 -fq2 -refIn
     -refIndex : reference genome indexed folder, please build before running SAW analysis
     -speciesName : species of the sample
     -tissueType : tissue type of the sample
-    -annotationsFile :  annotations file in GFF or GTF format, the file must contain gene and exon annotations
+    -annotationFile :  annotations file in GFF or GTF format, the file must contain gene and exon annotations
     -threads : the number of threads to be used for running this pipeline
     -sif : SAW sif file path
     -outDir : output directory path
