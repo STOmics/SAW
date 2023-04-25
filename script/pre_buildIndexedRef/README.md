@@ -30,7 +30,7 @@ export SINGULARITY_BIND=$referenceDir
 
 singularity exec <SAW_version.sif> mapping \
     --runMode genomeGenerate \
-    --genomeDir $reference/STAR_SJ100 \
+    --genomeDir $referenceDir/STAR_SJ100 \
     --genomeFastaFiles $referenceDir/genome/genome.fa \
     --sjdbGTFfile $referenceDir/genes/genes.gtf \
     --sjdbOverhang 99 \
