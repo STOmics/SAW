@@ -1,6 +1,6 @@
-```
-Our GitHub repository has been transferred to https://github.com/STOmics/SAW, please visit us for the latest update!
-```
+### Our GitHub repository has been transferred to https://github.com/STOmics/SAW, please visit us for the latest update!
+
+
 # SAW: Stereo-seq Analysis Workflow
 Workflow for analyzing Stereo-seq transcriptomic data. Stereo-seq Analysis Workflow (SAW) software suite is a set of pipelines bundled to map sequenced reads to their spatial location on the tissue section, quantify the corresponding gene expression levels and visually present spatial gene expression distribution.
 
