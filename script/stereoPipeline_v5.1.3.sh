@@ -232,7 +232,7 @@ elif [[ $fqType == 'SE' ]]; then
         echo "polyAnum=15" >> $bcPara
         echo "mismatchInPolyA=2" >> $bcPara
         echo "bcNum=`head -1 ${result_00mapping}/CIDCount`" >> $bcPara
-        export SINGULARITY_BIND=$read1DIR$outDir,$maskDIR,$annoDIR,$refDIR
+        export SINGULARITY_BIND=$read1DIR,$outDir,$maskDIR,$annoDIR,$refDIR
         singularity exec ${sif} mapping \
             --outSAMattributes spatial \
             --outSAMtype BAM SortedByCoordinate \
