@@ -1,5 +1,3 @@
-### Our GitHub repository has been transferred to https://github.com/STOmics/SAW, please visit us for the latest update!
-
 
 # SAW: Stereo-seq Analysis Workflow
 Workflow for analyzing Stereo-seq transcriptomic data. Stereo-seq Analysis Workflow (SAW) software suite is a set of pipelines bundled to map sequenced reads to their spatial location on the tissue section, quantify the corresponding gene expression levels and visually present spatial gene expression distribution.
@@ -22,6 +20,7 @@ Stereo-seq Analysis Workflow (SAW) should be run on a Linux system that meets th
 * Singularity: a container platform
 * SAW in the Singularity Image File (SIF) format
 * ImageQC >= v1.1.0, ImageStudio >= v1.0.0
+* StereoMap >= v1.0.0
 
 ####   Quick installation of Singularity
 ```
@@ -64,9 +63,21 @@ $ yum install -y singularity
 **For additional help or support, please visit https://sylabs.io/guides/3.8/admin-guide/installation.html**
 
 ####   Quick download SAW from DockerHub
-Currently, the latest version of SAW in DockerHub is 06.0.0. You can download SAW by running the following command:
+Currently, the latest version of SAW in DockerHub is 06.0.1. You can download SAW by running the following command:
 ```
 singularity build SAW_<version>.sif docker://stomics/saw:<version>
+```
+#####   All accessible versions on DockerHub
+```
+singularity build SAW_6.0.sif docker://stomics/saw:6.0.1
+singularity build SAW_5.5.sif docker://stomics/saw:5.5.4
+singularity build SAW_5.4.sif docker://stomics/saw:5.4.0
+singularity build SAW_5.1.sif docker://stomics/saw:5.1.3
+singularity build SAW_4.1.sif docker://stomics/saw:4.1.0
+singularity build SAW_4.0.sif docker://stomics/saw:4.0.0
+singularity build SAW_2.1.sif docker://stomics/saw:2.1.0
+singularity build SAW_2.0.sif docker://stomics/saw:2.0.0
+singularity build SAW_1.0.sif docker://stomics/saw:1.0.0
 ```
 
 
