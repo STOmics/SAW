@@ -69,15 +69,15 @@ singularity build SAW_<version>.sif docker://stomics/saw:<version>
 ```
 #####   All accessible versions on DockerHub
 ```
-singularity build SAW_6.0.sif docker://stomics/saw:6.0.1
-singularity build SAW_5.5.sif docker://stomics/saw:5.5.4
-singularity build SAW_5.4.sif docker://stomics/saw:5.4.0
-singularity build SAW_5.1.sif docker://stomics/saw:5.1.3
-singularity build SAW_4.1.sif docker://stomics/saw:4.1.0
-singularity build SAW_4.0.sif docker://stomics/saw:4.0.0
-singularity build SAW_2.1.sif docker://stomics/saw:2.1.0
-singularity build SAW_2.0.sif docker://stomics/saw:2.0.0
-singularity build SAW_1.0.sif docker://stomics/saw:1.0.0
+singularity build SAW_6.0.sif docker://stomics/saw:06.0.1
+singularity build SAW_5.5.sif docker://stomics/saw:05.5.4
+singularity build SAW_5.4.sif docker://stomics/saw:05.4.0
+singularity build SAW_5.1.sif docker://stomics/saw:05.1.3
+singularity build SAW_4.1.sif docker://stomics/saw:04.1.0
+singularity build SAW_4.0.sif docker://stomics/saw:04.0.0
+singularity build SAW_2.1.sif docker://stomics/saw:02.1.0
+singularity build SAW_2.0.sif docker://stomics/saw:02.0.0
+singularity build SAW_1.0.sif docker://stomics/saw:01.0.0
 ```
 
 
