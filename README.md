@@ -69,7 +69,7 @@ singularity build SAW_<version>.sif docker://stomics/saw:<version>
 ```
 #####   All accessible versions on DockerHub
 ```
-singularity build SAW_6.0.sif docker://stomics/saw:06.0.1
+singularity build SAW_6.0.sif docker://stomics/saw:06.0.2
 singularity build SAW_5.5.sif docker://stomics/saw:05.5.4
 singularity build SAW_5.4.sif docker://stomics/saw:05.4.0
 singularity build SAW_5.1.sif docker://stomics/saw:05.1.3
@@ -102,7 +102,7 @@ singularity exec SAW_<version>.sif mapping --runMode genomeGenerate \
 ##  RUN
 ### Usage
 ```
-# for saw_v6.0.0
+# for saw_v6.0
 usage: sh <stereoPipeline.sh> -genomeSize -splitCount -maskFile -fq1 -fq2 -refIndex -genomeFile -speciesName -tissueType -annotationFile -outDir -imageRecordFile -imageCompressedFile -doCellBin -threads -sif
     -genomeSize : file size of the genome.fa (GiB) 
     -splitCount : count of split Stereo-seq Chip T Mask file, usually 16 for SE+Q4 FASTQ data and 1 for PE+Q40 FASTQ data
@@ -121,7 +121,7 @@ usage: sh <stereoPipeline.sh> -genomeSize -splitCount -maskFile -fq1 -fq2 -refIn
     -doCellBin : [Y/N], optional
 
 # 1GiB=1024M=10241024KB=10241024*1024B
-# SAW version : v6.0.0
+# SAW version : v6.0
 ```
 ```
 # for saw_v5.1.3 and saw_v5.4.0 and saw_v5.5.3
