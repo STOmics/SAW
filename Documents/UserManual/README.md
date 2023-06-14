@@ -1,6 +1,21 @@
 # Important Notifications
 This notification page is a place to record and respond the user-reported issues/bugs and inform other users who may be affected by the same bug. Meanwhile, we inform users of important improvement and version changes here. We apologize for any inconvenience caused you.
 
+## SAW ST v6.0.2 (Modified Jun. 5, 2023)
+
+For `register` module：
+1. Improvement description: removed the dependence of parameters related to stitched-image stitching-evaluation from different versions of QC. The evaluation of stitched-image stitching is completed by `register` module;
+2. Bug fix: fixed the issue that the module was unable to get `.czi` file path;
+3. Bug fix: fixed the issue of doing cell segmentation in `rapidRegister` for manually-stitched data;
+4. Bug fix: fixed the issue that the registered `.ipr` file that could not be registered again;
+5. Bug fix: expanded the chip-prefix list and fixed the track line template acquisition error.
+
+For `imageTools` module：
+1. Improvement description: prompt an error when the <StainType> in the `.ipr` file is '-';
+2. Improvement description: supported Zeiss microscope-stitched image;
+3. Bug fix: fixed the issue that bin_100 of cellMask in the `SN.rpi` file did not save corresponding metadata;
+4. Bug fix: fixed the issue that the merge could not be performed on images with the same width and height.
+
 ## SAW ST v6.0.1 & v5.5.4 (Modified Apr. 17, 2023)
 
 1. Bug fix: fixed the bug that the execution path of `checkGTF` function was invalid.
