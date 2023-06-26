@@ -11,7 +11,7 @@ For `register` module：
 5. Bug fix: expanded the chip-prefix list and fixed the track line template acquisition error.
 
 For `imageTools` module：
-1. Improvement description: prompt an error when the <StainType> in the `.ipr` file is '-';
+1. Improvement description: prompt an error when `StainType` in `.ipr` file is '-';
 2. Improvement description: supported Zeiss microscope-stitched image;
 3. Bug fix: fixed the issue that bin_100 of cellMask in the `SN.rpi` file did not save corresponding metadata;
 4. Bug fix: fixed the issue that the merge could not be performed on images with the same width and height.
