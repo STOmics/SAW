@@ -112,7 +112,7 @@ usage: sh <stereoPipeline.sh> -genomeSize -splitCount -maskFile -fq1 -fq2 -refIn
     -maskFile : Stereo-seq Chip T Mask file path
     -fq1 : FASTQ file path of read1, if there are more than one FASTQ file, please separate them with comma, e.g:lane1_read_1.fq.gz,lane2_read_1.fq.gz
     -fq2 : FASTQ file path of read2, if there are more than one FASTQ file, please separate them with comma, not requested for 'SE+Q4' FASTQ data, e.g:lane1_read_2.fq.gz,lane2_read_2.fq.gz    
-    -refIndex : reference genome indexed folder, please build before running SAW analysis
+    -refIndex : reference genome indexed folder, please build index before running SAW analysis
     -speciesName : species of the sample
     -tissueType : tissue type of the sample
     -annotationFile :  annotations file in GFF or GTF format, the file must contain gene and exon annotations
