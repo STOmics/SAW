@@ -6,7 +6,7 @@ Workflow for analyzing Stereo-seq transcriptomic data. Stereo-seq Analysis Workf
 
 ##  Introduction
 SAW processes the sequencing data of Stereo-seq to generate spatial gene expression matrices, and the users could take these files as the starting point to perform downstream analysis. SAW includes thirteen essential and suggest pipelines and auxiliary tools for supporting other handy functions.
-![workflow.png](SAW_v6.1.0_workflow.png)
+![workflow.png](SAW_v6.1_workflow.png)
 
 ##  System Requirements
 ###   Hardware
