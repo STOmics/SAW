@@ -551,7 +551,7 @@ For example, if you have finished manual processing in ImageStudio at the step o
 
    - Run `stereoPipeline_v6.1.0_manual_part1.sh`  to obtain Expression Matrix and RPI for manual registration
 
-     - [stereoPipeline_v6.1.0_manual_part1.sh](https://github.com/STOmics/SAW/blob/main/Scripts/stereoPipeline_v6.1.0_manual_part1.sh)
+     - [stereoPipeline_v6.1_manual_part1.sh](https://github.com/STOmics/SAW/blob/main/Scripts/stereoPipeline_v6.1_manual_part1.sh)
 
        ```Bash
        ## run_v6.1.0_manual_part1.sh
@@ -604,7 +604,7 @@ For example, if you have finished manual processing in ImageStudio at the step o
 
   - Run `stereoPipeline_v6.1.0_manual_part2.sh` to obtain tissue segmentation + cluster analysis + report
 
-    - [stereoPipeline_v6.1.0_manual_part2.sh](https://github.com/STOmics/SAW/blob/main/Scripts/stereoPipeline_v6.1.0_manual_part2.sh)
+    - [stereoPipeline_v6.1_manual_part2.sh](https://github.com/STOmics/SAW/blob/main/Scripts/stereoPipeline_v6.1_manual_part2.sh)
     
     ```Bash
     ## run_v6.1.0_manual_part2.sh
