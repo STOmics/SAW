@@ -193,7 +193,7 @@ For SAW_v4, please use the [stereoRun_singleLane_v4.1.0.sh](https://github.com/S
 
 For SAW_v5, please use the [stereoPipeline_v5.5.0.sh](https://github.com/STOmics/SAW/blob/main/Scripts/stereoPipeline_v5.5.0.sh) to run the whole workflow.
 
-For SAW_v6, please use the [stereoPipeline_v6.1.0.sh](https://github.com/STOmics/SAW/blob/main/Scripts/stereoPipeline_v6.1.0.sh) to run the whole workflow.
+For SAW_v6, please use the [stereoPipeline_v6.1.sh](https://github.com/STOmics/SAW/blob/main/Scripts/stereoPipeline_v6.1.sh) to run the whole workflow.
 
 ####    Run stereoPipeline.sh bash script
 ```
