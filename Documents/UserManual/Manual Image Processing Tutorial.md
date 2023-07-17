@@ -366,7 +366,7 @@ For example, if you have finished manual processing in ImageStudio at the step o
       - Applicable scenes:
         - ImageStudio: QC + Stitching + **Tissue/Cell Segmentation** -> SAW: register
   
-  - ```bash
+  ```bash
     ## copy
     export HDF5_USE_FILE_LOCKING=FALSE
     export PATH=/share/app/singularity/3.8.1/bin:$PATH
