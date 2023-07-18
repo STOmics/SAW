@@ -1,13 +1,13 @@
 # TEST DATA
 ##  Demo data basic information
 
-|  | SN | Reference | Tissue Type |
-| ----------- | ----------- | ----------- | ----------- |
-| Demo 1 | SS200000135TL_D1 | mouse | brain |
-| Demo 2 | SS200000154TR_F5 | mouse | tongue |
-| Demo 3 | SS200000464BL_C4 | mouse | heart |
-| Demo 4 | SS200000059_NC | mouse | testis |
-
+|  | SN | ChipSize | Reference | Tissue Type |
+| ----------- | ----------- | ----------- | ----------- | ----------- |
+| Demo 1 | SS200000135TL_D1 | 1\*1 | mouse | brain |
+| Demo 2 | SS200000154TR_F5 | 1\*1 | mouse | tongue |
+| Demo 3 | SS200000464BL_C4 | 1\*1 | mouse | heart |
+| Demo 4 | SS200000059_NC | 1\*1 | mouse | testis |
+| Demo 5 | D02070C3D3 | 1\*2 | mouse | embryo |
 
 ##  Download data from Raysync
 **Link: http://116.6.21.110:8090/share/QJKAO6hGUpTPbuYH7Dvi**
@@ -23,6 +23,7 @@
 | SS200000154TR_F5_v5_tongue | >= V5.1.3 |
 | SS200000464BL_C4_v5_heart | >= V5.1.3 |
 | SS200000059_NC_v6_testis | >= V6.0.0 |
+| D02070C3D3_v6.1_embryo | >=V6.1.0 |
 
 
 ## Raw Data Directory Structure
