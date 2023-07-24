@@ -19,11 +19,11 @@
 | Demo Data Directory | SAW Version |
 | ----------- | ----------- |
 | SS200000135TL_D1_v4_brain | <= V4.1.0  |
-| SS200000135TL_D1_v5_brain | >= V5.1.3 |
-| SS200000154TR_F5_v5_tongue | >= V5.1.3 |
-| SS200000464BL_C4_v5_heart | >= V5.1.3 |
-| SS200000059_NC_v6_testis | >= V6.0.0 |
-| D02070C3D3_v6.1_embryo | >=V6.1.0 |
+| SS200000135TL_D1_v5_brain | \>= V5.1.3 |
+| SS200000154TR_F5_v5_tongue | \>= V5.1.3 |
+| SS200000464BL_C4_v5_heart | \>= V5.1.3 |
+| SS200000059_NC_v6_testis | \>= V6.0.0 |
+| D02070C3D3_v6.1_embryo | \>= V6.1.0 |
 
 
 ## Raw Data Directory Structure
