@@ -8,6 +8,8 @@
 | Demo 3 | SS200000464BL_C4 | 1\*1 | mouse | heart |
 | Demo 4 | SS200000059_NC | 1\*1 | mouse | testis |
 | Demo 5 | D02070C3D3 | 1\*2 | mouse | embryo |
+| Demo 6 | FP200009107_E414 | 0.5\*0.5 | mouse | olfactory bulb |
+
 
 ##  Download data from Raysync
 **Link: http://116.6.21.110:8090/share/QJKAO6hGUpTPbuYH7Dvi**
@@ -24,6 +26,7 @@
 | SS200000464BL_C4_v5_heart | \>= V5.1.3 |
 | SS200000059_NC_v6_testis | \>= V6.0.0 |
 | D02070C3D3_v6.1_embryo | \>= V6.1.0 |
+| FP200009107_E414_v6.1_olfactory_bulb | \>= V6.1.0 |
 
 
 ## Raw Data Directory Structure
