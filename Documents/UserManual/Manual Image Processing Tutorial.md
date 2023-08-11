@@ -593,8 +593,8 @@ For example, if you have finished manual processing in ImageStudio at the step o
 
   - Download following files and input these two files in StereoMap:
 
-    - The complete expression matrix `<part1_outdir>/02.count/SN.gef`
-    - The stitched panoramic image `<part1_outdir>/02.count/ipr2img/fov_stitched.rpi`
+    - The complete expression matrix `<part1_outdir>/03.register/manual_register/SN.gef`
+    - The stitched panoramic image `<part1_outdir>/03.register/manual_register/fov_stitched.rpi`
 
   - Click the Manual Registration Logo to do manual registration
 
