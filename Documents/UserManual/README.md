@@ -1,7 +1,7 @@
 # Important Notifications
 This notification page is a place to record and respond the user-reported issues/bugs and inform other users who may be affected by the same bug. Meanwhile, we inform users of important improvement and version changes here. We apologize for any inconvenience caused you.
 
-## SAW ST v6.1.1 (Modified Oct. 10, 2023)
+## SAW ST v6.1.1 (Modified Aug. 11, 2023)
 
 For `manualRegigster` module:  
 1. Bug fix: fixed the issue that obtaining information from manual registration file (`.json`) incorrectly resulted in wrong width and height of images.
