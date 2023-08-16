@@ -11,6 +11,3 @@ For `tissueCut` module:
 
 For `report` module:  
 1. Bug fix: compatible with the `.ipr` file which is failed with image quality control (QC) and has no record of heat map matrix information needed for html report.
-
-For `Manual Image Processing Tutorial.md` module:  
-1. Revise:  modified paths of `SN.gef` and `fov_stitched.rpi` in /QC-Fail/Demo of SAW manual pipeline/StereoMap: Manual Registration, corresponding to `stereoPipeline_v6.1_manual_part1.sh`.
