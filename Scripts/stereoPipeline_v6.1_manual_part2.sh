@@ -152,7 +152,7 @@ if [[ -f $imageTarFile ]] && [[ -f $iprFile ]]  && [[ $doCell == "Y" ]]; then
 			-s $extrude_x $extrude_y \
 			-a $isTuned \
 			-p ${result_03register}
-    out_iprFile=$(find ${result_03register} -maxdepth 1 -name *.ipr | head -1)
+    out_iprFile=$(find ${result_03register} -maxdepth 1 -name \*.ipr | head -1)
     /usr/bin/time -v singularity exec ${sif} imageTools ipr2img \
             -i ${imageTarFile} \
             -c ${out_iprFile} \
@@ -191,7 +191,7 @@ elif [[ -f $imageTarFile ]] && [[ -f $iprFile ]]  && [[ $doCell == "N" ]]; then
             -a $isTuned \
             -p ${result_03register}
 			
-    out_iprFile=$(find ${result_03register} -maxdepth 1 -name *.ipr | head -1)
+    out_iprFile=$(find ${result_03register} -maxdepth 1 -name \*.ipr | head -1)
     /usr/bin/time -v singularity exec ${sif} imageTools ipr2img \
             -i ${imageTarFile} \
             -c $out_iprFile \
@@ -215,7 +215,7 @@ fi
 
 if [[ -f $imageTarFile ]] && [[ -f $iprFile ]]; then
     # Run tissueCut to get the spatial gene expression profile of the tissue-covered region
-    #nucleusLayer=$(find ${result_03register} -maxdepth 1 -name *fov_stitched_transformed.tif -exec sh -c 'for f do basename -- "$f" _fov_stitched_transformed.tif;done' sh {} + | grep -v IF)
+    #nucleusLayer=$(find ${result_03register} -maxdepth 1 -name \*fov_stitched_transformed.tif -exec sh -c 'for f do basename -- "$f" _fov_stitched_transformed.tif;done' sh {} + | grep -v IF)
     nucleusLayer=$(basename `find ${result_03register} -name \*fov_stitched.tif` | grep -v IF | awk -F '_' '{print$1}')
     tissueMaskFile=$(find ${result_03register} -name \*${nucleusLayer}_${SN}_tissue_cut.tif)
     echo `date` "=> tissueCut start......."
@@ -315,7 +315,7 @@ if [[ $doCell == 'Y' ]]; then
     echo `date` "=> cellCut start......."
     export HDF5_USE_FILE_LOCKING=FALSE
     nucleusLayer=$(basename `find ${result_03register} -name \*fov_stitched.tif` | grep -v IF | awk -F '_' '{print$1}')
-    nucleusMask=$(find ${result_03register} -maxdepth 1 -name ${nucleusLayer}*_mask.tif)
+    nucleusMask=$(find ${result_03register} -maxdepth 1 -name ${nucleusLayer}\*_mask.tif)
     /usr/bin/time -v singularity exec ${sif} cellCut cgef \
         -i ${geneExp} \
         -m ${nucleusMask} \
@@ -354,7 +354,7 @@ saturationFile=${countDir}/02.count/${SN}_raw_barcode_gene_exp.txt
 echo `date` "=> report generation start......"
 export HDF5_USE_FILE_LOCKING=FALSE
 export SINGULARITY_BIND=$outDir,$countDir
-out_iprFile=$(find ${result_03register} -maxdepth 1 -name *.ipr | head -1)
+out_iprFile=$(find ${result_03register} -maxdepth 1 -name \*.ipr | head -1)
 
 if [[ -n ${out_iprFile} ]] && [[ -e ${out_iprFile} ]] && [[ $doCell == 'Y' ]]; then
     /usr/bin/time -v singularity exec ${sif} report \
