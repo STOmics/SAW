@@ -47,14 +47,14 @@ do
         shift
 done
 
-# Extract parameters from manual registration
-offsetX=`cat $registJson | jq -r '.offsetX'`
-offsetY=`cat $registJson | jq -r '.offsetY'`
-flip=`cat $registJson | jq -r '.flip'`
-rotate=`cat $registJson | jq -r '.rotate'`
-isTunedStr=`cat $registJson | jq -r '.isTuned'`
-extrude_x=`cat $registJson | jq -r '.extrude_x'`
-extrude_y=`cat $registJson | jq -r '.extrude_y'`
+# Another option of extracting parameters
+offsetX=`cat ${registJson} | sed 's/,/\n/g' | grep "offsetX" | sed 's/:/\n/g' | sed '1d' | sed 's/}//g'|sed 's/"//g'`
+offsetY=`cat ${registJson} | sed 's/,/\n/g' | grep "offsetY" | sed 's/:/\n/g' | sed '1d' | sed 's/}//g'|sed 's/"//g'`
+flip=`cat ${registJson} | sed 's/,/\n/g' | grep "flip" | sed 's/:/\n/g' | sed '1d' | sed 's/}//g'|sed 's/"//g'`
+rotate=`cat ${registJson} | sed 's/,/\n/g' | grep "rotate" | sed 's/:/\n/g' | sed '1d' | sed 's/}//g'|sed 's/"//g'`
+isTunedStr=`cat ${registJson} | sed 's/,/\n/g' | grep "isTuned" | sed 's/:/\n/g' | sed '1d' | sed 's/}//g'|sed 's/"//g'`
+extrude_x=`cat ${registJson} | sed 's/,/\n/g' | grep "extrude_x" | sed 's/:/\n/g' | sed '1d' | sed 's/}//g'|sed 's/"//g'`
+extrude_y=`cat ${registJson} | sed 's/,/\n/g' | grep "extrude_y" | sed 's/:/\n/g' | sed '1d' | sed 's/}//g'|sed 's/"//g'`
 
 if [[ isTunedStr == 'true' ]];then isTuned='True';else isTuned='False';fi
 
