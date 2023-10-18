@@ -58,6 +58,7 @@ extrude_y=`cat ${registJson} | sed 's/,/\n/g' | grep "extrude_y" | sed 's/:/\n/g
 
 if [[ isTunedStr == 'true' ]];then isTuned='True';else isTuned='False';fi
 
+
 # Summary of count result
 barcodeReadsCounts=${countDir}/01.merge/${SN}.merge.barcodeReadsCount.txt
 starBams=()
@@ -125,12 +126,24 @@ do
 done
 
 
+if [[ ! -d $result_03register ]];then
+    mkdir -p $result_03register
+fi
+
 if [[ $doCell == "Y" ]]; then
     result_041cellcut=${outDir}/041.cellcut
     result_051cellcluster=${outDir}/051.cellcluster
     mkdir -p $result_041cellcut
     mkdir -p $result_051cellcluster
 fi
+
+# Get origin TIFF path, either QCPass or QCFail
+if [[ ! -d $countDir/03.register/manual_register ]];then
+    tifDir=$countDir/03.register
+else
+	tifDir=$countDir/03.register/manual_register
+fi
+
 
 ## Run SAW register to stitch microscope tile images to a panoramic image, perform tissue and cell (optional, depends on -doCellBin) segmentation, and register the panoramic image and the segmentated images with the gene expression matrix.
 geneExp=$countDir/02.count/${SN}.raw.gef
@@ -143,7 +156,7 @@ if [[ -f $imageTarFile ]] && [[ -f $iprFile ]]  && [[ $doCell == "Y" ]]; then
     export SINGULARITY_BIND=$outDir,$imgTarDIR,$iprDIR,$countDir
     cp -rf ${iprFile} ${result_03register}/${SN}.reregist.ipr
     /usr/bin/time -v singularity exec ${sif} manualRegister \
-			-i ${result_03register}/manual_register \
+			-i $tifDir \
 			-c ${result_03register}/${SN}.reregist.ipr \
 			-v ${geneExp} \
 			-f $flip \
@@ -159,7 +172,7 @@ if [[ -f $imageTarFile ]] && [[ -f $iprFile ]]  && [[ $doCell == "Y" ]]; then
             -d tissue cell \
             -r True \
             -o ${result_03register}
-			
+
     # registerTif=$(find ${result_03register} -maxdepth 1 -name \*fov_stitched.tif)
     # regTifStr=$(echo $registerTif | tr ' ' ',')
     # regGroupStr=$(basename `find ${result_03register} -maxdepth 1 -name \*fov_stitched.tif` | grep -v IF | awk -F '_' '{print$1}')
@@ -170,7 +183,7 @@ if [[ -f $imageTarFile ]] && [[ -f $iprFile ]]  && [[ $doCell == "Y" ]]; then
         # -g ${regGroupStr}/Image \
         # -b 1 10 50 100 \
         # -o ${result_03register}/fov_stitched.rpi
-	
+
 elif [[ -f $imageTarFile ]] && [[ -f $iprFile ]]  && [[ $doCell == "N" ]]; then
     # Run SAW rapidRegister (stitch, tissue segmentation) + SAW imageTools
     echo `date` "=> image processing and registration start......."
@@ -181,7 +194,7 @@ elif [[ -f $imageTarFile ]] && [[ -f $iprFile ]]  && [[ $doCell == "N" ]]; then
     export SINGULARITY_BIND=$outDir,$imgTarDIR,$iprDIR,$countDir
     cp -rf ${iprFile} ${result_03register}/${SN}.reregist.ipr
     /usr/bin/time -v singularity exec ${sif} manualRegister \
-            -i ${result_03register}/manual_register \
+            -i $tifDir \
             -c ${result_03register}/${SN}.reregist.ipr \
             -v ${geneExp} \
             -f $flip \
@@ -190,7 +203,7 @@ elif [[ -f $imageTarFile ]] && [[ -f $iprFile ]]  && [[ $doCell == "N" ]]; then
             -s $extrude_x $extrude_y \
             -a $isTuned \
             -p ${result_03register}
-			
+
     out_iprFile=$(find ${result_03register} -maxdepth 1 -name \*.ipr | head -1)
     /usr/bin/time -v singularity exec ${sif} imageTools ipr2img \
             -i ${imageTarFile} \
@@ -198,7 +211,7 @@ elif [[ -f $imageTarFile ]] && [[ -f $iprFile ]]  && [[ $doCell == "N" ]]; then
             -d tissue \
             -r True \
             -o ${result_03register}
-			
+
     # registerTif=$(find ${result_03register} -maxdepth 1 -name \*fov_stitched.tif)
     # regTifStr=$(echo $registerTif | tr ' ' ',')
     # regGroupStr=$(basename `find ${result_03register} -maxdepth 1 -name \*fov_stitched.tif` | grep -v IF | awk -F '_' '{print$1}')
@@ -216,7 +229,7 @@ fi
 if [[ -f $imageTarFile ]] && [[ -f $iprFile ]]; then
     # Run tissueCut to get the spatial gene expression profile of the tissue-covered region
     #nucleusLayer=$(find ${result_03register} -maxdepth 1 -name \*fov_stitched_transformed.tif -exec sh -c 'for f do basename -- "$f" _fov_stitched_transformed.tif;done' sh {} + | grep -v IF)
-    nucleusLayer=$(basename `find ${result_03register} -name \*fov_stitched.tif` | grep -v IF | awk -F '_' '{print$1}')
+    nucleusLayer=$(basename `find ${result_03register} -name \*fov_stitched*.tif` | grep -v IF | awk -F '_' '{print$1}')
     tissueMaskFile=$(find ${result_03register} -name \*${nucleusLayer}_${SN}_tissue_cut.tif)
     echo `date` "=> tissueCut start......."
     export HDF5_USE_FILE_LOCKING=FALSE
@@ -229,7 +242,7 @@ if [[ -f $imageTarFile ]] && [[ -f $iprFile ]]; then
         -O Transcriptomics \
         -d -t 8 \
         -o ${result_04tissuecut}
-    
+
     for i in `h5dump -n ${result_03register}/${SN}.reregist.ipr | grep 'Labeling/' | awk '{print$2}'`;
     do
     label1=`basename $i`
@@ -268,8 +281,8 @@ export HDF5_USE_FILE_LOCKING=FALSE
     -i ${geneExp} \
     -o ${result_04tissuecut}/${SN}.gef \
     -O Transcriptomics
-	
-# Complete raw labeled tissue GEF to visual GEF	
+
+# Complete raw labeled tissue GEF to visual GEF
 for i in `h5dump -n ${result_03register}/${SN}.reregist.ipr | grep 'Labeling/' | awk '{print$2}'`;
 do
 label1=`basename $i`
@@ -314,7 +327,7 @@ export SINGULARITY_BIND=$outDir,$countDir
 if [[ $doCell == 'Y' ]]; then
     echo `date` "=> cellCut start......."
     export HDF5_USE_FILE_LOCKING=FALSE
-    nucleusLayer=$(basename `find ${result_03register} -name \*fov_stitched.tif` | grep -v IF | awk -F '_' '{print$1}')
+    nucleusLayer=$(basename `find ${result_03register} -name \*fov_stitched*.tif` | grep -v IF | awk -F '_' '{print$1}')
     nucleusMask=$(find ${result_03register} -maxdepth 1 -name ${nucleusLayer}\*_mask.tif)
     /usr/bin/time -v singularity exec ${sif} cellCut cgef \
         -i ${geneExp} \
