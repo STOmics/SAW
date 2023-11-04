@@ -9,12 +9,11 @@
 | Demo 4 | SS200000059_NC | 1\*1 | mouse | testis |
 | Demo 5 | D02070C3D3 | 1\*2 | mouse | embryo |
 | Demo 6 | FP200009107_E414 | 0.5\*0.5 | mouse | olfactory bulb |
+| Demo 7 | C02533C1 | 1\*1 | mouse | kidney |
 
 
 ##  Download data from Raysync
-**Link: http://116.6.21.110:8090/share/QJKAO6hGUpTPbuYH7Dvi**
-
-**Access password: ltVO**
+**Link: http://116.6.21.110:8090/share/21bb9df9-e6c5-47c5-9aa8-29f2d23a6df4**
 
 ![demo_data.png](demo_data.png)
 
@@ -27,7 +26,7 @@
 | SS200000059_NC_v6_testis | \>= V6.0.0 |
 | D02070C3D3_v6.1_embryo | \>= V6.1.0 |
 | FP200009107_E414_v6.1_olfactory_bulb | \>= V6.1.0 |
-
+| C02533C1_v7.0_kidney | \>= V7.0.0 |
 
 ## Raw Data Directory Structure
 Here we take `SS200000135TL_D1_v5` as an example. 
