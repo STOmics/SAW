@@ -204,7 +204,7 @@ bash stereoPipeline.sh \
     -tissueType <tissueName> \
     -refIndex $dataDir/reference/STAR_SJ100 \
     -annotationFile $dataDir/reference/genes.gtf \  ## GFF or GTF
-    -rRNAremove : [Y/N] \
+    -rRNAremove : N \
     -threads 16 \
     -outDir $outDir/result \
     -imageRecordFile $dataDir/image/<SN_date_time_version>.ipr \ # [optional] when image is given and has passed QC
@@ -222,7 +222,7 @@ bash stereoPipeline.sh \
     -tissueType <tissueName> \
     -refIndex $dataDir/reference/STAR_SJ100 \
     -annotationFile $dataDir/reference/genes.gtf \  ## GFF or GTF
-    -rRNAremove : [Y/N] \
+    -rRNAremove : N \
     -threads 16 \
     -outDir $outDir/result \
     -imageRecordFile $dataDir/image/<SN_date_time_version>.ipr \ # [optional] when image is given and has passed QC
@@ -240,7 +240,7 @@ bash stereoPipeline.sh \
     -tissueType <tissueName> \
     -refIndex $dataDir/reference/STAR_SJ100 \
     -annotationFile $dataDir/reference/genes.gtf \  ## GFF or GTF
-    -rRNAremove : [Y/N] \
+    -rRNAremove : N \
     -threads 16 \
     -outDir $outDir/result
 ```
