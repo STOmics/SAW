@@ -154,7 +154,7 @@ if [[ -f $imageTarFile ]] && [[ -f $iprFile ]]  && [[ $doCell == "Y" ]]; then
     iprDIR=$(dirname $iprFile)
     export SINGULARITY_BIND=$outDir,$imgTarDIR,$iprDIR,$dataDir
     cp -rf ${iprFile} ${result_03register}/${SN}.reregist.ipr
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/manualRegister \
+    /usr/bin/time -v singularity exec ${sif} manualRegister \
 			-i ${tifDir} \
 			-c ${result_03register}/${SN}.reregist.ipr \
 			-v ${geneExp} \
@@ -166,7 +166,7 @@ if [[ -f $imageTarFile ]] && [[ -f $iprFile ]]  && [[ $doCell == "Y" ]]; then
 			-p ${result_03register}
 
     out_iprFile=$(find ${result_03register} -maxdepth 1 -name \*.ipr | head -1)
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/imageTools ipr2img \
+    /usr/bin/time -v singularity exec ${sif} imageTools ipr2img \
             -i ${imageTarFile} \
             -c ${out_iprFile} \
             -d tissue cell \
@@ -182,7 +182,7 @@ elif [[ -f $imageTarFile ]] && [[ -f $iprFile ]]  && [[ $doCell == "N" ]]; then
 
     export SINGULARITY_BIND=$outDir,$imgTarDIR,$iprDIR,$dataDir
     cp -rf ${iprFile} ${result_03register}/${SN}.reregist.ipr
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/manualRegister \
+    /usr/bin/time -v singularity exec ${sif} manualRegister \
           -i ${tifDir} \
           -c ${result_03register}/${SN}.reregist.ipr \
           -v ${geneExp} \
@@ -194,7 +194,7 @@ elif [[ -f $imageTarFile ]] && [[ -f $iprFile ]]  && [[ $doCell == "N" ]]; then
           -p ${result_03register}
 			
     out_iprFile=$(find ${result_03register} -maxdepth 1 -name \*.ipr | head -1)
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/imageTools ipr2img \
+    /usr/bin/time -v singularity exec ${sif} imageTools ipr2img \
             -i ${imageTarFile} \
             -c $out_iprFile \
             -d tissue \
@@ -211,7 +211,7 @@ if [[ -f $imageTarFile ]] && [[ -f $iprFile ]]; then
     echo `date` "=> tissueCut start......."
     export HDF5_USE_FILE_LOCKING=FALSE
     export SINGULARITY_BIND=$outDir,$dataDir
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/tissueCut \
+    /usr/bin/time -v singularity exec ${sif} tissueCut \
         -i ${geneExp} \
         --dnbfile ${barcodeReadsCounts} \
         -s ${tissueMaskFile} \
@@ -220,7 +220,7 @@ if [[ -f $imageTarFile ]] && [[ -f $iprFile ]]; then
         -d -t 8 \
         -o ${result_04tissuecut}
     
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/cellCut bgef \
+    /usr/bin/time -v singularity exec ${sif} cellCut bgef \
         -i ${result_04tissuecut}/${SN}.tissue.gef \
         -o ${result_04tissuecut}/${SN}.${nucleusLayer}.gef \
         -O Transcriptomics \
@@ -232,7 +232,7 @@ if [[ -f $imageTarFile ]] && [[ -f $iprFile ]]; then
     mkdir -p ${result_04tissuecut}/tissuecut_${label}
     labelmask=$(find ${result_03register} -name \*${label}_tissue_cut.tif)
     echo $labelmask
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/tissueCut \
+    /usr/bin/time -v singularity exec ${sif} tissueCut \
         -l $label \
         -i ${geneExp} \
         --dnbfile ${barcodeReadsCounts} \
@@ -247,7 +247,7 @@ else
     export SINGULARITY_BIND=$outDir,$refDIR,$dataDir
     echo `date` "=> there is no image, tissueCut based on the gene expression matrix start......."
     export HDF5_USE_FILE_LOCKING=FALSE
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/tissueCut \
+    /usr/bin/time -v singularity exec ${sif} tissueCut \
         -i ${geneExp} \
         --dnbfile ${barcodeReadsCounts} \
         --sn ${SN} \
@@ -259,7 +259,7 @@ fi
 
 # Complete raw GEF to visual GEF
 export HDF5_USE_FILE_LOCKING=FALSE
-/usr/bin/time -v singularity exec ${sif} /usr/local/bin/cellCut bgef \
+/usr/bin/time -v singularity exec ${sif} cellCut bgef \
     -i ${geneExp} \
     -o ${result_04tissuecut}/${SN}.gef \
     -O Transcriptomics
@@ -269,19 +269,19 @@ for i in `singularity exec ${sif} h5dump -n ${result_03register}/${SN}.reregist.
 do
 label=`basename $i`
 export HDF5_USE_FILE_LOCKING=FALSE
-/usr/bin/time -v singularity exec ${sif} /usr/local/bin/cellCut bgef \
+/usr/bin/time -v singularity exec ${sif} cellCut bgef \
 	-i ${result_04tissuecut}/tissuecut_${label}/${SN}.${label}.raw.label.gef \
 	-o ${result_04tissuecut}/tissuecut_${label}/${SN}.${label}.label.gef \
 	-O Transcriptomics
 done
 
 ## Convert GEF to GEM [optional]
-/usr/bin/time -v singularity exec ${sif} /usr/local/bin/cellCut view \
+/usr/bin/time -v singularity exec ${sif} cellCut view \
     -s ${SN} \
     -i ${result_04tissuecut}/${SN}.gef \
     -o ${result_04tissuecut}/${SN}.gem
 gzip ${result_04tissuecut}/${SN}.gem
-/usr/bin/time -v singularity exec ${sif} /usr/local/bin/cellCut view \
+/usr/bin/time -v singularity exec ${sif} cellCut view \
     -s ${SN} \
     -i ${result_04tissuecut}/${SN}.tissue.gef \
     -o ${result_04tissuecut}/${SN}.tissue.gem
@@ -297,7 +297,7 @@ export NUMBA_CACHE_DIR=${outDir}/tmp
 export MPLCONFIGDIR=${outDir}/tmp
 binSize=200
 resolution=1.0
-/usr/bin/time -v singularity exec ${sif} /usr/local/bin/spatialCluster \
+/usr/bin/time -v singularity exec ${sif} spatialCluster \
     -i ${result_04tissuecut}/${SN}.tissue.gef \
     -o ${result_05spatialcluster}/${SN}.bin${binSize}_${resolution}.spatial.cluster.h5ad \
     -s ${binSize} \
@@ -311,7 +311,7 @@ if [[ $doCell == 'Y' ]]; then
     export HDF5_USE_FILE_LOCKING=FALSE
     nucleusLayer=$(find ${result_03register} -maxdepth 1 -name \*fov_stitched*.tif -exec sh -c 'for f do basename -- "$f" _fov_stitched*.tif;done' sh {} + | grep -v IF | awk -F_ '{print$1}')
     nucleusMask=$(find ${result_03register} -maxdepth 1 -name ${nucleusLayer}\*_mask.tif)
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/cellCut cgef \
+    /usr/bin/time -v singularity exec ${sif} cellCut cgef \
         -i ${geneExp} \
         -m ${nucleusMask} \
         -o ${result_041cellcut}/${SN}.cellbin.gef
@@ -319,7 +319,7 @@ if [[ $doCell == 'Y' ]]; then
 	## Run SAW cellCorrect
     echo `date` "=> cellCorrect start......."
     export HDF5_USE_FILE_LOCKING=FALSE
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/cellCorrect \
+    /usr/bin/time -v singularity exec ${sif} cellCorrect \
             -i ${dataDir}/02.count/${SN}.raw.gef \
             -m ${nucleusMask} \
             -d 10 \
@@ -327,7 +327,7 @@ if [[ $doCell == 'Y' ]]; then
 
     ## Write the adjusted mask image into SN.rpi
     cellCorrectMask=$(find ${result_041cellcut} -maxdepth 1 -name ${nucleusLayer}\*_mask_edm_dis\*.tif)
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/imageTools img2rpi \
+    /usr/bin/time -v singularity exec ${sif} imageTools img2rpi \
         -i ${cellCorrectMask} \
         -g ${nucleusLayer}/CellMask_adjusted \
         -b 2 10 50 100 150 \
@@ -338,17 +338,17 @@ if [[ $doCell == 'Y' ]]; then
     mkdir -p ${outDir}/tmp
     export NUMBA_CACHE_DIR=${outDir}/tmp
     export MPLCONFIGDIR=${outDir}/tmp
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/cellCluster \
+    /usr/bin/time -v singularity exec ${sif} cellCluster \
         -i ${outDir}/041.cellcut/${SN}.adjusted.cellbin.gef \
         -o ${outDir}/051.cellcluster/${SN}.adjusted.cell.cluster.h5ad
 	
-	/usr/bin/time -v singularity exec ${sif} /usr/local/bin/cellCluster \
+	/usr/bin/time -v singularity exec ${sif} cellCluster \
         -i ${outDir}/041.cellcut/${SN}.cellbin.gef \
         -o ${outDir}/051.cellcluster/${SN}.cell.cluster.h5ad
 
   ## Run SAW cellChunk to write rendering data into cellbin.gef
   echo `date` "=> cellChunk start......."
-  /usr/bin/time -v singularity exec ${sif} /usr/local/bin/cellChunk \
+  /usr/bin/time -v singularity exec ${sif} cellChunk \
       -i ${result_041cellcut}/${SN}.adjusted.cellbin.gef \
       -o ${result_041cellcut}
 
@@ -361,14 +361,14 @@ if [[ $doCell == 'Y' ]]; then
 #  echo $labelmask
 #
 #  echo `date` "=> cellCut for label ${label} start......."
-#  /usr/bin/time -v singularity exec ${sif} /usr/local/bin/cellCut cgef  \
+#  /usr/bin/time -v singularity exec ${sif} cellCut cgef  \
 #      -i ${outDir}/02.count/${SN}.raw.gef \
 #      -m ${labelmask} \
 #      -o ${outDir}/041.cellcut/cellcut_${label}/${SN}.${label}.label.cellbin.gef
 #
 #  echo `date` "=> cellCorrect for label ${label} start......."
 #  export HDF5_USE_FILE_LOCKING=FALSE
-#  /usr/bin/time -v singularity exec ${sif} /usr/local/bin/cellCorrect \
+#  /usr/bin/time -v singularity exec ${sif} cellCorrect \
 #          -i ${outDir}/02.count/${SN}.raw.gef \
 #          -m ${labelmask} \
 #          -d 10 \
@@ -376,19 +376,19 @@ if [[ $doCell == 'Y' ]]; then
 #
 #  ## Write the adjusted mask image into SN.rpi (label)
 #  cellCorrectMask=$(find ${outDir}/041.cellcut/cellcut_${label} -maxdepth 1 -name ${nucleusLayer}\*_mask_edm_dis\*.tif)
-#  /usr/bin/time -v singularity exec ${sif} /usr/local/bin/imageTools img2rpi \
+#  /usr/bin/time -v singularity exec ${sif} imageTools img2rpi \
 #      -i ${cellCorrectMask} \
 #      -g ${nucleusLayer}/CellMask_${label}_adjusted \
 #      -b 2 10 50 100 150 \
 #      -o ${outDir}/03.register/${SN}.rpi
 #
 #  echo `date` "=> cellCluster for label ${label} start......."
-#  /usr/bin/time -v singularity exec ${sif} /usr/local/bin/cellCluster \
+#  /usr/bin/time -v singularity exec ${sif} cellCluster \
 #      -i ${outDir}/041.cellcut/cellcut_${label}/${SN}.adjusted.cellbin.gef \
 #      -o ${outDir}/051.cellcluster/${SN}.${label}.label.adjusted.cell.cluster.h5ad
 #
 #  echo `date` "=> cellChunk for label ${label} start......."
-#  /usr/bin/time -v singularity exec ${sif} /usr/local/bin/cellChunk \
+#  /usr/bin/time -v singularity exec ${sif} cellChunk \
 #      -i ${outDir}/041.cellcut/cellcut_${label}/${SN}.adjusted.cellbin.gef \
 #      -o ${outDir}/041.cellcut/cellcut_${label}
 #    done
@@ -400,7 +400,7 @@ export SINGULARITY_BIND=$outDir,$dataDir
 echo `date` "=> saturation start ......"
 export HDF5_USE_FILE_LOCKING=FALSE
 saturationFile=${dataDir}/02.count/${SN}_raw_barcode_gene_exp.txt
-/usr/bin/time -v singularity exec ${sif} /usr/local/bin/saturation \
+/usr/bin/time -v singularity exec ${sif} saturation \
     -i ${saturationFile} \
     --tissue ${result_04tissuecut}/${SN}.tissue.gef \
     -o ${result_06saturation} \
@@ -416,7 +416,7 @@ out_iprFile=$(find ${result_03register} -maxdepth 1 -name \*.ipr | head -1)
 pipever=$(basename ${sif} .sif)
 
 if [[ -n ${out_iprFile} ]] && [[ -e ${out_iprFile} ]] && [[ $doCell == 'Y' ]]; then
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/report \
+    /usr/bin/time -v singularity exec ${sif} report \
         -m ${bcStatStr} \
         -a ${bcFinalOutStr} \
         -g ${dataDir}/02.count/${SN}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam.summary.stat \
@@ -450,7 +450,7 @@ if [[ -n ${out_iprFile} ]] && [[ -e ${out_iprFile} ]] && [[ $doCell == 'Y' ]]; t
         --reference ${refName} \
         -o ${result_07report}
 elif [[ -n ${out_iprFile} ]] && [[ -e ${out_iprFile} ]] && [[ $doCell == 'N' ]]; then
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/report \
+    /usr/bin/time -v singularity exec ${sif} report \
         -m ${bcStatStr} \
         -a ${bcFinalOutStr} \
         -g ${dataDir}/02.count/${SN}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam.summary.stat \
@@ -482,7 +482,7 @@ elif [[ -n ${out_iprFile} ]] && [[ -e ${out_iprFile} ]] && [[ $doCell == 'N' ]];
         --reference ${refName} \
         -o ${result_07report}
 else
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/report \
+    /usr/bin/time -v singularity exec ${sif} report \
         -m ${bcStatStr} \
         -a ${bcFinalOutStr} \
         -g ${dataDir}/02.count/${SN}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam.summary.stat \

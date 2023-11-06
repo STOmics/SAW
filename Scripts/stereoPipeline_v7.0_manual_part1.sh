@@ -2,8 +2,7 @@
 set -e
 
 if [[ $# -lt 12 ]];then
-    echo "usage: sh $0 -genomeSize -splitCount -maskFile -fq1 -fq2 -speciesName -tissueType -refIndex -annotationFile -imageRecordFile -imageCompressedFile -sif -threads -outDir
-    -genomeSize : genome size
+    echo "usage: sh $0 -splitCount -maskFile -fq1 -fq2 -speciesName -tissueType -refIndex -annotationFile -imageRecordFile -imageCompressedFile -sif -threads -outDir
     -splitCount : count of splited stereochip mask file, usually 16 for SE+Q4 fq data and 1 for PE+Q40 fq data
     -maskFile : stereochip mask file
     -fq1 : fastq file path of read1, if there are more than one fastq file, please separate them with comma, e.g:lane1_read_1.fq.gz,lane2_read_1.fq.gz
@@ -120,7 +119,7 @@ if [[ ! -n "$read2" ]]; then
         if [[ ! -d $each ]];then mkdir -p $each; fi
     done
     export SINGULARITY_BIND=$outDir,$maskDIR,$annoDIR,$refDIR
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/splitMask \
+    /usr/bin/time -v singularity exec ${sif} splitMask \
         ${maskFile} ${outDir}/00.mapping/splitBin $threads $splitCnt 2_25
     for ((i=1;i<=$splitCnt;i++)); do
         if [[ $(echo ${#i}) == '1' ]];then a=0$i; else a=$i;fi
@@ -131,7 +130,7 @@ else
     read2List=(`echo $read2 | tr ',' ' '`)
     fqNumber=`echo ${#read1List[@]}`
     export SINGULARITY_BIND=$outDir,$maskDIR,$annoDIR,$refDIR
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/CIDCount \
+    /usr/bin/time -v singularity exec ${sif} CIDCount \
         -i ${maskFile} \
         -s ${refName} \
         -g ${GSize} > ${outDir}/00.mapping/CIDCount
@@ -168,7 +167,7 @@ if [[ $fqType == 'Q40' ]]; then
         read1DIR=$(dirname ${read1List[i]})
         read2DIR=$(dirname ${read2List[i]})
         export SINGULARITY_BIND=$read1DIR,$read2DIR,$outDir,$maskDIR,$annoDIR,$refDIR
-        /usr/bin/time -v singularity exec ${sif} /usr/local/bin/mapping \
+        /usr/bin/time -v singularity exec ${sif} mapping \
             --outSAMattributes spatial \
             --outSAMtype BAM SortedByCoordinate \
             --genomeDir ${GDir} \
@@ -193,7 +192,7 @@ if [[ $fqType == 'Q40' ]]; then
 elif [[ $fqType == 'Q4' ]]; then
     for ((i=1;i<=$splitCnt;i++)); do
         if [[ $(echo ${#i}) == '1' ]];then a=0$i; else a=$i;fi
-        /usr/bin/time -v singularity exec ${sif} /usr/local/bin/CIDCount \
+        /usr/bin/time -v singularity exec ${sif} CIDCount \
             -i $(ls ${outDir}/00.mapping/splitBin/${a}.${SN}.barcodeToPos.bin) \
             -s ${refName} \
             -g ${GSize} > ${outDir}/00.mapping/CIDCount
@@ -218,7 +217,7 @@ elif [[ $fqType == 'Q4' ]]; then
             echo "rRNAremove" >> $bcPara
         fi
         export SINGULARITY_BIND=$read1DIR,$outDir,$maskDIR,$annoDIR,$refDIR
-        /usr/bin/time -v singularity exec ${sif} /usr/local/bin/mapping \
+        /usr/bin/time -v singularity exec ${sif} mapping \
             --outSAMattributes spatial \
             --outSAMtype BAM SortedByCoordinate \
             --genomeDir ${GDir} \
@@ -260,7 +259,7 @@ barcodeReadsCounts=${outDir}/01.merge/${SN}.merge.barcodeReadsCount.txt
 export SINGULARITY_BIND=$outDir,$maskDIR
 if [[ $fqType == 'Q4' ]] && [[ $(echo ${#bcReadsCounts[*]}) > '1' ]]; then
     echo 'Q4'
-    /usr/bin/time -v singularity exec ${sif} /usr/local/bin/merge \
+    /usr/bin/time -v singularity exec ${sif} merge \
         ${maskFile} \
         $bcReadsCountsStr \
         $barcodeReadsCounts
@@ -270,7 +269,7 @@ elif [[ $fqType == 'Q40' ]]; then
     then
         cp $bcReadsCountsStr $barcodeReadsCounts
     else
-        /usr/bin/time -v singularity exec ${sif} /usr/local/bin/merge \
+        /usr/bin/time -v singularity exec ${sif} merge \
             ${maskFile} \
             $bcReadsCountsStr \
             $barcodeReadsCounts
@@ -284,7 +283,7 @@ geneExp=${result_02count}/${SN}.raw.gef
 saturationFile=${result_02count}/${SN}_raw_barcode_gene_exp.txt
 export SINGULARITY_BIND=$outDir,$annoDIR,$refDIR
 export HDF5_USE_FILE_LOCKING=FALSE
-/usr/bin/time -v singularity exec ${sif} /usr/local/bin/count \
+/usr/bin/time -v singularity exec ${sif} count \
     -i ${starBamsStr} \
     -o ${result_02count}/${SN}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam \
     -a ${annoFile} \
@@ -303,7 +302,7 @@ export HDF5_USE_FILE_LOCKING=FALSE
 mkdir -p ${result_03register}/manual_register
 export SINGULARITY_BIND=$outDir
 export HDF5_USE_FILE_LOCKING=FALSE
-/usr/bin/time -v singularity exec ${sif} /usr/local/bin/cellCut bgef \
+/usr/bin/time -v singularity exec ${sif} cellCut bgef \
     -i ${geneExp} \
     -o ${result_03register}/manual_register/${SN}.gef \
     -O Transcriptomics
@@ -313,7 +312,7 @@ export HDF5_USE_FILE_LOCKING=FALSE
 imgTarDIR=$(dirname $imageTarFile)
 iprDIR=$(dirname $iprFile)
 export SINGULARITY_BIND=$outDir,$imgTarDIR,$iprDIR
-/usr/bin/time -v singularity exec ${sif} /usr/local/bin/imageTools ipr2img \
+/usr/bin/time -v singularity exec ${sif} imageTools ipr2img \
             -i $imageTarFile \
             -c $iprFile \
             -r False \
@@ -324,7 +323,7 @@ export SINGULARITY_BIND=$outDir,$imgTarDIR,$iprDIR
 regTifStr=$(find ${result_03register}/manual_register -name \*fov_stitched.tif)
 regGroupStr=$(basename `find ${result_03register}/manual_register -name \*fov_stitched.tif` | grep -v IF | awk -F '_' '{print$1}')
 
-/usr/bin/time -v singularity exec ${sif} /usr/local/bin/imageTools img2rpi \
+/usr/bin/time -v singularity exec ${sif} imageTools img2rpi \
         -i ${regTifStr} \
         -g ${regGroupStr}/Image \
         -b 1 10 50 100 \
