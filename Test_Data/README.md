@@ -31,37 +31,62 @@
 ## Raw Data Directory Structure
 Here we take `SS200000135TL_D1_v5` as an example. 
 ```
-$ tree
+# v1
+cd /data/dataManagement/reference
+tree ./
 .
-|-- image
-|   |-- SS200000135TL_D1_20220527_201353_1.1.0.ipr
-|   `-- SS200000135TL_D1_20220527_201353_1.1.0.tar.gz
-|-- mask
-|   `-- SS200000135TL_D1.barcodeToPos.h5
-|-- md5
-|-- reads
-|   |-- E100026571_L01_trim_read_1.fq.gz
-|   `-- E100026571_L01_trim_read_2.fq.gz
-`-- reference
-    |-- STAR_SJ100
-    |   |-- Genome
-    |   |-- SA
-    |   |-- SAindex
-    |   |-- chrLength.txt
-    |   |-- chrName.txt
-    |   |-- chrNameLength.txt
-    |   |-- chrStart.txt
-    |   |-- exonGeTrInfo.tab
-    |   |-- exonInfo.tab
-    |   |-- geneInfo.tab
-    |   |-- genomeParameters.txt
-    |   |-- genomeParameters_bkp.txt
-    |   |-- sjdbInfo.txt
-    |   |-- sjdbList.fromGTF.out.tab
-    |   |-- sjdbList.out.tab
-    |   `-- transcriptInfo.tab
-    |-- genes.gtf
-    `-- genome.fa
+└── specieName
+    ├── STAR_SJ100
+    │   ├── Genome
+    │   ├── SA
+    │   ├── SAindex
+    │   ├── chrLength.txt
+    │   ├── chrName.txt
+    │   ├── chrNameLength.txt
+    │   ├── chrStart.txt
+    │   ├── exonGeTrInfo.tab
+    │   ├── exonInfo.tab
+    │   ├── geneInfo.tab
+    │   ├── genomeParameters.txt
+    │   ├── sjdbInfo.txt
+    │   ├── sjdbList.fromGTF.out.tab
+    │   ├── sjdbList.out.tab
+    │   └── transcriptInfo.tab
+    ├── genes
+    │   └── genes.gtf
+    └── genome
+        └── genome.fa
 
-5 directories, 24 files
+4 directories, 17 files
+
+
+# v2
+cd /data/dataManagement/reference
+tree ./
+.
+└── specieName
+    ├── STAR_SJ100
+    |   ├── Genome 
+    |   ├── SA
+    |   ├── SAindex
+    |   ├── SAindexAux
+    |   ├── chrLength.txt
+    |   ├── chrName.txt
+    |   ├── chrNameLength.txt
+    |   ├── chrStart.txt
+    |   ├── exonGeTrInfo.tab
+    |   ├── exonInfo.tab
+    |   ├── FMindex
+    |   ├── geneInfo.tab
+    |   ├── genomeParameters.txt
+    |   ├── sjdbInfo.txt
+    |   ├── sjdbList.fromGTF.out.tab
+    |   ├── sjdbList.out.tab
+    |   └── transcriptInfo.tab
+    ├── genes
+    │   └── genes.gtf
+    └── genome
+        └── genome.fa
+
+4 directories, 19 files
 ```

@@ -63,7 +63,7 @@ $ yum install -y singularity
 **For additional help or support, please visit https://sylabs.io/guides/3.8/admin-guide/installation.html**
 
 ####   Quick download SAW from DockerHub
-Currently, the latest version of SAW in DockerHub is 06.1.0. You can download SAW by running the following command:
+Currently, the latest version of SAW in DockerHub is 07.0.0. You can download SAW by running the following command:
 ```
 singularity build SAW_<version>.sif docker://stomics/saw:<version>
 ```
@@ -133,7 +133,6 @@ usage: sh stereoPipeline_v7.0.sh -splitCount -maskFile -fq1 -fq2 -refIndex -geno
 # for for saw_v7.0_muanal
 # part1
 usage: sh stereoPipeline_v7.0_manual_part1.sh -genomeSize -splitCount -maskFile -fq1 -fq2 -speciesName -tissueType -refIndex -annotationFile -imageRecordFile -imageCompressedFile -sif -threads -outDir
-    -genomeSize : genome size
     -splitCount : count of splited stereochip mask file, usually 16 for SE+Q4 fq data and 1 for PE+Q40 fq data
     -maskFile : stereochip mask file
     -fq1 : fastq file path of read1, if there are more than one fastq file, please separate them with comma, e.g:lane1_read_1.fq.gz,lane2_read_1.fq.gz
@@ -196,7 +195,7 @@ export SINGULARITY_BIND=$dataDir,$outDir
 ## Scenario 1: input image and run cell bin
 bash stereoPipeline.sh \
     -sif $dataDir/SAW/SAW_<version>.sif \
-    -splitCount 1 \  ## 16 or 64 for SE, 1 for PE
+    -splitCount 1 \  ## 16 or 64 for Q4, 1 for Q40
     -maskFile $dataDir/mask/SN.h5 \
     -fq1 $dataDir/reads/lane1_read_1.fq.gz,...,$dataDir/reads/laneN_read_1.fq.gz  \
     -fq2 $dataDir/reads/lane1_read_2.fq.gz,...,$dataDir/reads/laneN_read_2.fq.gz \ # [optional] when the sequenced data is in PE format
@@ -214,7 +213,7 @@ bash stereoPipeline.sh \
 ## Scenario 2: input image but no need for cell bin
 bash stereoPipeline.sh \
     -sif $dataDir/SAW/SAW_<version>.sif \
-    -splitCount 1 \  ## 16 or 64 for SE, 1 for PE
+    -splitCount 1 \  ## 16 or 64 for Q4, 1 for Q40
     -maskFile $dataDir/mask/SN.h5 \
     -fq1 $dataDir/reads/lane1_read_1.fq.gz,...,$dataDir/reads/laneN_read_1.fq.gz  \
     -fq2 $dataDir/reads/lane1_read_2.fq.gz,...,$dataDir/reads/laneN_read_2.fq.gz \ # [optional] when the sequenced data is in PE format
@@ -232,7 +231,7 @@ bash stereoPipeline.sh \
 ## Scenario 3: no image
 bash stereoPipeline.sh \
     -sif $dataDir/SAW/SAW_<version>.sif \
-    -splitCount 1 \  ## 16 or 64 for SE, 1 for PE
+    -splitCount 1 \  ## 16 or 64 for Q4, 1 for Q40
     -maskFile $dataDir/mask/SN.h5 \
     -fq1 $dataDir/reads/lane1_read_1.fq.gz,...,$dataDir/reads/laneN_read_1.fq.gz  \
     -fq2 $dataDir/reads/lane1_read_2.fq.gz,...,$dataDir/reads/laneN_read_2.fq.gz \ # [optional] when the sequenced data is in PE format
