@@ -43,30 +43,62 @@ Once the run is completed , you will have a STAR_SJ100 folder in the reference d
 
 ####    Description of each folder    
 ```
+# v1
 cd /data/dataManagement/reference
 tree ./
 .
 └── specieName
     ├── STAR_SJ100
-    │   ├── Genome
-    │   ├── SA
-    │   ├── SAindex
-    │   ├── chrLength.txt
-    │   ├── chrName.txt
-    │   ├── chrNameLength.txt
-    │   ├── chrStart.txt
-    │   ├── exonGeTrInfo.tab
-    │   ├── exonInfo.tab
-    │   ├── geneInfo.tab
-    │   ├── genomeParameters.txt
-    │   ├── sjdbInfo.txt
-    │   ├── sjdbList.fromGTF.out.tab
-    │   ├── sjdbList.out.tab
-    │   └── transcriptInfo.tab
+    │   ├── Genome
+    │   ├── SA
+    │   ├── SAindex
+    │   ├── chrLength.txt
+    │   ├── chrName.txt
+    │   ├── chrNameLength.txt
+    │   ├── chrStart.txt
+    │   ├── exonGeTrInfo.tab
+    │   ├── exonInfo.tab
+    │   ├── geneInfo.tab
+    │   ├── genomeParameters.txt
+    │   ├── sjdbInfo.txt
+    │   ├── sjdbList.fromGTF.out.tab
+    │   ├── sjdbList.out.tab
+    │   └── transcriptInfo.tab
     ├── genes
-    │   └── genes.gtf
+    │   └── genes.gtf
     └── genome
         └── genome.fa
 
 4 directories, 17 files
+
+
+# v2
+cd /data/dataManagement/reference
+tree ./
+.
+└── specieName
+    ├── STAR_SJ100
+    |   ├── Genome 
+    |   ├── SA
+    |   ├── SAindex
+    |   ├── SAindexAux
+    |   ├── chrLength.txt
+    |   ├── chrName.txt
+    |   ├── chrNameLength.txt
+    |   ├── chrStart.txt
+    |   ├── exonGeTrInfo.tab
+    |   ├── exonInfo.tab
+    |   ├── FMindex
+    |   ├── geneInfo.tab
+    |   ├── genomeParameters.txt
+    |   ├── sjdbInfo.txt
+    |   ├── sjdbList.fromGTF.out.tab
+    |   ├── sjdbList.out.tab
+    |   └── transcriptInfo.tab
+    ├── genes
+    │   └── genes.gtf
+    └── genome
+        └── genome.fa
+
+4 directories, 19 files
 ```
