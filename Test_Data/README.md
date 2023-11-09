@@ -1,15 +1,15 @@
 # TEST DATA
 ##  Demo data basic information
 
-|  | SN | ChipSize | Reference | Tissue Type |
-| ----------- | ----------- | ----------- | ----------- | ----------- |
-| Demo 1 | SS200000135TL_D1 | 1\*1 | mouse | brain |
-| Demo 2 | SS200000154TR_F5 | 1\*1 | mouse | tongue |
-| Demo 3 | SS200000464BL_C4 | 1\*1 | mouse | heart |
-| Demo 4 | SS200000059_NC | 1\*1 | mouse | testis |
-| Demo 5 | D02070C3D3 | 1\*2 | mouse | embryo |
-| Demo 6 | FP200009107_E414 | 0.5\*0.5 | mouse | olfactory bulb |
-| Demo 7 | C02533C1 | 1\*1 | mouse | kidney |
+|  | SN | Chip Size | Reference | Tissue Type | Image Type |
+| ----------- | ----------- | ----------- | ----------- | ----------- | ----------- |
+| Demo 1 | SS200000135TL_D1 | 1\*1 | mouse | brain | ssDNA |
+| Demo 2 | SS200000154TR_F5 | 1\*1 | mouse | tongue | ssDNA |
+| Demo 3 | SS200000464BL_C4 | 1\*1 | mouse | heart | ssDNA |
+| Demo 4 | SS200000059_NC | 1\*1 | mouse | testis | DAPI+mIF(AKAP3+TESK2) |
+| Demo 5 | D02070C3D3 | 1\*2 | mouse | embryo | DAPI |
+| Demo 6 | FP200009107_E414 | 0.5\*0.5 | mouse | olfactory bulb | DAPI |
+| Demo 7 | C02533C1 | 1\*1 | mouse | kidney | H&E |
 
 
 ##  Download data from Raysync
