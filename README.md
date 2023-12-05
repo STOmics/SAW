@@ -175,7 +175,7 @@ usage: sh stereoPipeline_v7.0_manual_part2.sh -SN -dataDir -registJson -speciesN
 
 For SAW_v7.0, please use the [stereoPipeline_v7.0.sh](https://github.com/STOmics/SAW/blob/main/Scripts/stereoPipeline_v7.0.sh) to run the whole workflow.
 
-For SAW_v7_manual, please use the [stereoPipeline_v7.0_maunal_part1.sh](https://github.com/STOmics/SAW/blob/main/Scripts/stereoPipeline_v7.0_manual_part1.sh) and [stereoPipeline_v7.0_maunal_part2.sh](https://github.com/STOmics/SAW/blob/main/Scripts/stereoPipeline_v7.0_manual_part2.sh) to finish the manual processing. 
+For SAW_v7_manual, please use the [stereoPipeline_v7.0_manual_part1.sh](https://github.com/STOmics/SAW/blob/main/Scripts/stereoPipeline_v7.0_manual_part1.sh) and [stereoPipeline_v7.0_manual_part2.sh](https://github.com/STOmics/SAW/blob/main/Scripts/stereoPipeline_v7.0_manual_part2.sh) to finish the manual processing. 
 
 ####    Run stereoPipeline.sh bash script
 ```
