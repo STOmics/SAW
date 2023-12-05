@@ -130,7 +130,7 @@ usage: sh stereoPipeline_v7.0.sh -splitCount -maskFile -fq1 -fq2 -refIndex -geno
 ```
 
 ```
-# for for saw_v7.0_muanal
+# for for saw_v7.0_manual
 # part1
 usage: sh stereoPipeline_v7.0_manual_part1.sh -genomeSize -splitCount -maskFile -fq1 -fq2 -speciesName -tissueType -refIndex -annotationFile -imageRecordFile -imageCompressedFile -sif -threads -outDir
     -splitCount : count of splited stereochip mask file, usually 16 for SE+Q4 fq data and 1 for PE+Q40 fq data
