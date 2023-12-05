@@ -2,7 +2,7 @@
 set -e
 
 if [[ $# -lt 12 ]];then
-    echo "usage: sh $0 -splitCount -maskFile -fq1 -fq2 -refIndex -genomeFile -speciesName -tissueType -annotationFile -outDir -imageRecordFile -imageCompressedFile -doCellBin -rRNARemove -threads -sif
+    echo "usage: sh $0 -splitCount -maskFile -fq1 -fq2 -refIndex -genomeFile -speciesName -tissueType -annotationFile -outDir -imageRecordFile -imageCompressedFile -doCellBin -rRNARemove -threads -dockerUrl
     -splitCount : count of splited stereochip mask file, usually 16 for SE+Q4 fq data and 1 for PE+Q40 fq data
     -maskFile : stereochip mask file
     -fq1 : fastq file path of read1, if there are more than one fastq file, please separate them with comma, e.g:lane1_read_1.fq.gz,lane2_read_1.fq.gz
@@ -17,7 +17,7 @@ if [[ $# -lt 12 ]];then
     -doCellBin : [Y/N]
     -rRNAremove : [Y/N]
     -threads : the number of threads to be used in running the pipeline
-    -sif : the file format of the visual software
+    -dockerUrl : the file format of the visual software
     "
     exit
 fi
@@ -53,7 +53,7 @@ do
             shift ;;
         -threads) threads="$2"
             shift ;;
-        -sif) sif="$2"
+        -dockerUrl) dockerUrl="$2"
             shift ;;
         # -preRegDir) preRegDir="$2"
         #     shift ;;
@@ -63,23 +63,6 @@ done
 
 
 # Software check
-if [ `command -v singularity` ]
-then
-    singularityPath=`command -v singularity`
-    echo `date` " singularity check: pass, and singularity path is ${singularityPath}"
-else
-    echo `date` " singularity check: singularity does not exits, please verify that you have installed singularity and exported it to your system PATH variable"
-    exit
-fi
-
-if [[ -n $sif ]]
-then
-    echo `date` " singularity image file check: file exist and SIF path is ${sif}"
-else
-    echo `date` " singularity image file check: file does not exist, please double check your SIF file is in the current directory or the path given by the option -s is valid."
-fi
-
-
 if [[ ! -d $outDir ]];then
     mkdir -p $outDir
 fi
@@ -132,8 +115,7 @@ if [[ ! -n "$read2" ]]; then
     for each in "${arr_result[@]}";do
         if [[ ! -d $each ]];then mkdir -p $each; fi
     done
-    export SINGULARITY_BIND=$outDir,$maskDIR,$annoDIR,$refDIR
-    /usr/bin/time -v singularity exec ${sif} splitMask \
+    /usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir -v $maskDIR:$maskDIR -v $annoDIR:$annoDIR -v $refDIR:$refDIR ${dockerUrl} /bin/bash splitMask \
         ${maskFile} ${outDir}/00.mapping/splitBin $threads $splitCnt 2_25
     for ((i=1;i<=$splitCnt;i++)); do
         if [[ $(echo ${#i}) == '1' ]];then a=0$i; else a=$i;fi
@@ -143,8 +125,7 @@ else
     fqType="Q40"
     read2List=(`echo $read2 | tr ',' ' '`)
     fqNumber=`echo ${#read1List[@]}`
-    export SINGULARITY_BIND=$outDir,$maskDIR,$annoDIR,$refDIR
-    /usr/bin/time -v singularity exec ${sif} CIDCount \
+    /usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir -v $maskDIR:$maskDIR -v $annoDIR:$annoDIR -v $refDIR:$refDIR ${dockerUrl} /bin/bash CIDCount \
         -i ${maskFile} \
         -s ${refName} \
         -g ${GSize} > ${outDir}/00.mapping/CIDCount
@@ -180,8 +161,7 @@ if [[ $fqType == 'Q40' ]]; then
         fi
         read1DIR=$(dirname ${read1List[i]})
         read2DIR=$(dirname ${read2List[i]})
-        export SINGULARITY_BIND=$read1DIR,$read2DIR,$outDir,$maskDIR,$annoDIR,$refDIR
-        /usr/bin/time -v singularity exec ${sif} mapping \
+        /usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $read1DIR:$read1DIR -v $read2DIR:$read2DIR -v $outDir:$outDir -v $maskDIR:$maskDIR -v $annoDIR:$annoDIR -v $refDIR:$refDIR ${dockerUrl} /bin/bash mapping \
             --outSAMattributes spatial \
             --outSAMtype BAM SortedByCoordinate \
             --genomeDir ${GDir} \
@@ -206,7 +186,7 @@ if [[ $fqType == 'Q40' ]]; then
 elif [[ $fqType == 'Q4' ]]; then
     for ((i=1;i<=$splitCnt;i++)); do
         if [[ $(echo ${#i}) == '1' ]];then a=0$i; else a=$i;fi
-        /usr/bin/time -v singularity exec ${sif} CIDCount \
+        /usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $read1DIR:$read1DIR -v $read2DIR:$read2DIR -v $outDir:$outDir -v $maskDIR:$maskDIR -v $annoDIR:$annoDIR -v $refDIR:$refDIR ${dockerUrl} /bin/bash CIDCount \
             -i $(ls ${outDir}/00.mapping/splitBin/${a}.${SN}.barcodeToPos.bin) \
             -s ${refName} \
             -g ${GSize} > ${outDir}/00.mapping/CIDCount
@@ -230,8 +210,7 @@ elif [[ $fqType == 'Q4' ]]; then
         if [[ $rRNAremove == "Y" ]]; then
             echo "rRNAremove" >> $bcPara
         fi
-        export SINGULARITY_BIND=$read1DIR,$outDir,$maskDIR,$annoDIR,$refDIR
-        /usr/bin/time -v singularity exec ${sif} mapping \
+        /usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $read1DIR:$read1DIR -v $outDir:$outDir -v $maskDIR:$maskDIR -v $annoDIR:$annoDIR -v $refDIR:$refDIR ${dockerUrl} /bin/bash mapping \
             --outSAMattributes spatial \
             --outSAMtype BAM SortedByCoordinate \
             --genomeDir ${GDir} \
@@ -270,10 +249,9 @@ fi
 # Run SAW merge to integrate barcodeReadsCount file
 echo `date` "=> merge barcode reads count tables start......"
 barcodeReadsCounts=${outDir}/01.merge/${SN}.merge.barcodeReadsCount.txt
-export SINGULARITY_BIND=$outDir,$maskDIR
 if [[ $fqType == 'Q4' ]] && [[ $(echo ${#bcReadsCounts[*]}) > '1' ]]; then
     echo 'Q4'
-    /usr/bin/time -v singularity exec ${sif} merge \
+    /usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir -v $maskDIR:$maskDIR ${dockerUrl} /bin/bash merge \
         ${maskFile} \
         $bcReadsCountsStr \
         $barcodeReadsCounts
@@ -283,7 +261,7 @@ elif [[ $fqType == 'Q40' ]]; then
     then
         cp $bcReadsCountsStr $barcodeReadsCounts
     else
-        /usr/bin/time -v singularity exec ${sif} merge \
+        /usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir -v $maskDIR:$maskDIR ${dockerUrl} /bin/bash merge \
             ${maskFile} \
             $bcReadsCountsStr \
             $barcodeReadsCounts
@@ -293,9 +271,8 @@ fi
 
 # Run SAW count to perform annotation, deduplication, and generate gene expression matrix
 echo `date` "=> annotation, deduplication, and generate gene expression matrix start......"
-export SINGULARITY_BIND=$outDir,$annoDIR,$refDIR
 export HDF5_USE_FILE_LOCKING=FALSE
-/usr/bin/time -v singularity exec ${sif} count \
+/usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir -v $annoDIR:$annoDIR -v $refDIR:$refDIR ${dockerUrl} /bin/bash count \
     -i ${starBamsStr} \
     -o ${outDir}/02.count/${SN}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam \
     -a ${annoFile} \
@@ -316,9 +293,8 @@ if [[ -f $imageTarFile ]] && [[ -f $iprFile ]]  && [[ $doCell == "Y" ]]; then
     export HDF5_USE_FILE_LOCKING=FALSE
     imgTarDIR=$(dirname $imageTarFile)
     iprDIR=$(dirname $iprFile)
-    export SINGULARITY_BIND=$outDir,$imgTarDIR,$iprDIR
 
-    /usr/bin/time -v singularity exec ${sif} register \
+    /usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir -v $imgTarDIR:$imgTarDIR -v $iprDIR:$iprDIR ${dockerUrl} /bin/bash register \
         -i ${imageTarFile} \
         -c ${iprFile} \
         -v ${outDir}/02.count/${SN}.raw.gef \
@@ -326,7 +302,7 @@ if [[ -f $imageTarFile ]] && [[ -f $iprFile ]]  && [[ $doCell == "Y" ]]; then
         -o ${outDir}/03.register
     
     out_iprFile=$(find ${outDir}/03.register -maxdepth 1 -name \*.ipr | head -1)    
-    /usr/bin/time -v singularity exec ${sif} imageTools ipr2img \
+    /usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir -v $imgTarDIR:$imgTarDIR -v $iprDIR:$iprDIR ${dockerUrl} /bin/bash imageTools ipr2img \
         -i ${imageTarFile} \
         -c ${out_iprFile} \
         -d tissue cell \
@@ -339,7 +315,7 @@ if [[ -f $imageTarFile ]] && [[ -f $iprFile ]]  && [[ $doCell == "Y" ]]; then
     regGroupStr=$(echo $regGroup | sed 's/ \|$/\/Image,/g' | sed 's/.$//')
     echo $regTifStr
     echo $regGroupStr
-    /usr/bin/time -v singularity exec ${sif} imageTools img2rpi \
+    /usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir -v $imgTarDIR:$imgTarDIR -v $iprDIR:$iprDIR ${dockerUrl} /bin/bash imageTools img2rpi \
         -i ${regTifStr} \
         -g ${regGroupStr} \
         -b 1 10 50 100 \
@@ -351,15 +327,14 @@ elif [[ -f $imageTarFile ]] && [[ -f $iprFile ]]  && [[ $doCell == "N" ]]; then
     imgTarDIR=$(dirname $imageTarFile)
     iprDIR=$(dirname $iprFile)
 
-    export SINGULARITY_BIND=$outDir,$imgTarDIR,$iprDIR
-    /usr/bin/time -v singularity exec ${sif} register \
+    /usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir -v $imgTarDIR:$imgTarDIR -v $iprDIR:$iprDIR ${dockerUrl} /bin/bash register \
         -i ${imageTarFile} \
         -c ${iprFile} \
         -v ${outDir}/02.count/${SN}.raw.gef \
         -w False --core ${threads} \
         -o ${outDir}/03.register
     out_iprFile=$(find ${outDir}/03.register -maxdepth 1 -name \*.ipr | head -1)
-    /usr/bin/time -v singularity exec ${sif} imageTools ipr2img \
+    /usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir -v $imgTarDIR:$imgTarDIR -v $iprDIR:$iprDIR ${dockerUrl} /bin/bash imageTools ipr2img \
         -i ${imageTarFile} \
         -c ${out_iprFile} \
         -d tissue \
@@ -371,7 +346,7 @@ elif [[ -f $imageTarFile ]] && [[ -f $iprFile ]]  && [[ $doCell == "N" ]]; then
     regGroupStr=$(echo $regGroup | sed 's/ \|$/\/Image,/g' | sed 's/.$//')
     echo $regTifStr
     echo $regGroupStr
-    /usr/bin/time -v singularity exec ${sif} imageTools img2rpi \
+    /usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir -v $imgTarDIR:$imgTarDIR -v $iprDIR:$iprDIR ${dockerUrl} /bin/bash imageTools img2rpi \
         -i ${regTifStr} \
         -g ${regGroupStr} \
         -b 1 10 50 100 \
@@ -386,8 +361,7 @@ if [[ -f $imageTarFile ]] && [[ -f $iprFile ]]; then
     nucleusLayer=$(find ${outDir}/03.register -maxdepth 1 -name \*fov_stitched*.tif -exec sh -c 'for f do basename -- "$f" _fov_stitched*.tif;done' sh {} + | grep -v IF | awk -F_ '{print$1}')
     tissueMaskFile=$(find ${outDir}/03.register -maxdepth 1 -name *_${SN}_tissue_cut.tif)
     export HDF5_USE_FILE_LOCKING=FALSE
-    export SINGULARITY_BIND=$outDir
-    /usr/bin/time -v singularity exec ${sif} tissueCut \
+    /usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir ${dockerUrl} /bin/bash tissueCut \
         -i ${outDir}/02.count/${SN}.raw.gef \
         --dnbfile ${barcodeReadsCounts} \
         -s ${tissueMaskFile} \
@@ -397,7 +371,7 @@ if [[ -f $imageTarFile ]] && [[ -f $iprFile ]]; then
         -o ${outDir}/04.tissuecut
 
     export HDF5_USE_FILE_LOCKING=FALSE
-    /usr/bin/time -v singularity exec ${sif} cellCut bgef \
+    /usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir ${dockerUrl} /bin/bash cellCut bgef \
         -i ${outDir}/04.tissuecut/${SN}.tissue.gef \
         -o ${outDir}/04.tissuecut/${SN}.${nucleusLayer}.gef \
         -O Transcriptomics \
@@ -405,15 +379,14 @@ if [[ -f $imageTarFile ]] && [[ -f $iprFile ]]; then
 
     # output labeled GEF [optional]
     out_iprFile=$(find ${outDir}/03.register -maxdepth 1 -name \*.ipr | head -1)
-    for i in `singularity exec ${sif} h5dump -n $out_iprFile | grep 'Labeling/' | grep -v 'Labeling/.*/Canvas'|grep -v 'Labeling/.*/Element'|awk '{print$2}'`;
+    for i in `docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir ${dockerUrl} /bin/bash h5dump -n $out_iprFile | grep 'Labeling/' | grep -v 'Labeling/.*/Canvas'|grep -v 'Labeling/.*/Element'|awk '{print$2}'`;
     do
     label=`basename $i`
     mkdir -p ${outDir}/04.tissuecut/tissuecut_${label}
     labelmask=$(find ${outDir}/03.register -name \*${label}_tissue_cut.tif)
     echo $labelmask
     export HDF5_USE_FILE_LOCKING=FALSE
-    export SINGULARITY_BIND=$outDir
-    /usr/bin/time -v singularity exec ${sif} tissueCut \
+    /usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir ${dockerUrl} /bin/bash tissueCut \
         -l $label \
         -i ${outDir}/02.count/${SN}.raw.gef \
         --dnbfile ${barcodeReadsCounts} \
@@ -425,10 +398,9 @@ if [[ -f $imageTarFile ]] && [[ -f $iprFile ]]; then
     done
 else
     ## Run tissueCut based on the gene expression matrix directly
-    export SINGULARITY_BIND=$outDir,$annoDIR,$refDIR
     echo `date` "=> there is no image, tissueCut based on the gene expression matrix start......."
     export HDF5_USE_FILE_LOCKING=FALSE
-    /usr/bin/time -v singularity exec ${sif} tissueCut \
+    /usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir -v $annoDIR:$annoDIR -v $refDIR:$refDIR ${dockerUrl} /bin/bash tissueCut \
         -i ${outDir}/02.count/${SN}.raw.gef \
         --dnbfile ${barcodeReadsCounts} \
         --sn ${SN} \
@@ -439,7 +411,7 @@ fi
 
 # Complete raw GEF to visual GEF
 export HDF5_USE_FILE_LOCKING=FALSE
-/usr/bin/time -v singularity exec ${sif} cellCut bgef \
+/usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir -v $annoDIR:$annoDIR -v $refDIR:$refDIR ${dockerUrl} /bin/bash cellCut bgef \
     -i ${outDir}/02.count/${SN}.raw.gef \
     -o ${outDir}/02.count/${SN}.gef \
     -O Transcriptomics \
@@ -447,23 +419,23 @@ export HDF5_USE_FILE_LOCKING=FALSE
 
 # Complete raw labeled tissue GEF to visual GEF 
 out_iprFile=$(find ${outDir}/03.register -maxdepth 1 -name \*.ipr | head -1)
-for i in `singularity exec ${sif} h5dump -n $out_iprFile | grep 'Labeling/' | grep -v 'Labeling/.*/Canvas'|grep -v 'Labeling/.*/Element'|awk '{print$2}'`;
+for i in `docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir -v $annoDIR:$annoDIR -v $refDIR:$refDIR ${dockerUrl} /bin/bash h5dump -n $out_iprFile | grep 'Labeling/' | grep -v 'Labeling/.*/Canvas'|grep -v 'Labeling/.*/Element'|awk '{print$2}'`;
 do
 label=`basename $i`
 export HDF5_USE_FILE_LOCKING=FALSE
-/usr/bin/time -v singularity exec ${sif} cellCut bgef \
+/usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir -v $annoDIR:$annoDIR -v $refDIR:$refDIR ${dockerUrl} /bin/bash cellCut bgef \
     -i ${outDir}/04.tissuecut/tissuecut_${label}/${SN}.${label}.raw.label.gef \
     -o ${outDir}/04.tissuecut/tissuecut_${label}/${SN}.${label}.label.gef \
     -O Transcriptomics
 done
 
 ## Convert GEF to GEM [optional]
-# /usr/bin/time -v singularity exec ${sif} cellCut view \
+# /usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir -v $annoDIR:$annoDIR -v $refDIR:$refDIR ${dockerUrl} /bin/bash cellCut view \
 #     -s ${SN} \
 #     -i ${outDir}/02.count/${SN}.gef \
 #     -o ${outDir}/02.count/${SN}.gem
 # gzip ${outDir}/02.count/${SN}.gem
-# /usr/bin/time -v singularity exec ${sif} cellCut view \
+# /usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir -v $annoDIR:$annoDIR -v $refDIR:$refDIR ${dockerUrl} /bin/bash cellCut view \
 #     -s ${SN} \
 #     -i ${outDir}/04.tissuecut/${SN}.tissue.gef \
 #     -o ${outDir}/04.tissuecut/${SN}.tissue.gem
@@ -473,14 +445,13 @@ done
 # Run SAW spatialCluster
 binSize=200
 resolution=1.0
-export SINGULARITY_BIND=$outDir
 echo `date` "=> spatialCluster start......."
 export HDF5_USE_FILE_LOCKING=FALSE
 mkdir -p ${outDir}/tmp
 export NUMBA_CACHE_DIR=${outDir}/tmp
 export MPLCONFIGDIR=${outDir}/tmp
 
-/usr/bin/time -v singularity exec ${sif} spatialCluster \
+/usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir ${dockerUrl} /bin/bash spatialCluster \
     -i ${outDir}/04.tissuecut/${SN}.tissue.gef \
     -s ${binSize} \
 	-r ${resolution} \
@@ -488,12 +459,12 @@ export MPLCONFIGDIR=${outDir}/tmp
 
 ## output labeled spatial H5AD [optional]
 # out_iprFile=$(find ${outDir}/03.register -maxdepth 1 -name \*.ipr | head -1)
-# for i in `singularity exec ${sif} h5dump -n $out_iprFile | grep 'Labeling/' | grep -v 'Labeling/.*/Canvas'|grep -v 'Labeling/.*/Element'|awk '{print$2}'`;
+# for i in `docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir ${dockerUrl} /bin/bash h5dump -n $out_iprFile | grep 'Labeling/' | grep -v 'Labeling/.*/Canvas'|grep -v 'Labeling/.*/Element'|awk '{print$2}'`;
 # do
 # label=`basename $i`
 # echo $labelmask
 # export HDF5_USE_FILE_LOCKING=FALSE
-# /usr/bin/time -v singularity exec ${sif} spatialCluster \
+# /usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir ${dockerUrl} /bin/bash spatialCluster \
 #     -i ${outDir}/04.tissuecut/tissuecut_${label}/${SN}.${label}.label.gef \
 #     -s ${binSize} \
 #     -r ${resolution} \
@@ -501,20 +472,19 @@ export MPLCONFIGDIR=${outDir}/tmp
 # done
 
 # Run SAW cellCut, cellCorrect, cellCluster and cellChunk
-export SINGULARITY_BIND=$outDir
 if [[ $doCell == 'Y' ]]; then
     echo `date` "=> cellCut start......."
     export HDF5_USE_FILE_LOCKING=FALSE
     nucleusLayer=$(find ${outDir}/03.register -maxdepth 1 -name \*fov_stitched*.tif -exec sh -c 'for f do basename -- "$f" _fov_stitched*.tif;done' sh {} + | grep -v IF | awk -F_ '{print$1}')
     nucleusMask=$(find ${outDir}/03.register -maxdepth 1 -name ${nucleusLayer}\*_mask.tif)
-    /usr/bin/time -v singularity exec ${sif} cellCut cgef \
+    /usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir ${dockerUrl} /bin/bash cellCut cgef \
         -i ${outDir}/02.count/${SN}.raw.gef \
         -m ${nucleusMask} \
         -o ${outDir}/041.cellcut/${SN}.cellbin.gef
 
     echo `date` "=> cellCorrect start......."
     export HDF5_USE_FILE_LOCKING=FALSE
-    /usr/bin/time -v singularity exec ${sif} cellCorrect \
+    /usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir ${dockerUrl} /bin/bash cellCorrect \
             -i ${outDir}/02.count/${SN}.raw.gef \
             -m ${nucleusMask} \
             -d 10 \
@@ -522,14 +492,14 @@ if [[ $doCell == 'Y' ]]; then
 
     ## Write the cellCorrect mask image into SN.rpi
     cellCorrectMask=$(find ${outDir}/041.cellcut -maxdepth 1 -name ${nucleusLayer}\*_mask_edm_dis\*.tif)
-    /usr/bin/time -v singularity exec ${sif} imageTools img2rpi \
+    /usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir ${dockerUrl} /bin/bash imageTools img2rpi \
         -i ${cellCorrectMask} \
         -g ${nucleusLayer}/CellMask_adjusted \
         -b 2 10 50 100 150 \
         -o ${outDir}/03.register/${SN}.rpi
 
     ### Convert cellbin GEF to GEM
-    # /usr/bin/time -v singularity exec ${sif} cellCut view \
+    # /usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir ${dockerUrl} /bin/bash cellCut view \
     #     -i ${outDir}/041.cellcut/${SN}.cellbin.gef \
     #     -d ${outDir}/02.count/${SN}.gef \
     #     -o ${outDir}/041.cellcut/${SN}.cellbin.gem \
@@ -540,24 +510,23 @@ if [[ $doCell == 'Y' ]]; then
     export NUMBA_CACHE_DIR=${outDir}/tmp
     export MPLCONFIGDIR=${outDir}/tmp
     
-    /usr/bin/time -v singularity exec ${sif} cellCluster \
+    /usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir ${dockerUrl} /bin/bash cellCluster \
         -i ${outDir}/041.cellcut/${SN}.adjusted.cellbin.gef \
         -o ${outDir}/051.cellcluster/${SN}.adjusted.cell.cluster.h5ad
 
     echo `date` "=> cellChunk start......."
     # Write rendering data into cellbin.gef
-    /usr/bin/time -v singularity exec ${sif} cellChunk \
+    /usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir ${dockerUrl} /bin/bash cellChunk \
         -i ${outDir}/041.cellcut/${SN}.adjusted.cellbin.gef \
         -o ${outDir}/041.cellcut/
 fi
 
 
 # Run SAW saturation
-export SINGULARITY_BIND=$outDir
 echo `date` "=> saturation start ......"
 export HDF5_USE_FILE_LOCKING=FALSE
 bcStatStr=$(find ${outDir}/00.mapping -name \*stat | tr '\n' ',' | sed 's/.$//')
-/usr/bin/time -v singularity exec ${sif} saturation \
+/usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir ${dockerUrl} /bin/bash saturation \
     -i ${outDir}/02.count/${SN}_raw_barcode_gene_exp.txt \
     --tissue ${outDir}/04.tissuecut/${SN}.tissue.gef \
     -o ${outDir}/06.saturation \
@@ -569,15 +538,14 @@ bcStatStr=$(find ${outDir}/00.mapping -name \*stat | tr '\n' ',' | sed 's/.$//')
 # Run SAW report to generate HTML file
 echo `date` "=> report generation start......"
 export HDF5_USE_FILE_LOCKING=FALSE
-export SINGULARITY_BIND=$outDir
 out_iprFile=$(find ${outDir}/03.register -maxdepth 1 -name \*.ipr | head -1)
 
 bcStatStr=$(find ${outDir}/00.mapping -name \*stat | tr '\n' ',' | sed 's/.$//')
 bcFinalOutStr=$(find ${outDir}/00.mapping -name \*.final.out | tr '\n' ',' | sed 's/.$//')
-pipever=$(basename ${sif} .sif)
+pipever=$(basename ${dockerUrl} .dockerUrl)
 
 if [[ -n ${out_iprFile} ]] && [[ -e ${out_iprFile} ]] && [[ $doCell == 'Y' ]]; then
-    /usr/bin/time -v singularity exec ${sif} report \
+    /usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir ${dockerUrl} /bin/bash report \
         -m ${bcStatStr} \
         -a ${bcFinalOutStr} \
         -g ${outDir}/02.count/${SN}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam.summary.stat \
@@ -611,7 +579,7 @@ if [[ -n ${out_iprFile} ]] && [[ -e ${out_iprFile} ]] && [[ $doCell == 'Y' ]]; t
         --reference ${refName} \
         -o ${outDir}/07.report
 elif [[ -n ${out_iprFile} ]] && [[ -e ${out_iprFile} ]] && [[ $doCell == 'N' ]]; then
-    /usr/bin/time -v singularity exec ${sif} report \
+    /usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir ${dockerUrl} /bin/bash report \
         -m ${bcStatStr} \
         -a ${bcFinalOutStr} \
         -g ${outDir}/02.count/${SN}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam.summary.stat \
@@ -643,7 +611,7 @@ elif [[ -n ${out_iprFile} ]] && [[ -e ${out_iprFile} ]] && [[ $doCell == 'N' ]];
         --reference ${refName} \
         -o ${outDir}/07.report
 else
-    /usr/bin/time -v singularity exec ${sif} report \
+    /usr/bin/time -v docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir ${dockerUrl} /bin/bash report \
         -m ${bcStatStr} \
         -a ${bcFinalOutStr} \
         -g ${outDir}/02.count/${SN}.Aligned.sortedByCoord.out.merge.q10.dedup.target.bam.summary.stat \
@@ -694,7 +662,7 @@ fi
 
 # 04.tissuecut
 out_iprFile=$(find ${outDir}/03.register -maxdepth 1 -name \*.ipr | head -1)
-for i in `singularity exec ${sif} h5dump -n $out_iprFile | grep 'Labeling/' | grep -v 'Labeling/.*/Canvas'|grep -v 'Labeling/.*/Element'|awk '{print$2}'`;
+for i in `docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir ${dockerUrl} /bin/bash h5dump -n $out_iprFile | grep 'Labeling/' | grep -v 'Labeling/.*/Canvas'|grep -v 'Labeling/.*/Element'|awk '{print$2}'`;
 do
 label=`basename $i`
     if [[ -f ${outDir}/04.tissuecut/tissuecut_${label}/${SN}.${label}.label.gef ]]
@@ -716,7 +684,7 @@ then
 fi
 
 #out_iprFile=$(find ${outDir}/03.register -maxdepth 1 -name \*.ipr | head -1)
-#for i in `singularity exec ${sif} h5dump -n $out_iprFile | grep 'Labeling/' | grep -v 'Labeling/.*/Canvas'|grep -v 'Labeling/.*/Element'|awk '{print$2}'`;
+#for i in `docker run -e HDF5_USE_FILE_LOCKING=FALSE --rm -i -v $outDir:$outDir ${dockerUrl} /bin/bash h5dump -n $out_iprFile | grep 'Labeling/' | grep -v 'Labeling/.*/Canvas'|grep -v 'Labeling/.*/Element'|awk '{print$2}'`;
 #do
 #label=`basename $i`
 #    if [[ -f ${outDir}/05.spatialcluster/${SN}.${label}.bin${binSize}_${resolution}.spatial.cluster.h5ad ]]
