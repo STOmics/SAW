@@ -157,7 +157,7 @@ usage: bash stereoPipeline_v7.0_manual_part1.sh -genomeSize -splitCount -maskFil
 
 
 # part2
-usage: sh stereoPipeline_v7.0_manual_part2.sh -SN -dataDir -registJson -speciesName -tissueType -outDir -imageRecordFile -imageCompressedFile -doCellBin -threads -sif
+usage: bash stereoPipeline_v7.0_manual_part2.sh -SN -dataDir -registJson -speciesName -tissueType -outDir -imageRecordFile -imageCompressedFile -doCellBin -threads -sif
     -SN : sample id
     -dataDir : output directory of gene expression matrix result 
     -registJson : manual registration json file
