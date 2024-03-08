@@ -26,6 +26,7 @@ gunzip Homo_sapiens.GRCh38.93.gtf.gz
 ###   Run : build the genome index file
 ```
 referenceDir=/Full/Path/Of/Reference/Folder/Path
+mkdir $referenceDir/STAR_SJ100
 export SINGULARITY_BIND=$referenceDir
 
 singularity exec <SAW_version.sif> mapping \

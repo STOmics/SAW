@@ -383,8 +383,8 @@ fi
 echo `date` "=> tissueCut start......."
 if [[ -f $imageTarFile ]] && [[ -f $iprFile ]]; then
     ## Run tissueCut to get the spatial gene expression profile of the tissue-covered region
-    nucleusLayer=$(find ${outDir}/03.register -maxdepth 1 -name \*fov_stitched*.tif -exec sh -c 'for f do basename -- "$f" _fov_stitched*.tif;done' sh {} + | grep -v IF | awk -F_ '{print$1}')
-    tissueMaskFile=$(find ${outDir}/03.register -maxdepth 1 -name *_${SN}_tissue_cut.tif)
+    nucleusLayer=$(find ${outDir}/03.register -maxdepth 1 -name \*fov_stitched_transformed.tif -exec sh -c 'for f do basename -- "$f" _fov_stitched_transformed.tif;done' sh {} + | grep -v IF | awk -F_ '{print$1}')
+    tissueMaskFile=$(find ${outDir}/03.register -maxdepth 1 -name ${nucleusLayer}_${SN}_tissue_cut.tif)
     export HDF5_USE_FILE_LOCKING=FALSE
     export SINGULARITY_BIND=$outDir
     /usr/bin/time -v singularity exec ${sif} tissueCut \
@@ -445,17 +445,21 @@ export HDF5_USE_FILE_LOCKING=FALSE
     -O Transcriptomics \
     -b 1,5,10,20,50,100,150,200
 
-# Complete raw labeled tissue GEF to visual GEF 
+# Complete raw labeled tissue GEF to visual GEF
 out_iprFile=$(find ${outDir}/03.register -maxdepth 1 -name \*.ipr | head -1)
-for i in `singularity exec ${sif} h5dump -n $out_iprFile | grep 'Labeling/' | grep -v 'Labeling/.*/Canvas'|grep -v 'Labeling/.*/Element'|awk '{print$2}'`;
-do
-label=`basename $i`
-export HDF5_USE_FILE_LOCKING=FALSE
-/usr/bin/time -v singularity exec ${sif} cellCut bgef \
-    -i ${outDir}/04.tissuecut/tissuecut_${label}/${SN}.${label}.raw.label.gef \
-    -o ${outDir}/04.tissuecut/tissuecut_${label}/${SN}.${label}.label.gef \
-    -O Transcriptomics
-done
+if [[ -n ${out_iprFile} ]] && [[ -e ${out_iprFile} ]];then
+  out_iprFile=$(find ${outDir}/03.register -maxdepth 1 -name \*.ipr | head -1)
+  for i in `singularity exec ${sif} h5dump -n $out_iprFile | grep 'Labeling/' | grep -v 'Labeling/.*/Canvas'|grep -v 'Labeling/.*/Element'|awk '{print$2}'`;
+  do
+  label=`basename $i`
+  export HDF5_USE_FILE_LOCKING=FALSE
+  /usr/bin/time -v singularity exec ${sif} cellCut bgef \
+      -i ${outDir}/04.tissuecut/tissuecut_${label}/${SN}.${label}.raw.label.gef \
+      -o ${outDir}/04.tissuecut/tissuecut_${label}/${SN}.${label}.label.gef \
+      -O Transcriptomics
+  done
+fi
+
 
 ## Convert GEF to GEM [optional]
 # /usr/bin/time -v singularity exec ${sif} cellCut view \
@@ -505,8 +509,8 @@ export SINGULARITY_BIND=$outDir
 if [[ $doCell == 'Y' ]]; then
     echo `date` "=> cellCut start......."
     export HDF5_USE_FILE_LOCKING=FALSE
-    nucleusLayer=$(find ${outDir}/03.register -maxdepth 1 -name \*fov_stitched*.tif -exec sh -c 'for f do basename -- "$f" _fov_stitched*.tif;done' sh {} + | grep -v IF | awk -F_ '{print$1}')
-    nucleusMask=$(find ${outDir}/03.register -maxdepth 1 -name ${nucleusLayer}\*_mask.tif)
+    nucleusLayer=$(find ${outDir}/03.register -maxdepth 1 -name \*fov_stitched_transformed.tif -exec sh -c 'for f do basename -- "$f" _fov_stitched_transformed.tif;done' sh {} + | grep -v IF | awk -F_ '{print$1}')
+    nucleusMask=$(find ${outDir}/03.register -maxdepth 1 -name ${nucleusLayer}_${SN}_mask.tif)
     /usr/bin/time -v singularity exec ${sif} cellCut cgef \
         -i ${outDir}/02.count/${SN}.raw.gef \
         -m ${nucleusMask} \
@@ -521,7 +525,7 @@ if [[ $doCell == 'Y' ]]; then
             -o ${outDir}/041.cellcut
 
     ## Write the cellCorrect mask image into SN.rpi
-    cellCorrectMask=$(find ${outDir}/041.cellcut -maxdepth 1 -name ${nucleusLayer}\*_mask_edm_dis\*.tif)
+    cellCorrectMask=$(find ${outDir}/041.cellcut -maxdepth 1 -name ${nucleusLayer}_${SN}_mask_edm_dis\*.tif)
     /usr/bin/time -v singularity exec ${sif} imageTools img2rpi \
         -i ${cellCorrectMask} \
         -g ${nucleusLayer}/CellMask_adjusted \
@@ -544,11 +548,19 @@ if [[ $doCell == 'Y' ]]; then
         -i ${outDir}/041.cellcut/${SN}.adjusted.cellbin.gef \
         -o ${outDir}/051.cellcluster/${SN}.adjusted.cell.cluster.h5ad
 
+    /usr/bin/time -v singularity exec ${sif} cellCluster \
+      -i ${outDir}/041.cellcut/${SN}.cellbin.gef \
+      -o ${outDir}/051.cellcluster/${SN}.cell.cluster.h5ad
+
     echo `date` "=> cellChunk start......."
     # Write rendering data into cellbin.gef
     /usr/bin/time -v singularity exec ${sif} cellChunk \
         -i ${outDir}/041.cellcut/${SN}.adjusted.cellbin.gef \
         -o ${outDir}/041.cellcut/
+
+    /usr/bin/time -v singularity exec ${sif} cellChunk \
+    -i ${outDir}/041.cellcut/${SN}.cellbin.gef \
+    -o ${outDir}/041.cellcut/
 fi
 
 
@@ -685,7 +697,7 @@ then
 fi
 
 ## 03.register
-if [[ -f ${outDir}/03.register/fov_stitched_transformed.rpi ]] || [[ -f ${outDir}/03.register/${SN}.rpi ]] || [[ -f out_iprFile ]]
+if [[ -f ${outDir}/03.register/fov_stitched_transformed.rpi ]] || [[ -f ${outDir}/03.register/${SN}.rpi ]] || [[ -f $out_iprFile ]]
 then
     ln -s ${outDir}/03.register/fov_stitched_transformed.rpi ${outDir}/visualization/fov_stitched_transformed.rpi
     ln -s ${outDir}/03.register/${SN}.rpi ${outDir}/visualization/${SN}.rpi
@@ -694,14 +706,17 @@ fi
 
 # 04.tissuecut
 out_iprFile=$(find ${outDir}/03.register -maxdepth 1 -name \*.ipr | head -1)
-for i in `singularity exec ${sif} h5dump -n $out_iprFile | grep 'Labeling/' | grep -v 'Labeling/.*/Canvas'|grep -v 'Labeling/.*/Element'|awk '{print$2}'`;
-do
-label=`basename $i`
-    if [[ -f ${outDir}/04.tissuecut/tissuecut_${label}/${SN}.${label}.label.gef ]]
-    then
-        ln -s ${outDir}/04.tissuecut/tissuecut_${label}/${SN}.${label}.label.gef ${outDir}/visualization/${SN}.${label}.label.gef
-    fi
-done
+if [[ -n ${out_iprFile} ]] && [[ -e ${out_iprFile} ]]
+then
+  for i in `singularity exec ${sif} h5dump -n ${out_iprFile} | grep 'Labeling/' | grep -v 'Labeling/.*/Canvas'|grep -v 'Labeling/.*/Element'|awk '{print$2}'`;
+  do
+  label=`basename $i`
+      if [[ -f ${outDir}/04.tissuecut/tissuecut_${label}/${SN}.${label}.label.gef ]]
+      then
+          ln -s ${outDir}/04.tissuecut/tissuecut_${label}/${SN}.${label}.label.gef ${outDir}/visualization/${SN}.${label}.label.gef
+      fi
+  done
+fi
 
 ## 041.cellcut
 if [[ -f ${outDir}/041.cellcut/${SN}.adjusted.cellbin.gef ]]
