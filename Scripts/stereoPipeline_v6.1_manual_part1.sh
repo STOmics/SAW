@@ -318,12 +318,22 @@ export SINGULARITY_BIND=$outDir,$imgTarDIR,$iprDIR
             -o ${result_03register}/manual_register
 
 ## Run img2rpi for RPI 
-regTifStr=$(find ${result_03register}/manual_register -name \*fov_stitched.tif)
-regGroupStr=$(basename `find ${result_03register}/manual_register -name \*fov_stitched.tif` | grep -v IF | awk -F '_' '{print$1}')
+registerTif=$(find ${result_03register}/manual_register -maxdepth 1 -name \*fov_stitched_transformed.tif)
+if [[ -n $registerTif ]]
+then
+    regGroup=$(find ${result_03register}/manual_register -maxdepth 1 -name \*fov_stitched_transformed.tif -exec sh -c 'for f do basename -- "$f" _fov_stitched_transformed.tif;done' sh {} +)
+else
+    registerTif=$(find ${result_03register}/manual_register -maxdepth 1 -name \*fov_stitched.tif)
+    regGroup=$(find ${result_03register}/manual_register -maxdepth 1 -name \*fov_stitched.tif -exec sh -c 'for f do basename -- "$f" _fov_stitched.tif;done' sh {} +)
+fi
+regTifStr=$(echo $registerTif | tr ' ' ',')
+regGroupStr=$(echo $regGroup | sed 's/ \|$/\/Image,/g' | sed 's/.$//')
+echo $regTifStr
+echo $regGroupStr
 
 /usr/bin/time -v singularity exec ${sif} imageTools img2rpi \
         -i ${regTifStr} \
-        -g ${regGroupStr}/Image \
+        -g ${regGroupStr} \
         -b 1 10 50 100 \
         -o ${result_03register}/manual_register/fov_stitched.rpi
 
