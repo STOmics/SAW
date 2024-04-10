@@ -2,16 +2,16 @@
 ##  Demo data basic information
 The HTML report may differ slightly from the StereoMap visualization data in Raysync due to version upgrades
 
-|  | SN | Chip Size | Reference | Tissue Type | Image Type | HTML Report |
-| -------------- | ----------- | ----------- | ----------- | ----------- | ----------- |----------- |
-| Demo 1 | SS200000135TL_D1 | 1\*1 | mouse | brain | ssDNA | [SS200000135TL_D1.report.html](https://github.com/STOmics/SAW/blob/main/Test_Data/SS200000135TL_D1.report.html) <br> v7.0.1|
-| Demo 2 | SS200000154TR_F5 | 1\*1 | mouse | tongue | ssDNA | [SS200000154TR_F5.report.html](https://github.com/STOmics/SAW/blob/main/Test_Data/SS200000154TR_F5.report.html) <br> v5.5.4 |
-| Demo 3 | SS200000464BL_C4 | 1\*1 | mouse | heart | ssDNA | [SS200000464BL_C4.report.html](https://github.com/STOmics/SAW/blob/main/Test_Data/SS200000464BL_C4.report.html) <br> v6.1.3 |
-| Demo 4 | SS200000059_NC | 1\*1 | mouse | testis | DAPI+mIF(AKAP3+TESK2) | [SS200000059_NC.report.html](https://github.com/STOmics/SAW/blob/main/Test_Data/SS200000059_NC.report.html) <br> v6.1.3 |
-| Demo 5 | D02070C3D3 | 1\*2 | mouse | embryo | DAPI | [D02070C3D3.report.html](https://github.com/STOmics/SAW/blob/main/Test_Data/D02070C3D3.report.html) <br> v6.1.3 |
-| Demo 6 | FP200009107_E414 | 0.5\*0.5 | mouse | olfactory bulb | DAPI | [FP200009107_E414.report.html](https://github.com/STOmics/SAW/blob/main/Test_Data/FP200009107_E414.report.html) <br> v6.1.3 |
-| Demo 7 | C02533C1 | 1\*1 | mouse | kidney | H&E | [C02533C1.report.html](https://github.com/STOmics/SAW/blob/main/Test_Data/C02533C1.report.html) <br> v7.0.1 |
-| Demo 8 | A02677B5 | 1\*1 | mouse | thymus | DAPI | [A02677B5.AnalysisReport.zip](https://github.com/STOmics/SAW/blob/main/Test_Data/A02677B5.AnalysisReport.zip) <br> v7.1.0 |
+|  | SN | Chip Size | Reference | Tissue Type | Image Type | HTML Report | STOmics Product | Kit Version | Sequencing Type |
+| -------------- | ----------- | ----------- | ----------- | ----------- | ----------- |----------- | ----------- |----------- |----------- |
+| Demo1 | SS200000135TL_D1 | 1\*1 | mouse | brain | ssDNA | [SS200000135TL_D1.report.html](https://github.com/STOmics/SAW/blob/main/Test_Data/SS200000135TL_D1.report.html) <br> v7.0.1| Stereo-seq Transcriptomics Solution | Stereo-seq T FF V1.2 | PE100_50+100 |
+| Demo2 | SS200000154TR_F5 | 1\*1 | mouse | tongue | ssDNA | [SS200000154TR_F5.report.html](https://github.com/STOmics/SAW/blob/main/Test_Data/SS200000154TR_F5.report.html) <br> v5.5.4 | Stereo-seq Transcriptomics Solution | Stereo-seq T FF V1.2 | PE100_50+100 |
+| Demo3 | SS200000464BL_C4 | 1\*1 | mouse | heart | ssDNA | [SS200000464BL_C4.report.html](https://github.com/STOmics/SAW/blob/main/Test_Data/SS200000464BL_C4.report.html) <br> v6.1.3 | Stereo-seq Transcriptomics Solution | Stereo-seq T FF V1.2 | PE100_50+100 |
+| Demo4 | SS200000059_NC | 1\*1 | mouse | testis | DAPI+mIF(AKAP3+TESK2) | [SS200000059_NC.report.html](https://github.com/STOmics/SAW/blob/main/Test_Data/SS200000059_NC.report.html) <br> v6.1.3 | Stereo-seq Transcriptomics mIF Solution | Stereo-seq T FF V1.2 | PE100_50+100 |
+| Demo5 | D02070C3D3 | 1\*2 | mouse | embryo | DAPI | [D02070C3D3.report.html](https://github.com/STOmics/SAW/blob/main/Test_Data/D02070C3D3.report.html) <br> v6.1.3 | Stereo-seq Large Chip Designs | Stereo-seq T FF V1.2 | PE100_50+100 |
+| Demo6 | FP200009107_E414 | 0.5\*0.5 | mouse | olfactory bulb | DAPI | [FP200009107_E414.report.html](https://github.com/STOmics/SAW/blob/main/Test_Data/FP200009107_E414.report.html) <br> v6.1.3 | Stereo-seq Transcriptomics Mini Chip Solution | Stereo-seq T FF V1.2 | PE100_50+100 |
+| Demo7 | C02533C1 | 1\*1 | mouse | kidney | H&E | [C02533C1.report.html](https://github.com/STOmics/SAW/blob/main/Test_Data/C02533C1.report.html) <br> v7.0.1 | Stereo-seq Transcriptomics H&E Solution | Stereo-seq T FF V1.2 | PE100_50+100 |
+| Demo8 | A02677B5 | 1\*1 | mouse | thymus | DAPI | [A02677B5.AnalysisReport.zip](https://github.com/STOmics/SAW/blob/main/Test_Data/A02677B5.AnalysisReport.zip) <br> v7.1.0 | Stereo-CITE Proteo-Transcriptomics Solution | Stereo-CITE T FF V1.2 | PE100_50+100 |
 
 ##  Download data from Raysync
 **Raw data: http://116.6.21.110:8090/share/21bb9df9-e6c5-47c5-9aa8-29f2d23a6df4**
