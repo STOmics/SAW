@@ -72,6 +72,7 @@ singularity build SAW_<version>.sif docker://stomics/saw:<version>
 ```
 #####   All accessible versions on DockerHub
 ```
+singularity build SAW_7.1.sif docker://stomics/saw:07.1.1
 singularity build SAW_7.1.sif docker://stomics/saw:07.1.0
 singularity build SAW_7.0.sif docker://stomics/saw:07.0.1
 singularity build SAW_7.0.sif docker://stomics/saw:07.0.0

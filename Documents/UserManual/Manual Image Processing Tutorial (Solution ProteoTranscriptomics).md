@@ -583,7 +583,7 @@ For example, if you have finished manual processing in ImageStudio at the step o
     dataDir=/path/to/data	# notice that dataDir in step2 should be the outDir from step1, to get basic information like statistics
     iprDir=/path/to/ipr  # when QCPass, changed the directory to processed ipr from register module
     tarDir=/path/to/tar.gz
-    outDir=/path/to/output
+    outDir=/path/to/output # Suggest not being in the same directory as the dataDir directory
     registJsonDir=/path/to/<date_time>.regist.json
     
     export SINGULARITY_BIND=${dataDir},${iprDir},${outDir},${registJsonDir}
@@ -724,7 +724,7 @@ For example, if you have finished manual processing in ImageStudio at the step o
     dataDir=/path/to/data	# notice that dataDir in step2 should be the outDir from step1, to get basic information like statistics
     iprDir=/path/to/ipr  # when QCPass, changed the directory to processed ipr from 03.register module; when QCFail, set the directory to original ipr
     tarDir=/path/to/tar.gz
-    outDir=/path/to/output
+    outDir=/path/to/output # Suggest not being in the same directory as the dataDir directory
     registJsonDir=/path/to/<date_time>.regist.json
     
     export SINGULARITY_BIND=${dataDir},${iprDir},${outDir},${registJsonDir}
@@ -758,7 +758,7 @@ For example, if you have finished manual processing in ImageStudio at the step o
     dataDir=/path/to/data	# notice that dataDir in step2 should be the outDir from step1, to get basic information like statistics
     iprDir=/path/to/ipr  # when QCPass, changed the directory to processed ipr from 04.register module; when QCFail, set the directory to original ipr
     tarDir=/path/to/tar.gz
-    outDir=/path/to/output
+    outDir=/path/to/output # Suggest not being in the same directory as the dataDir directory
     registJsonDir=/path/to/<date_time>.regist.json
     
     export SINGULARITY_BIND=${dataDir},${iprDir},${outDir},${registJsonDir}
