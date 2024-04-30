@@ -1,6 +1,11 @@
 # Important Notifications
 This notification page is a place to record and respond the user-reported issues/bugs and inform other users who may be affected by the same bug. Meanwhile, we inform users of important improvement and version changes here. We apologize for any inconvenience caused you.
 
+## SAW ST v6.1.4 (Modified Apr, 2024)
+For `mapping` module:  
+1. Bug fix: fixed occasional compute crashes due to specific GTF
+
+
 ## SAW ST v6.1.3 (Modified Oct, 2023)
 For `imageTools` module:    
 1. Bug fix: fixed the problem that manually registered images were incorrectly cropped after scale operation.
@@ -22,3 +27,5 @@ For `tissueCut` module:
 For `report` module:    
 1. Bug fix:  
 compatible with the `.ipr` file which is failed with image quality control (QC) and has no record of heat map matrix information needed for html report.
+
+
