@@ -7,7 +7,3 @@ For `mapping-SP` module
 
 For `register` module
 1. Fixed stitching error in Leica DM6 B.
-
-For `lasso` module
-1. Fixed the occasional error of discrepancy between targeted lasso region and GEF. 
-2. Fixed GEM generation error in large offset expression data.
