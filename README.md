@@ -156,7 +156,7 @@ usage: bash stereoPipeline_pt_v7.1_manual_part1.sh -genomeSize -splitCount -mask
     -adtFq1 : ADT fastq file path of read1, if there are more than one fastq file, please separate them with comma, e.g:lane1_read_1.fq.gz,lane2_read_1.fq.gz
     -adtFq2 : ADT fastq file path of read2, if there are more than one fastq file, please separate them with comma, not requested for Q4 fastq data, e.g:lane1_read_2.fq.gz,lane2_read_2.fq.gz
     -proteinList : protein list file which contain protein sequences and names.
-	-refIndex : reference genome indexed folder, please build IT before SAW analysis run
+    -refIndex : reference genome indexed folder, please build IT before SAW analysis run
     -annotationFile :  annotations file in gff or gtf format, the file must contain gene and exon annotations
     -speciesName : specie of the sample
     -tissueType : tissue type of the sample
@@ -193,7 +193,7 @@ usage: bash stereoPipeline_pt_v7.1_manual_part1.sh -genomeSize -splitCount -mask
     -adtFq1 : ADT fastq file path of read1, if there are more than one fastq file, please separate them with comma, e.g:lane1_read_1.fq.gz,lane2_read_1.fq.gz
     -adtFq2 : ADT fastq file path of read2, if there are more than one fastq file, please separate them with comma, not requested for Q4 fastq data, e.g:lane1_read_2.fq.gz,lane2_read_2.fq.gz
     -proteinList : protein list file which contain protein sequences and names.
-	-refIndex : reference genome indexed folder, please build IT before SAW analysis run
+    -refIndex : reference genome indexed folder, please build IT before SAW analysis run
     -annotationFile :  annotations file in gff or gtf format, the file must contain gene and exon annotations
     -speciesName : specie of the sample
     -tissueType : tissue type of the sample
@@ -248,21 +248,17 @@ export SINGULARITY_BIND=$dataDir,$outDir
 ## Choose from the following scenarios
 
 ## Scenario 1: input image and run cell bin
-bash stereoPipeline_pt.sh \
+bash stereoPipeline.sh \
     -sif $dataDir/SAW/SAW_<version>.sif \
     -splitCount 1 \  ## 16 or 64 for Q4, 1 for Q40
     -maskFile $dataDir/mask/SN.h5 \
-    -adtFq1 $dataDir/STOmics-ADT/lane1_read_1.fq.gz,...,$dataDir/STOmics-ADT/laneN_read_1.fq.gz \
-    -adtFq2 $dataDir/STOmics-ADT/lane1_read_2.fq.gz,...,$dataDir/STOmics-ADT/laneN_read_2.fq.gz \ # [optional] when the sequenced data is in Q40 format
-    -rnaFq1 $dataDir/STOmics-RNA/lane1_read_1.fq.gz,...,$dataDir/STOmics-RNA/laneN_read_1.fq.gz \
-    -rnaFq2 $dataDir/STOmics-RNA/lane1_read_2.fq.gz,...,$dataDir/STOmics-RNA/laneN_read_2.fq.gz \ # [optional] when the sequenced data is in Q40 format
+    -fq1 $dataDir/reads/lane1_read_1.fq.gz,...,$dataDir/reads/laneN_read_1.fq.gz  \
+    -fq2 $dataDir/reads/lane1_read_2.fq.gz,...,$dataDir/reads/laneN_read_2.fq.gz \ # [optional] when the sequenced data is in Q40 format
     -speciesName <speciesName> \
     -tissueType <tissueName> \
-    -proteinList $dataDir/protein-reference/ProteinPanel.list \
     -refIndex $dataDir/reference/STAR_SJ100 \
     -annotationFile $dataDir/reference/genes.gtf \  ## GFF or GTF
-    -rRNAremove N \
-    -pidStart 21 \ ## given the example of sequencing transcriptome and ADT libraries together
+    -rRNAremove : N \
     -threads 16 \
     -outDir $outDir/result \
     -imageRecordFile $dataDir/image/<SN_date_time_version>.ipr \ # [optional] when image is given and has passed QC
@@ -270,21 +266,17 @@ bash stereoPipeline_pt.sh \
     -doCellBin Y  # [optional] when you want to do the cell segmentation and get cell gene expression data
 
 ## Scenario 2: input image but no need for cell bin
-bash stereoPipeline_pt.sh \
+bash stereoPipeline.sh \
     -sif $dataDir/SAW/SAW_<version>.sif \
     -splitCount 1 \  ## 16 or 64 for Q4, 1 for Q40
     -maskFile $dataDir/mask/SN.h5 \
-    -adtFq1 $dataDir/STOmics-ADT/lane1_read_1.fq.gz,...,$dataDir/STOmics-ADT/laneN_read_1.fq.gz  \
-    -adtFq2 $dataDir/STOmics-ADT/lane1_read_2.fq.gz,...,$dataDir/STOmics-ADT/laneN_read_2.fq.gz \ # [optional] when the sequenced data is in Q40 format
-    -rnaFq1 $dataDir/STOmics-RNA/lane1_read_1.fq.gz,...,$dataDir/STOmics-RNA/laneN_read_1.fq.gz  \
-    -rnaFq2 $dataDir/STOmics-RNA/lane1_read_2.fq.gz,...,$dataDir/STOmics-RNA/laneN_read_2.fq.gz \ # [optional] when the sequenced data is in Q40 format
+    -fq1 $dataDir/reads/lane1_read_1.fq.gz,...,$dataDir/reads/laneN_read_1.fq.gz  \
+    -fq2 $dataDir/reads/lane1_read_2.fq.gz,...,$dataDir/reads/laneN_read_2.fq.gz \ # [optional] when the sequenced data is in Q40 format
     -speciesName <speciesName> \
     -tissueType <tissueName> \
-    -proteinList $dataDir/protein-reference/ProteinPanel.list \
     -refIndex $dataDir/reference/STAR_SJ100 \
     -annotationFile $dataDir/reference/genes.gtf \  ## GFF or GTF
-    -rRNAremove N \
-    -pidStart 21 \ ## given the example of sequencing transcriptome and ADT libraries together
+    -rRNAremove : N \
     -threads 16 \
     -outDir $outDir/result \
     -imageRecordFile $dataDir/image/<SN_date_time_version>.ipr \ # [optional] when image is given and has passed QC
@@ -292,21 +284,17 @@ bash stereoPipeline_pt.sh \
     -doCellBin N  # [optional] when you want to do the cell segmentation and get cell gene expression data
 
 ## Scenario 3: no image
-bash stereoPipeline_pt.sh \
+bash stereoPipeline.sh \
     -sif $dataDir/SAW/SAW_<version>.sif \
     -splitCount 1 \  ## 16 or 64 for Q4, 1 for Q40
     -maskFile $dataDir/mask/SN.h5 \
-    -adtFq1 $dataDir/STOmics-ADT/lane1_read_1.fq.gz,...,$dataDir/STOmics-ADT/laneN_read_1.fq.gz  \
-    -adtFq2 $dataDir/STOmics-ADT/lane1_read_2.fq.gz,...,$dataDir/STOmics-ADT/laneN_read_2.fq.gz \ # [optional] when the sequenced data is in Q40 format
-    -rnaFq1 $dataDir/STOmics-RNA/lane1_read_1.fq.gz,...,$dataDir/STOmics-RNA/laneN_read_1.fq.gz  \
-    -rnaFq2 $dataDir/STOmics-RNA/lane1_read_2.fq.gz,...,$dataDir/STOmics-RNA/laneN_read_2.fq.gz \ # [optional] when the sequenced data is in Q40 format
-    -proteinList $dataDir/protein-reference/ProteinPanel.list \
+    -fq1 $dataDir/reads/lane1_read_1.fq.gz,...,$dataDir/reads/laneN_read_1.fq.gz  \
+    -fq2 $dataDir/reads/lane1_read_2.fq.gz,...,$dataDir/reads/laneN_read_2.fq.gz \ # [optional] when the sequenced data is in Q40 format
     -speciesName <speciesName> \
     -tissueType <tissueName> \
     -refIndex $dataDir/reference/STAR_SJ100 \
     -annotationFile $dataDir/reference/genes.gtf \  ## GFF or GTF
-    -rRNAremove N \
-    -pidStart 21 \ ## given the example of sequencing transcriptome and ADT libraries together
+    -rRNAremove : N \
     -threads 16 \
     -outDir $outDir/result
 ```
@@ -347,6 +335,7 @@ bash stereoPipeline_pt.sh \
     -refIndex $dataDir/reference/STAR_SJ100 \
     -annotationFile $dataDir/reference/genes.gtf \  ## GFF or GTF
     -rRNAremove N \
+    -pidStart 21 \ ## given the example of sequencing transcriptome and ADT libraries together
     -threads 16 \
     -outDir $outDir/result \
     -imageRecordFile $dataDir/image/<SN_date_time_version>.ipr \ # [optional] when image is given and has passed QC
@@ -368,6 +357,7 @@ bash stereoPipeline_pt.sh \
     -refIndex $dataDir/reference/STAR_SJ100 \
     -annotationFile $dataDir/reference/genes.gtf \  ## GFF or GTF
     -rRNAremove N \
+    -pidStart 21 \ ## given the example of sequencing transcriptome and ADT libraries together
     -threads 16 \
     -outDir $outDir/result \
     -imageRecordFile $dataDir/image/<SN_date_time_version>.ipr \ # [optional] when image is given and has passed QC
@@ -389,6 +379,7 @@ bash stereoPipeline_pt.sh \
     -refIndex $dataDir/reference/STAR_SJ100 \
     -annotationFile $dataDir/reference/genes.gtf \  ## GFF or GTF
     -rRNAremove N \
+    -pidStart 21 \ ## given the example of sequencing transcriptome and ADT libraries together
     -threads 16 \
     -outDir $outDir/result
 ```
