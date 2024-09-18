@@ -1,8 +1,19 @@
 
+# What's new ?!!!
+
+## New Form
+
+SAW (>= 8.0) is released as a self-contained tar.gz file that can be unpacked directly on the system, without the need to configure the computing environment. Because it has assembled all of the software-required dependencies, which are pre-compiled to run on most Linux distributions.
+You can download new SAW through our [STOmics website](https://en.stomics.tech/products/stomics-software/stomics-offline-software/list.html).
+
+## New Entry
+
+If you want to download SAW (>= 8.0), demo datasets and consult user manuals, please visit our [software manual](https://en.stomics.tech/service/new-saw-operation-manual.html).
+
+...
+
 # SAW: Stereo-seq Analysis Workflow
 Workflow for analyzing Stereo-seq transcriptomic data. Stereo-seq Analysis Workflow (SAW) software suite is a set of pipelines bundled to map sequenced reads to their spatial location on the tissue section, quantify the corresponding gene expression levels and visually present spatial gene expression distribution.
-
-**DockerHub Link: https://hub.docker.com/r/stomics/saw/tags**
 
 ##  Introduction
 SAW processes the sequencing data of Stereo-seq to generate spatial gene expression matrices, and the users could take these files as the starting point to perform downstream analysis. SAW includes thirteen essential and suggest pipelines and auxiliary tools for supporting other handy functions.
