@@ -73,6 +73,13 @@ $ echo 'export GOPATH=${HOME}/go' >> ~/.bashrc && \
 
 ## Install singularity on CentOS without compile
 $ yum install -y singularity
+
+## Install singularity on Red Hat Enterprise Linux without compile
+sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+sudo yum update -y &&  \
+   sudo yum install -y epel-release && \
+   sudo yum update -y && \
+   sudo yum install -y singularity-ce
 ```
 **For additional help or support, please visit https://sylabs.io/guides/3.8/admin-guide/installation.html**
 
